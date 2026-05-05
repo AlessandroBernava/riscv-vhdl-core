@@ -1,0 +1,30 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "VSG Check file corrente",
+            "type": "shell",
+            "command": "vsg",
+            "args": [
+                "-c",
+                ".vsg.yaml",
+                "-f",
+                "${file}"
+            ],
+            "problemMatcher": []
+        },
+        {
+            "label": "VSG Fix file corrente",
+            "type": "shell",
+            "command": "vsg",
+            "args": [
+                "-c",
+                ".vsg.yaml",
+                "-f",
+                "${file}",
+                "--fix"
+            ],
+            "problemMatcher": []
+        }
+    ]
+}

@@ -1,0 +1,13 @@
+# Cartelle di build / sim
+obj/
+simu/
+*.ghw
+*.vcd
+
+# File temporanei editor
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+
+# Varie
+*.log

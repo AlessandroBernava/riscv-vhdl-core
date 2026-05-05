@@ -1,0 +1,9 @@
+rule:
+  global:
+    case: lower
+
+  constant_002:
+    case: upper
+
+  length_001:
+    length: 120
