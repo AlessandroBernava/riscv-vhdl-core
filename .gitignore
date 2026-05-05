@@ -11,3 +11,7 @@ simu/
 
 # Varie
 *.log
+*.ys
+*.ys_out
+*.il
+*.blif
