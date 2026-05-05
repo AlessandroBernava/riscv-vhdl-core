@@ -9,7 +9,7 @@ simu/
 !.vscode/settings.json
 !.vscode/tasks.json
 
-# Varie
+# Vari, file sintesi
 *.log
 *.ys
 *.ys_out
