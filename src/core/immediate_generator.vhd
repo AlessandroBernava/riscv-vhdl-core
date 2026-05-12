@@ -4,6 +4,9 @@
 -- Logica puramente combinatoria, nessun clock.
 -- Il tipo R non ha immediato: restituisce zero
 
+-- verificare se e' opportuno modificare la logica rendendola parallela a quella della CU per
+-- ridurre il critical path (teoricamente lo stadio EX è quello critico in ogni caso)
+
 library ieee;
 
 library work;
