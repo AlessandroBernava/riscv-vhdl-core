@@ -17,6 +17,7 @@ entity control_unit is
         imm_type_o     : out instr_type_t;
         f3_o           : out std_logic_vector(2 downto 0);
         f7b_o          : out std_logic;
+        isRtype_o      : out std_logic;
         alu_op         : out std_logic_vector(1 downto 0);
         alu_src_a_o    : out std_logic_vector(1 downto 0);
         alu_src_b_o    : out std_logic;
@@ -49,6 +50,8 @@ begin
     J_TYPE;
     f3_o <= instr_i(14 downto 12);
     f7b_o <= instr_i(30);
+    isRtype_o <= '1' when opcode = opc_op else
+    '0';
     alu_op <= "00" when (opcode = opc_load or opcode = opc_store or opcode = opc_auipc or opcode = opc_jal or opcode = opc_jalr or opcode = opc_lui) else
     "01"           when opcode = opc_branch else
     "10";
