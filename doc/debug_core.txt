@@ -1,0 +1,58 @@
+    -- DEBUG NOTE (load-use + stall/flush + EX/MEM NOP)
+    -- Inizialmente davo priorità al flush rispetto allo stall sia in IF/ID
+    -- (instruction_memory) sia nel registro ID/EX. In pratica:
+    --   - se flush='1' (branch/jump preso) azzeravo subito IF/ID e ID/EX
+    --     con una NOP, anche se nello stesso ciclo l'hazard detection unit
+    --     aveva rilevato uno stall per load-use.
+    -- Questo portava a situazioni in cui:
+    --   - una branch o una J/JALR veniva calcolata in EX con operandi
+    --     sbagliati (perché c'era un hazard load-use ancora non risolto),
+    --   - il segnale jump risultava quindi errato,
+    --   - il flush annullava le istruzioni sbagliate e il PC saltava a
+    --     un indirizzo non valido.
+    --
+    -- Ho capito che se c'è uno stall (load-use) i dati in EX non sono ancora
+    -- affidabili, quindi qualsiasi branch/jalr calcolata in quel ciclo è
+    -- potenzialmente errata. La soluzione è dare priorità allo stall:
+    --   - se stall='1', congelo IF/ID e ID/EX (non accetto nuove
+    --     istruzioni e non avanzo quella corrente),
+    --   - solo se stall='0' considero flush e, se necessario, inietto NOP.
+    -- Questo è stato implementato in instruction_memory e in id_ex_reg
+    -- invertendo l'ordine dei test: prima stall, poi flush.
+    --
+    -- Secondo problema: gestione dello stall nella parte bassa della pipeline.
+    -- All'inizio, in caso di stall, bloccavo anche EX/MEM senza modificarne
+    -- il contenuto. In questo modo l'istruzione che causava l'hazard (load
+    -- o istruzione successiva) rimaneva intrappolata in EX/MEM, mentre ID/EX
+    -- e IF/ID restavano fermi. L'hazard detection unit continuava a vedere
+    -- la stessa combinazione "istruzione in MEM/EX + use in EX/ID" e
+    -- stall rimaneva a '1' all'infinito: PC bloccato per sempre.
+    --
+    -- La chiave è stata capire che, quando introduco uno stall, devo sì
+    -- congelare gli stadi a monte, ma lo stadio subito dopo il punto in cui
+    -- rilevo l'hazard deve ricevere una NOP (bolla), non restare congelato.
+    -- Nel mio schema la hazard detection unit confronta l'istruzione di
+    -- EX/MEM con quella in ID/EX; quindi il registro EX/MEM è "dopo" il
+    -- punto di controllo. Ho modificato ex_mem_reg così:
+    --   - se res='1' → EX_MEM_REG_RESET (NOP)
+    --   - elsif stall='1' → EX_MEM_REG_RESET (inietto NOP nello stadio MEM)
+    --   - else → ex_mem <= ex_mem_new (normale avanzamento)
+    -- In questo modo:
+    --   - al ciclo in cui rilevo l'hazard, l'istruzione che usa dati
+    --     sbagliati viene cancellata da EX/MEM (sostituita da NOP),
+    --   - IF/ID e ID/EX restano congelati, quindi la stessa istruzione
+    --     "use" rimane in ID/EX,
+    --   - al ciclo successivo la load può completare in WB e produrre il
+    --     dato corretto,
+    --   - la stessa istruzione "use" rientra in EX, stavolta con il
+    --     forwarding corretto da WB e con EX/MEM libero (NOP), quindi lo
+    --     stall scompare.
+    --
+    -- In sintesi: il bug era dato da priorità sbagliata tra stall e flush
+    -- (branch calcolato su dati non pronti) e da un EX/MEM congelato invece
+    -- che trasformato in NOP durante lo stall. Correggendo entrambi:
+    --   - prima gestisco lo stall (congelo IF/ID e ID/EX, NOP in EX/MEM),
+    --   - solo poi applico flush quando i dati in EX sono affidabili,
+    -- la pipeline risolve correttamente i load-use hazard senza bloccare
+    -- per sempre il PC e senza saltare con indirizzi calcolati su operandi
+    -- sbagliati.

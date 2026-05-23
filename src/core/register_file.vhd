@@ -1,20 +1,21 @@
 
 library ieee;
-    use ieee.numeric_std.all;
-    use ieee.std_logic_1164.all;
-    use work.pkg_riskv_types.all;
+use ieee.numeric_std.all;
+use ieee.std_logic_1164.all;
+
+use work.pkg_riskv_types.all;
 
 entity register_file is
     port (
-        clk          : in    std_logic;
-        res          : in    std_logic;
-        we           : in    std_logic;
-        rs1_addr_i   : in    reg_addr_t;
-        rs2_addr_i   : in    reg_addr_t;
-        rd_addr_i    : in    reg_addr_t;
-        write_data_i : in    word_t;
-        rs1_data_o   : out   word_t;
-        rs2_data_o   : out   word_t
+        clk          : in  std_logic;
+        res          : in  std_logic;
+        we           : in  std_logic;
+        rs1_addr_i   : in  reg_addr_t;
+        rs2_addr_i   : in  reg_addr_t;
+        rd_addr_i    : in  reg_addr_t;
+        write_data_i : in  word_t;
+        rs1_data_o   : out word_t;
+        rs2_data_o   : out word_t
     );
 end entity register_file;
 
@@ -29,7 +30,7 @@ begin
     -- in memoria, evitando lo structural hazard di scrittura/lettura sullo stesso
     -- registro nello stesso ciclo di clock.
     --
-    -- NOTA ARCHITETTURALE: il forwarding e' puramente combinatorio e non considera
+    -- NOTA ARCHITETTURALE: il forwarding di lettrua  e' puramente combinatorio e non considera
     -- il segnale res. Di conseguenza, durante il reset (res='1'), se we='1' e
     -- rd_addr_i = rs1/rs2_addr_i, le uscite mostrano write_data_i invece di zero,
     -- anche se reg e' stato appena azzerato dal process sincrono.
@@ -38,15 +39,17 @@ begin
     -- del clock, le uscite escono dal forzamento a zero mentre reg non e' ancora
     -- stato azzerato, generando un impulso spurio (glitch) invisibile in sim.
     -- La responsabilita' di abbassare we durante il reset e' quindi delegata al
-    -- controller della pipeline.
+    -- controller della pipeline. Nota 2: entrambe le situazioni non sono problematiche
+    -- dal momento che 1) il reset è sincrono e 2) il dato non viene propagato, dato che
+    -- il reset azzera il registro id/ex
 
     rs1_data_o <= (others => '0') when rs1_addr_i = REG_X0 else
-                  write_data_i when (we = '1'  and rs1_addr_i = rd_addr_i) else
-                  reg(to_integer(unsigned(rs1_addr_i)));
+    write_data_i                  when (we = '1'  and rs1_addr_i = rd_addr_i) else
+    reg(to_integer(unsigned(rs1_addr_i)));
 
     rs2_data_o <= (others => '0') when rs2_addr_i = REG_X0 else
-                  write_data_i when (we = '1'  and rs2_addr_i = rd_addr_i) else
-                  reg(to_integer(unsigned(rs2_addr_i)));
+    write_data_i                  when (we = '1'  and rs2_addr_i = rd_addr_i) else
+    reg(to_integer(unsigned(rs2_addr_i)));
 
     reg_file_write : process (clk) is
     begin

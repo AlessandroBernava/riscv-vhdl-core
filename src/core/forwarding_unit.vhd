@@ -21,7 +21,7 @@ entity forwarding_unit is
         reg_write_mem_i : in  std_logic;
         rd_wb_i         : in  reg_addr_t;                    --collegare a mem_wb.rd_addr
         reg_write_wb_i  : in  std_logic;
-        forwardA_o      : out std_logic_vector(1 downto 0);  --00 no forward, 01 da ex/mem, 01 da mem/ wb  controlla mux prima del mux alu_src_A
+        forwardA_o      : out std_logic_vector(1 downto 0);  --00 no forward, 01 da ex/mem, 10 da mem/ wb  controlla mux prima del mux alu_src_A
         forwardB_o      : out std_logic_vector(1 downto 0)
     );
 end entity forwarding_unit;

@@ -2,8 +2,10 @@ rule:
   global:
     case: lower
 
-  constant_002:
-    case: upper
-
   length_001:
     length: 120
+
+    indent_size : 4
+rule:
+  global:
+    indent_size : 4

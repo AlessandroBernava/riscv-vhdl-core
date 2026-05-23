@@ -1,6 +1,7 @@
 # Cartelle di build / sim
 obj/
 simu/
+trash/
 *.ghw
 *.vcd
 

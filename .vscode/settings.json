@@ -1,8 +1,9 @@
 {
     "editor.insertSpaces": true,
-    "editor.tabSize": 2,
+    "editor.tabSize": 4,
     "editor.renderWhitespace": "selection",
     "editor.minimap.enabled": false,
+    "editor.detectIndentation": false,
     "files.trimTrailingWhitespace": true,
     "files.insertFinalNewline": true,
     "errorLens.enabledDiagnosticLevels": [
@@ -15,6 +16,11 @@
     "editor.fontLigatures": "false",
     "editor.formatOnSave": true,
     "[vhdl]": {
-        "editor.defaultFormatter": "HenriHaka.hdlfmtr"
-    }
+        "editor.defaultFormatter": "HenriHaka.hdlfmtr",
+        "editor.formatOnSave": true,
+        "editor.insertSpaces": true,
+        "editor.tabSize": 4,
+        "editor.detectIndentation": false
+    },
+    "hdlfmtr.indentStyle": "spaces"
 }
