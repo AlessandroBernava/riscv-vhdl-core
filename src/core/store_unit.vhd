@@ -27,7 +27,7 @@
 -- NOTE: questa load_unit assume accessi di memoria allineati
 -- (word su indirizzi multipli di 4, half su multipli di 2).
 -- Gli accessi misallineati in RISC-V hanno comportamento dipendente
--- dall'ambiente di esecuzione (EEI) e richiedono logica extra:
+-- dall'ambiente di esecuzione e richiedono logica extra:
 --   - o trap per misaligned load/store
 --   - o gestione hardware con due accessi di memoria
 -- Per ora il core RV32I supporta solo accessi allineati; per estenderlo

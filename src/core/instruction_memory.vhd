@@ -31,30 +31,17 @@ end entity instruction_memory;
 architecture rtl of instruction_memory is
 
     signal mem : instr_mem_t := (
-        -- FASE 1: dipendenze lunghe su registri (forwarding/stall)
-        0 => x"00100093",  -- addi x1, x0, 1
-        1 => x"00100113",  -- addi x2, x0, 1
-        2 => x"32208063",  -- beq  x1, x2, +800 bytes  -> salta a indirizzo 202
-        3 => x"11100193",  -- addi x3, x0, 273   ; da saltare
-        4 => x"22200213",  -- addi x4, x0, 546   ; da saltare
-        5 => x"33300293",  -- addi x5, x0, 819   ; da saltare
+        0 => x"00000537",  -- lui x10, 0x00001      -> x10 = 0x00001000
+        1 => x"00050513",  -- addi x10, x10, 0      -> x10 = 0x00001000 (ridondante, ma chiaro)
 
-        20 => x"00A00313",  -- addi x6, x0, 10    ; target del branch indietro
-        21 => x"01400393",  -- addi x7, x0, 20
-        22 => x"00638433",  -- add  x8, x7, x6    ; x8 = 30
-        23 => x"00000063",  -- beq  x0, x0, 0     ; loop finale se arrivi qui
+        2 => x"07B00593",  -- addi x11, x0, 123     -> x11 = 123 (0x0000007B)
 
-        202 => x"00100413",  -- addi x8, x0, 1     ; conferma salto avanti riuscito
-        203 => x"00108493",  -- addi x9, x1, 1     ; x9 = 2
-        204 => x"d21080e3",  -- beq  x1, x1, -720 bytes -> torna a indirizzo 24 circa
-        205 => x"44400513",  -- addi x10, x0, 1092 ; da saltare
-        206 => x"55500593",  -- addi x11, x0, 1365 ; da saltare
+        3 => x"00B52023",  -- sw x11, 0(x10)        -> MEM[0x00001000] = 123
 
-        24 => x"06300613",  -- addi x12, x0, 99   ; qui deve arrivare il branch all'indietro
-        25 => x"00160693",  -- addi x13, x12, 1   ; x13 = 100
-        26 => x"00000063",  -- beq  x0, x0, 0     ; loop finale pulito
+        4 => x"00052283",  -- lw x5, 0(x10)         -> x5 = MEM[0x00001000] = 123
 
-        others => x"00000013"  -- nop
+        5      => x"0000006F",  -- jal x0, 0             -> loop infinito su se stessa
+        others => x"00000013"   -- nop
     );
 
 begin

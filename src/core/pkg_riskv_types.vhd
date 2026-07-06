@@ -32,8 +32,8 @@ package pkg_riskv_types is
 
     -- ALU Code (bit(30) & funct3): Identifica univocamente l'operazione logico-aritmetica (R-Type e I-Type) che l'ALU deve eseguire.   Questo permette di ottenere una decodifica hardware estremamente efficiente nell'ALU Decoder (semplice cablaggio).In questo modo sfruttiamo la codifica nativa dell'ISA (filtrata leggermente, forzando bit30 a 0 quando non serve).
 
-    constant alu_add  : std_logic_vector(3 downto 0) := "0000";  -- bit 3 è 0 per distinguere ADD da SUB
-    constant alu_sub  : std_logic_vector(3 downto 0) := "1000";  -- bIT 3 è 1 per distinguere SUB da ADD
+    constant alu_add  : std_logic_vector(3 downto 0) := "0000";  -- bit 3 e' 0 per distinguere ADD da SUB
+    constant alu_sub  : std_logic_vector(3 downto 0) := "1000";  -- bIT 3 e' 1 per distinguere SUB da ADD
     constant alu_sll  : std_logic_vector(3 downto 0) := "0001";  -- Shift Left Logical
     constant alu_slt  : std_logic_vector(3 downto 0) := "0010";  -- Set Less Than (signed)
     constant alu_sltu : std_logic_vector(3 downto 0) := "0011";  -- Set Less Than Unsigned (unsigned)
@@ -69,6 +69,9 @@ package pkg_riskv_types is
     constant f3_word   : std_logic_vector(2 downto 0) := "010";  -- LW, SW
     constant f3_byte_u : std_logic_vector(2 downto 0) := "100";  -- LBU
     constant f3_half_u : std_logic_vector(2 downto 0) := "101";  -- LHU
+
+    -- Organizzazione della memoria
+    constant DATA_BASE_ADDRESS : word_t := x"00001000";
 
 end package pkg_riskv_types;
 

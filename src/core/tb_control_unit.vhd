@@ -39,7 +39,7 @@ begin
         imm_type_o     => imm_type_o_t,
         f3_o           => f3_o_t,
         f7b_o          => f7b_o_t,
-        alu_op         => alu_op_t,
+        alu_op_o       => alu_op_t,
         alu_src_a_o    => alu_src_a_o_t,
         alu_src_b_o    => alu_src_b_o_t,
         mem_read_o     => mem_read_o_t,

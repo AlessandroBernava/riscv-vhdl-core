@@ -45,13 +45,14 @@ end entity data_memory;
 
 architecture rtl of data_memory is
 
-    signal mem : data_mem_t := (others => (others => '0'));
+    signal mem        : data_mem_t := (others => (others => '0'));
+    signal word_index : integer;
 
 begin
 
+    word_index <= to_integer(unsigned(addr_i(31 downto 2))) - to_integer(unsigned(DATA_BASE_ADDRESS(31 downto 2)));
     data_mem_proc : process (clk) is
     begin
-
         if (clk'event and clk = '1') then
             if (res_i = '1') then
                 data_o <= (others => '0');
@@ -60,24 +61,24 @@ begin
                     --  mem(to_integer(unsigned(addr_i(31 downto 2)))) <= write_data_i; questo sovrascrive tutti i byte della word in memoria
 
                     if (byte_enable_i(0) = '1') then
-                        mem(to_integer(unsigned(addr_i(31 downto 2))))(7 downto 0) <= write_data_i(7 downto 0);
+                        mem(word_index)(7 downto 0) <= write_data_i(7 downto 0);
                     end if;
 
                     if (byte_enable_i(1) = '1') then
-                        mem(to_integer(unsigned(addr_i(31 downto 2))))(15 downto 8) <= write_data_i(15 downto 8);
+                        mem(word_index)(15 downto 8) <= write_data_i(15 downto 8);
                     end if;
 
                     if (byte_enable_i(2) = '1') then
-                        mem(to_integer(unsigned(addr_i(31 downto 2))))(23 downto 16) <= write_data_i(23 downto 16);
+                        mem(word_index)(23 downto 16) <= write_data_i(23 downto 16);
                     end if;
 
                     if (byte_enable_i(3) = '1') then
-                        mem(to_integer(unsigned(addr_i(31 downto 2))))(31 downto 24) <= write_data_i(31 downto 24);
+                        mem(word_index)(31 downto 24) <= write_data_i(31 downto 24);
                     end if;
                 end if;
 
                 if (mem_read_i = '1') then                              -- nota: se io scrivo in memoria ad un indirizzo e lo leggo durante lo stesso ciclo di clk, sul successivo fronte del clk leggo l'indirizzo vecchio. Non è un problema dato che nessuna istruzione legge e scrive contemparaneamente in memoria
-                    data_o <= mem(to_integer(unsigned(addr_i(31 downto 2))));
+                    data_o <= mem(word_index);
                 else
                     data_o <= (others => '0');
                 end if;

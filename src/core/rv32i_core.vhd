@@ -245,7 +245,7 @@ begin
         if (clk'event and clk = '1') then
             if (res = '1') then
                 id_ex <= ID_EX_REG_RESET;
-            elsif (stall = '0') then      --forse scambiare flush e stall, prima deve esservi stall
+            elsif (stall = '0') then      -- scambiare flush e stall, prima deve esservi stall
                 if (flush = '1') then
                     id_ex <= ID_EX_REG_RESET;
                 else
