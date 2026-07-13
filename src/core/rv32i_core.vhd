@@ -18,12 +18,14 @@ entity rv32i_core is
         --dbg_rd_addr : out reg_addr_t;
         dbg_wr_data : out word_t;
 
-        dbg_id_ex_we  : out std_logic;
-        dbg_id_ex_rd  : out reg_addr_t;
-        dbg_ex_mem_we : out std_logic;
-        dbg_ex_mem_rd : out reg_addr_t;
-        dbg_mem_wb_we : out std_logic;
-        dbg_mem_wb_rd : out reg_addr_t;
+        dbg_id_ex_we       : out std_logic;
+        dbg_id_ex_rd       : out reg_addr_t;
+        dbg_id_ex_rs1_addr : out reg_addr_t;
+        dbg_id_ex_rs2_addr : out reg_addr_t;
+        dbg_ex_mem_we      : out std_logic;
+        dbg_ex_mem_rd      : out reg_addr_t;
+        dbg_mem_wb_we      : out std_logic;
+        dbg_mem_wb_rd      : out reg_addr_t;
 
         dbg_cu_we : out std_logic;
         dbg_cu_rd : out reg_addr_t;
@@ -156,6 +158,7 @@ begin
         reg_write_mem_i => ex_mem.reg_write,
         rd_wb_i         => mem_wb.rd_addr,
         reg_write_wb_i  => mem_wb.reg_write,
+        ex_mem_opcode_i => ex_mem.opcode,
         forwardA_o      => forwardA,          --controlla mux in ex che produce aluopB, vedere appunti
         forwardB_o      => forwardB
     );
@@ -295,7 +298,7 @@ begin
     alu_result;
 
     -- mux pre alu in ex
-    rs1_forwarded <= id_ex.rs1_data when forwardA = "00" else
+    rs1_forwarded <= id_ex.rs1_data when forwardA = "00" else  -- problema congelo il registro id ex e con lui un dato id_ex.rs1_data vecchio di un ciclo, quindi se l'istruzione prima (2 prima di quella corrente) cambia il valore in quel registro, l'istruzione non prende il dato che è stato appena scritto (effettivamrnte lo è stato) nel registro, ma quello che c'era al ciclo prima
     ex_mem.alu_result               when forwardA = "01" else
     write_data;
 
@@ -382,4 +385,6 @@ begin
 
     dbg_mem_size <= mem_wb.mem_size;
 
+    dbg_id_ex_rs1_addr <= id_ex.rs1_addr;
+    dbg_id_ex_rs2_addr <= id_ex.rs2_addr;
 end architecture rtl;

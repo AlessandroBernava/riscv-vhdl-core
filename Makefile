@@ -6,7 +6,7 @@ GTKWAVE = gtkwave
 GHDLFLAGS = --std=08 --workdir=$(WORKDIR)
 
 TOP_TB = tb_rv32i_core
-STOP_TIME = 1us
+STOP_TIME = 500ns
 WAVEFILE = $(SIMDIR)/$(TOP_TB).ghw
 
 PKG = \
@@ -42,7 +42,7 @@ $(WORKDIR):
 $(SIMDIR):
 	mkdir -p $(SIMDIR)
 
-analizza: $(WORKDIR)
+analizza: $(WORKDIR) | mem
 	$(GHDL) -a $(GHDLFLAGS) $(SRC)
 
 elabora: analizza
@@ -61,3 +61,74 @@ wave: guarda
 
 clean:
 	rm -rf $(WORKDIR) $(SIMDIR)
+
+# Sezione software: compilazione C -> ELF -> file memorie
+
+# Nome di default del programma C (main.c)
+
+APP ?= main# Sovrascrive main se app non è definita da nessuna parte, con make APP=foo oppure definendo APP in un punto del makefile main non viene sovrascritto
+
+# Toolchain GNU RISC V
+
+CC := riscv-none-elf-gcc
+OBJDUMP := riscv-none-elf-objdump
+READELF := riscv-none-elf-readelf
+NM := riscv-none-elf-nm
+
+# Cartelle
+
+SOFT_SRC_DIR := software/src
+SOFT_BUILD_DIR := software/build
+SOFT_LINKER := software/linker/linker.ld
+SOFT_SCRIPT := software/scripts/hex_generator.py
+
+CFLAGS := -march=rv32i -mabi=ilp32 -ffreestanding -nostdlib -O0 -Wall -Wextra -mno-relax
+LDFLAGS := -T $(SOFT_LINKER) -march=rv32i -mabi=ilp32 -nostdlib -ffreestanding -Wl,--no-relax
+
+# Sorgenti
+
+SOFT_ASM_SRC := $(SOFT_SRC_DIR)/start.S
+SOFT_C_SRC := $(SOFT_SRC_DIR)/$(APP).c
+
+SOFT_START_O := $(SOFT_BUILD_DIR)/start.o
+SOFT_APP_O := $(SOFT_BUILD_DIR)/$(APP).o
+SOFT_ELF := $(SOFT_BUILD_DIR)/$(APP).elf
+SOFT_DUMP := $(SOFT_BUILD_DIR)/$(APP).dump
+SOFT_SECTIONS := $(SOFT_BUILD_DIR)/$(APP).sections
+SOFT_SYMS := $(SOFT_BUILD_DIR)/$(APP).symbols
+
+soft_dirs:                 # La directroy build viene eliminata con make clear
+	mkdir -p $(SOFT_BUILD_DIR)
+
+$(SOFT_START_O): $(SOFT_ASM_SRC) | soft_dirs     # $< = primo prerequisito $@ = target $^ = tutte le dipendenze
+	$(CC) -c $< -o $@ $(CFLAGS)
+
+$(SOFT_APP_O): $(SOFT_C_SRC) | soft_dirs
+	$(CC) -c $< -o $@ $(CFLAGS)
+
+$(SOFT_ELF): $(SOFT_START_O) $(SOFT_APP_O)
+	$(CC) -o $@ $^ $(LDFLAGS)
+
+.PHONY: elf
+
+elf: $(SOFT_ELF)
+
+dump: $(SOFT_ELF)
+	$(OBJDUMP) -D $(SOFT_ELF) > $(SOFT_DUMP)
+	$(READELF) -S $(SOFT_ELF) > $(SOFT_SECTIONS)
+	$(NM) -n $(SOFT_ELF) > $(SOFT_SYMS)
+
+mem: $(SOFT_ELF) | dump
+	python $(SOFT_SCRIPT) $(SOFT_ELF)
+
+check-app:
+	@echo "APP = '$(APP)'"
+	@echo "origin(APP) = $(origin APP)"
+help:
+	@echo "Target make disponibili:"
+	@echo "  make / make simula   - analizza, elabora e simula il testbench"
+	@echo "  make onda            - genera waveform (.ghw) per GTKWave"
+	@echo "  make guarda / wave   - apre GTKWave sulla waveform"
+	@echo "  make analizza        - analizza tutti i file VHDL"
+	@echo "  make elabora         - elabora il testbench top"
+	@echo "  make clean           - pulisce obj/ e simu/"

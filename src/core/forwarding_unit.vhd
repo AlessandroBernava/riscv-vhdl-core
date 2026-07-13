@@ -21,6 +21,7 @@ entity forwarding_unit is
         reg_write_mem_i : in  std_logic;
         rd_wb_i         : in  reg_addr_t;                    --collegare a mem_wb.rd_addr
         reg_write_wb_i  : in  std_logic;
+        ex_mem_opcode_i : in  std_logic_vector(6 downto 0);
         forwardA_o      : out std_logic_vector(1 downto 0);  --00 no forward, 01 da ex/mem, 10 da mem/ wb  controlla mux prima del mux alu_src_A
         forwardB_o      : out std_logic_vector(1 downto 0)
     );
@@ -28,11 +29,11 @@ end entity forwarding_unit;
 
 architecture rtl of forwarding_unit is
 begin
-    forwardA_o <= "01"  when rs1_addr_i = rd_mem_i and reg_write_mem_i = '1' else
+    forwardA_o <= "01"  when rs1_addr_i = rd_mem_i and reg_write_mem_i = '1' and ex_mem_opcode_i /= opc_load else
     "10"                when rs1_addr_i = rd_wb_i and reg_write_wb_i = '1' else
     "00";
 
-    forwardB_o <= "01"  when rs2_addr_i = rd_mem_i and reg_write_mem_i = '1' else
+    forwardB_o <= "01"  when rs2_addr_i = rd_mem_i and reg_write_mem_i = '1' and ex_mem_opcode_i /= opc_load else
     "10"                when rs2_addr_i = rd_wb_i and reg_write_wb_i = '1' else
     "00";
 end architecture rtl;

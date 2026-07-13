@@ -10,6 +10,33 @@ MEMORY  {
 }
 
 SECTIONS    {
+    /* codice e costanti in ROM */
+    .text : {
+        *(.text.init) /* prende la routine di bootstrap */
+        *(.text*)    /* prende tutti i frammenti di sezione il cui nome inizia con .text (tutto il codice) dagli object file e li concatena in    questa sezione di output  */
+        *(.rodata*) /* mette tutte le costanti in ROM */
+    } > ROM
 
+    . = ORIGIN(RAM) + 0x100;  /* riserva 256 byte a out */
+
+    /* dati inizializzati in RAM */
+    .data : {
+        __data_start__ = .;
+        *(.data*)
+        __data_end__ = .;
+    } > RAM
+
+    /* dati non inizializzati (bss) in RAM */
+    .bss : {
+        __bss_start__ = .;
+        *(.bss*)
+        *(COMMON)         /* variabili globali non inizializzate messe in un'area separata per gestire definizioni multiple */
+        __bss_end__ = .;
+    } > RAM
+
+    . = ALIGN(16);    /* . avanza al prossimo indirizzo multiplo di 8 (inserendo padding) per assicurarsi che la prossima sezione sia allineata a 16 byte (richiesto per sp da standard ABI per RISC V) */
+    __StackLimit = .;
+    __StackTop = ORIGIN(RAM) + LENGTH(RAM);
+    __end = .;
 }
 
