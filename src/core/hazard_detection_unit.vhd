@@ -1,11 +1,11 @@
 -- Hazard Detection Unit: rileva il load-use hazard, l'unico caso in cui il
 -- forwarding non e' sufficiente e serve uno stall esplicito della durata di un ciclo di clock. Si verifica quando
 -- una LOAD in EX scrive su un registro che l'istruzione successiva (in ID) legge
--- immediatamente: il dato e' disponibile solo dopo MEM, troppo tardi per EX.
+-- immediatamente: il dato e' disponibile solo dopo MEM, troppo tardi per EX (load + use)
 -- Quando stall_o='1', il top level deve:
---   1. congelare il PC (non aggiornarlo)
---   2. congelare la Instruction Memory / registro IF/ID (stall_i='1')
---   3. inserire una bolla in ID/EX azzerando i segnali di controllo (flush).
+--   - congelare il PC (non aggiornarlo)
+--   - congelare la Instruction Memory / registro IF/ID (stall_i='1')
+--   - inserire una bolla in ID/EX azzerando i segnali di controllo (flush).
 -- Un solo ciclo di stall e' sufficiente perche' la LOAD risolve in MEM e il
 -- forwarding da MEM/WB copre il ciclo successivo.
 
@@ -27,7 +27,7 @@ end entity hazard_detection_unit;
 
 architecture rtl of hazard_detection_unit is
 begin
-    stall_o <= '1' when opc_ex_mem_i = opc_load and (rd_addr_i = rs1_addr_i or rd_addr_i = rs2_addr_i) else
+    stall_o <= '1' when (opc_ex_mem_i = opc_load  and rd_addr_i /= REG_X0) and (rd_addr_i = rs1_addr_i or rd_addr_i = rs2_addr_i) else
     '0';
 end architecture rtl;
 

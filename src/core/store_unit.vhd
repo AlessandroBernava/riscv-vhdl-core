@@ -21,9 +21,6 @@
 --  Con BRAM sincrona non posso fare tutto in un unico blocco in MEM,
 --  altrimenti i dati delle load sarebbero sfasati rispetto all'istruzione.
 
--- scelta architetturale: verificare se e' utile mettere il blocco di formattazione del dato letto dalla memoria (load_unit)
--- nello stadio di WB piuttosto che nello stadio di MEM come logica aggiunta al modulo data_memory
-
 -- NOTE: questa load_unit assume accessi di memoria allineati
 -- (word su indirizzi multipli di 4, half su multipli di 2).
 -- Gli accessi misallineati in RISC-V hanno comportamento dipendente
@@ -31,7 +28,7 @@
 --   - o trap per misaligned load/store
 --   - o gestione hardware con due accessi di memoria
 -- Per ora il core RV32I supporta solo accessi allineati; per estenderlo
--- studiare: misaligned load/store in spec RISC-V e design di LSU (es. Ibex).
+-- studiare: misaligned load/store in spec RISC-V e design di LSU (es. Ibex (??)).
 
 library ieee;
 use ieee.numeric_std.all;

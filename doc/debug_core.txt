@@ -1,58 +1,101 @@
-    -- DEBUG NOTE (load-use + stall/flush + EX/MEM NOP)
-    -- Inizialmente davo priorità al flush rispetto allo stall sia in IF/ID
-    -- (instruction_memory) sia nel registro ID/EX. In pratica:
-    --   - se flush='1' (branch/jump preso) azzeravo subito IF/ID e ID/EX
-    --     con una NOP, anche se nello stesso ciclo l'hazard detection unit
-    --     aveva rilevato uno stall per load-use.
-    -- Questo portava a situazioni in cui:
-    --   - una branch o una J/JALR veniva calcolata in EX con operandi
-    --     sbagliati (perché c'era un hazard load-use ancora non risolto),
-    --   - il segnale jump risultava quindi errato,
-    --   - il flush annullava le istruzioni sbagliate e il PC saltava a
-    --     un indirizzo non valido.
-    --
-    -- Ho capito che se c'è uno stall (load-use) i dati in EX non sono ancora
-    -- affidabili, quindi qualsiasi branch/jalr calcolata in quel ciclo è
-    -- potenzialmente errata. La soluzione è dare priorità allo stall:
-    --   - se stall='1', congelo IF/ID e ID/EX (non accetto nuove
-    --     istruzioni e non avanzo quella corrente),
-    --   - solo se stall='0' considero flush e, se necessario, inietto NOP.
-    -- Questo è stato implementato in instruction_memory e in id_ex_reg
-    -- invertendo l'ordine dei test: prima stall, poi flush.
-    --
-    -- Secondo problema: gestione dello stall nella parte bassa della pipeline.
-    -- All'inizio, in caso di stall, bloccavo anche EX/MEM senza modificarne
-    -- il contenuto. In questo modo l'istruzione che causava l'hazard (load
-    -- o istruzione successiva) rimaneva intrappolata in EX/MEM, mentre ID/EX
-    -- e IF/ID restavano fermi. L'hazard detection unit continuava a vedere
-    -- la stessa combinazione "istruzione in MEM/EX + use in EX/ID" e
-    -- stall rimaneva a '1' all'infinito: PC bloccato per sempre.
-    --
-    -- La chiave è stata capire che, quando introduco uno stall, devo sì
-    -- congelare gli stadi a monte, ma lo stadio subito dopo il punto in cui
-    -- rilevo l'hazard deve ricevere una NOP (bolla), non restare congelato.
-    -- Nel mio schema la hazard detection unit confronta l'istruzione di
-    -- EX/MEM con quella in ID/EX; quindi il registro EX/MEM è "dopo" il
-    -- punto di controllo. Ho modificato ex_mem_reg così:
-    --   - se res='1' → EX_MEM_REG_RESET (NOP)
-    --   - elsif stall='1' → EX_MEM_REG_RESET (inietto NOP nello stadio MEM)
-    --   - else → ex_mem <= ex_mem_new (normale avanzamento)
-    -- In questo modo:
-    --   - al ciclo in cui rilevo l'hazard, l'istruzione che usa dati
-    --     sbagliati viene cancellata da EX/MEM (sostituita da NOP),
-    --   - IF/ID e ID/EX restano congelati, quindi la stessa istruzione
-    --     "use" rimane in ID/EX,
-    --   - al ciclo successivo la load può completare in WB e produrre il
-    --     dato corretto,
-    --   - la stessa istruzione "use" rientra in EX, stavolta con il
-    --     forwarding corretto da WB e con EX/MEM libero (NOP), quindi lo
-    --     stall scompare.
-    --
-    -- In sintesi: il bug era dato da priorità sbagliata tra stall e flush
-    -- (branch calcolato su dati non pronti) e da un EX/MEM congelato invece
-    -- che trasformato in NOP durante lo stall. Correggendo entrambi:
-    --   - prima gestisco lo stall (congelo IF/ID e ID/EX, NOP in EX/MEM),
-    --   - solo poi applico flush quando i dati in EX sono affidabili,
-    -- la pipeline risolve correttamente i load-use hazard senza bloccare
-    -- per sempre il PC e senza saltare con indirizzi calcolati su operandi
-    -- sbagliati.
+BUG RILEVATI TRAMITE TEST SEQUENZE DI ISTRUZIONI MACCHINA AGGIUNTE MANUALMENTE ALLA INSTRUCTION MEMORY:
+
+    DEBUG NOTE (load-use + stall/flush + EX/MEM NOP)
+        Inizialmente davo priorità al flush rispetto allo stall sia in IF/ID (instruction_memory) sia nel registro ID/EX. In pratica, se flush='1' (branch/jump preso) azzeravo subito IF/ID e ID/EX con una NOP, anche se nello stesso ciclo l'hazard detection unit aveva rilevato uno stall per load-use.
+        Questo portava a situazioni in cui una branch o una J/JALR veniva calcolata in EX con operandi sbagliati (perché c'era un hazard load-use ancora non risolto), il segnale jump risultava quindi errato, il flush annullava le istruzioni sbagliate e il PC saltava a un indirizzo non valido.
+
+        Ho capito che se c'è uno stall (load-use) i dati in EX non sono ancora affidabili, quindi qualsiasi branch/jalr calcolata in quel ciclo è potenzialmente errata. La soluzione è dare priorità allo stall:
+        se stall='1', congelo IF/ID e ID/EX (non accetto nuove istruzioni e non avanzo quella corrente),
+        solo se stall='0' considero flush e, se necessario, inietto NOP.
+        Questo è stato implementato in instruction_memory e in id_ex_reg invertendo l'ordine dei test: prima stall, poi flush.
+
+    Secondo problema: gestione dello stall nella parte bassa della pipeline.
+        All'inizio, in caso di stall, bloccavo anche EX/MEM senza modificarne il contenuto. In questo modo l'istruzione che causava l'hazard (load o istruzione successiva) rimaneva intrappolata in EX/MEM, mentre ID/EX e IF/ID restavano fermi. L'hazard detection unit continuava a vedere la stessa combinazione "istruzione in MEM/EX + use in EX/ID" e stall rimaneva a '1' all'infinito: il PC rimaneva bloccato per sempre.
+
+        La chiave è stata capire che, quando introduco uno stall, devo sì congelare gli stadi a monte, ma lo stadio subito dopo il punto in cui rilevo l'hazard deve ricevere una NOP (bolla), non restare congelato. Nel mio schema la hazard detection unit confronta l'istruzione di EX/MEM con quella in ID/EX; quindi il registro EX/MEM è "dopo" il punto di controllo. Ho modificato ex_mem_reg così:
+        se res='1' -> EX_MEM_REG_RESET (NOP)
+        elsif stall='1' -> EX_MEM_REG_RESET (inietto NOP nello stadio MEM)
+        else -> ex_mem <= ex_mem_new (normale avanzamento)
+        In questo modo, al ciclo in cui rilevo l'hazard, l'istruzione che usa dati sbagliati viene cancellata da EX/MEM (sostituita da NOP), IF/ID e ID/EX restano congelati, quindi la stessa istruzione "use" rimane in ID/EX, al ciclo successivo la load può completare in WB e produrre il dato corretto, la stessa istruzione "use" rientra in EX, stavolta con il forwarding corretto da WB e con EX/MEM libero (NOP), quindi lo stall scompare.
+
+        In sintesi, il bug era dato da priorità sbagliata tra stall e flush (branch calcolato su dati non pronti) e da un EX/MEM congelato invece che trasformato in NOP durante lo stall. Correggendo entrambi:
+        prima gestisco lo stall (congelo IF/ID e ID/EX, NOP in EX/MEM),
+        solo poi applico flush quando i dati in EX sono affidabili,
+        la pipeline risolve correttamente i load-use hazard senza bloccare per sempre il PC e senza saltare con indirizzi calcolati su operandi sbagliati.
+
+BUG RILEVATI TRAMITE TEST DEI PROGRAMMI C (tramite analisi del file .dump):
+    Bug load-use con forwarding da mem/wb verso id/ex dell'istruzione 'use':
+        Con la scelta progettuale, inizialmente adottata, di produrre il segnale di stall confrontando il registro rd (dell'istruzione load) in ex/mem con i registri rs1 ed rs2 della successiva istruzione 'use', era necessario, per stall = '1' congelare i registri pipeline fino a id/ex, inserendo una bolla NOP in ex/mem. Congelando id/ex il dato id_ex.rs*_data non viene aggiornato, quindi se l'istruzione prima (2 prima di quella corrente) cambia il valore in quel registro, il forwarding non avviene e l'istruzione non prende il dato che sarà poi scritto nel registro, ma quello che c'era al ciclo prima.
+        Soluzione:
+        Anticipare la gestione del load-use hazard di un ciclo, di modo che ad essere congelati siano solo i registri PC e ifid (instruction memory) e che in id/ex venga inserita una bolla NOP.
+    Bug forwarding con rs2 = x0 (zero register)
+        Sintomo:
+        L'istruzione "sw zero,-20(s0)" doveva scrivere 0 nello slot di stack, ma in simulazione veniva scritto 0x00000108 (264) o altri valori derivati da istruzioni precedenti.
+        Di conseguenza il loop che accumula sum1 nel programma main.c partiva da un valore sporco invece che da 0, e m risultava "valore vecchio + 120" invece di 120 pulito.
+
+        Analisi:
+        Il Register File era corretto: per rs2_addr_i = REG_X0 l'uscita rs2_data_o era sempre 0, e le scritture su x0 venivano ignorate.
+        Il valore errato nasceva nel datapath di EX: il mux rs2_forwarded bypassava il valore 0 del Register File con ex_mem.alu_result o write_data quando forwardB = "01"/"10".
+        In pratica la Forwarding Unit non distingueva il caso rs2 = x0: se trovava rs2_addr = rd_mem/rd_wb con reg_write = '1', attivava il forwarding anche quando il sorgente logico era il registro zero.
+
+        Soluzione:
+        È stata aggiunta una condizione esplicita nel mux di forwarding:
+        rs2_forwarded <= id_ex.rs2_data
+        when forwardB = "00" or id_ex.rs2_addr = REG_X0 else ...
+        In questo modo, se rs2_addr = REG_X0 il valore usato in EX proviene sempre dal Register File (zero costante) e il forwarding viene disattivato per il registro zero, indipendentemente da forwardB.
+        Dopo la correzione:
+        "sw zero,-20(s0)" scrive effettivamente 0 nello slot di stack.
+        Il loop sum1 parte da 0 e arriva a 120.
+        m contiene 120 anche senza azzeramento manuale precedente.
+
+    Inizializzazione memoria e risoluzione "Out of Bounds" su I/O
+        Sintomo:
+        Durante i primi test del core RV32I con programmi C che facevano uso di variabili globali (come array precompilati), l'esecuzione non produceva i risultati attesi. Invece di leggere i dati corretti, la CPU leggeva zero. Inoltre, si verificavano accessi a indirizzi di memoria errati con conseguenti blocchi per "Out of Bounds".
+
+        Primo problema (mancata inizializzazione della memoria)
+        Mi sono reso conto di un problema strutturale: l'architettura VHDL partiva con la memoria completamente vuota (a zero), ma i programmi C compilati (l'eseguibile ELF) presupponevano che certe variabili globali (array, contatori, puntatori inizializzati) fossero già caricate in RAM prima dell'inizio dell'esecuzione (nella sezione .data).
+
+        Soluzione (preload della memoria via script):
+        Ho compreso meglio il funzionamento del linker script (.ld), comprendendo come il compilatore mappa le variabili globali inizializzate nella sezione .data e quelle non inizializzate nella sezione .bss (che per default partono da 0).
+        Ho usato uno script Python per estrarre il contenuto binario della sezione .data direttamente dal file elf generato dalla toolchain.
+        La data memory in VHDL è stata modificata per leggere il file generato dallo script, pre-caricando i dati agli indirizzi fisici corretti (es. a partire dalla base 0x1100).
+        Questo fix ha risolto in modo definitivo il problema della memoria "vuota" e dei valori sporchi in lettura.
+
+        Secondo bug (auto-sovrascrittura del puntatore)
+        Nonostante la memoria venisse ora inizializzata correttamente dallo script, su alcune operazioni di scrittura in memoria in C, continuavano a verificarsi crash per accessi out of bounds.
+
+        Analisi:
+        Il problema era concettuale nel modo in cui definivo l'output in C:
+        volatile unsigned int m = (volatile unsigned int )0x00001100;
+        Dichiarando m come variabile globale inizializzata, il linker la piazzava in .data (es. all'indirizzo fisico 0x1100), e lo script Python la pre-caricava correttamente col valore 0x1100.
+        A runtime, ad esempio l'istruzione:
+        m = 5;
+        produceva:
+        lw: la CPU legge il valore del puntatore m dall'indirizzo 0x1100 (valore letto: 0x1100).
+        sw: la CPU scrive il valore 5 all'indirizzo letto (0x1100).
+        Così facendo, la scrittura distruggeva il puntatore stesso.
+        All'istruzione successiva:
+        m = 10;
+        la CPU legge di nuovo da 0x1100, ma ora trova 5 e non più 0x1100, somma l'offset (4 byte) e ottiene indirizzo 9, tentando di scrivere all'indirizzo 0x00000009, con errore out of bounds.
+
+        Soluzione (macro  invece di variabili in RAM):
+        L'uso di una vera variabile in RAM per puntare a un indirizzo I/O fisso (MMIO) spreca memoria, richiede una lettura lw extra, ed è vulnerabile alla sovrascrittura.
+        La soluzione standard adottata è l'uso di costanti (macro) nel compilatore:
+        #define OUT ((volatile uint32_t *)0x00001200u)
+        Con questo approccio:
+        - L'indirizzo base 0x1200 non occupa spazio nella sezione .data.
+        - L'indirizzo viene hardcoded direttamente nelle istruzioni della .text (usando lui e addi).
+        - L'hardware e il simulatore sanno che le scritture a 0x1200 vanno verso i dispositivi mappati in I/O.
+        - Viene azzerato il rischio di auto-sovrascrittura.
+
+        Risultato:
+        L'architettura è ora divisa in modo logico e pulito:
+        - Variabili C: gestite in RAM (.data precaricata via script / .bss a zero).
+        - Puntatori fissi hardcoded nel firmware, utilizzabili in futuro per MMIO.
+
+
+
+
+
+
+

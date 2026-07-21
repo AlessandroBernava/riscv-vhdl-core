@@ -1,5 +1,6 @@
--- Forwarding Unit: rileva gli hazard di dato e genera i segnali di selezione
--- per i mux di forwarding posti prima degli ingressi della ALU nello stadio EX.
+-- Forwarding Unit:
+-- rileva i data hazard  e genera i segnali di selezione per i mux di forwarding
+-- posti prima degli ingressi della ALU nello stadio EX.
 -- Confronta gli indirizzi rs1/rs2 dell'istruzione in EX con rd delle istruzioni
 -- in MEM e WB: se coincidono e reg_write e' attivo, il dato viene prelevato
 -- direttamente dall'uscita dello stadio piu' avanzato invece che dal registro

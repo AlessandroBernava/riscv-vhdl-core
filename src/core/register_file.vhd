@@ -1,3 +1,20 @@
+-- Lettura asincrona con forwarding interno: se we='1' e rd_addr_i coincide con
+-- rs1/rs2_addr_i, viene propagato direttamente write_data_i invece del valore
+-- in memoria, evitando lo structural hazard di scrittura/lettura sullo stesso
+-- registro nello stesso ciclo di clock.
+--
+-- NOTA ARCHITETTURALE: il forwarding di lettrua  e' puramente combinatorio e non considera
+-- il segnale res. Di conseguenza, durante il reset (res='1'), se we='1' e
+-- rd_addr_i = rs1/rs2_addr_i, le uscite mostrano write_data_i invece di zero,
+-- anche se reg e' stato appena azzerato dal process sincrono.
+-- Soluzione scartata: aggiungere il controllo di res nelle uscite combinatorie
+-- avrebbe creato un reset ibrido. In hardware/FPGA, se res torna basso prima del fronte
+-- del clock, le uscite escono dal forzamento a zero mentre reg non e' ancora
+-- stato azzerato, generando un impulso spurio (glitch) invisibile in sim.
+-- La responsabilita' di abbassare we durante il reset e' quindi delegata al
+-- controller della pipeline. Nota 2: entrambe le situazioni non sono problematiche
+-- dal momento che 1) il reset è sincrono e 2) il dato non viene propagato, dato che
+-- il reset azzera il registro id/ex
 
 library ieee;
 use ieee.numeric_std.all;
@@ -24,24 +41,6 @@ architecture rtl of register_file is
     signal reg : reg_file_t;
 
 begin
-
-    -- Lettura asincrona con forwarding interno: se we='1' e rd_addr_i coincide con
-    -- rs1/rs2_addr_i, viene propagato direttamente write_data_i invece del valore
-    -- in memoria, evitando lo structural hazard di scrittura/lettura sullo stesso
-    -- registro nello stesso ciclo di clock.
-    --
-    -- NOTA ARCHITETTURALE: il forwarding di lettrua  e' puramente combinatorio e non considera
-    -- il segnale res. Di conseguenza, durante il reset (res='1'), se we='1' e
-    -- rd_addr_i = rs1/rs2_addr_i, le uscite mostrano write_data_i invece di zero,
-    -- anche se reg e' stato appena azzerato dal process sincrono.
-    -- Soluzione scartata: aggiungere il controllo di res nelle uscite combinatorie
-    -- avrebbe creato un reset ibrido. Su in hardware/FPGA, se res torna basso prima del fronte
-    -- del clock, le uscite escono dal forzamento a zero mentre reg non e' ancora
-    -- stato azzerato, generando un impulso spurio (glitch) invisibile in sim.
-    -- La responsabilita' di abbassare we durante il reset e' quindi delegata al
-    -- controller della pipeline. Nota 2: entrambe le situazioni non sono problematiche
-    -- dal momento che 1) il reset è sincrono e 2) il dato non viene propagato, dato che
-    -- il reset azzera il registro id/ex
 
     rs1_data_o <= (others => '0') when rs1_addr_i = REG_X0 else
     write_data_i                  when (we = '1'  and rs1_addr_i = rd_addr_i) else

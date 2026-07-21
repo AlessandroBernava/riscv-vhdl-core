@@ -1,5 +1,5 @@
--- Branch/Jump Unit: decide se il PC deve essere aggiornato con il target
--- address (branch taken o jump) o con PC+4 (esecuzione sequenziale).
+-- Branch/Jump Unit: decide se il PC deve essere aggiornato con il target address (branch taken o jump)
+--  o con PC+4.
 -- Per i branch, valuta la condizione direttamente sui dati (BLT, BGE, BLTU, BGEU)
 -- o sul flag zero proveniente dalla ALU (BEQ, BNE), evitando flag aggiuntivi
 -- nell'ALU. Per JAL e JALR il salto e' incondizionato.

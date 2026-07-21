@@ -1,3 +1,9 @@
+/*
+    Questo package definisce i tipi di dati e le costanti utilizzati nel progetto RISC-V. In particolare, include:
+    - La definizione del tipo word_t come un vettore di 32 bit, che rappresenta una parola di dati.
+    - Le costanti per gli opcode delle istruzioni RISC-V, che identificano il tipo di operazione da eseguire.
+    - Le costanti per i codici ALU, che identificano univocamente l'operazione logico-aritmetica che l'ALU deve eseguire, facilitando la decodifica hardware nell'ALU Decoder.
+*/
 
 library ieee;
 use ieee.std_logic_1164.all;
@@ -42,9 +48,9 @@ package pkg_riskv_types is
     constant alu_sra  : std_logic_vector(3 downto 0) := "1101";  -- Shift Right Arithmetic (bit alto 1 per distinguere da SRL)
     constant alu_or   : std_logic_vector(3 downto 0) := "0110";  -- OR
     constant alu_and  : std_logic_vector(3 downto 0) := "0111";  -- AND
-    -- ==========================================
+
     -- RISC-V Funct3 Constants (3 bit)
-    -- ==========================================
+
     -- Aritmetiche/Logiche (usate con OPC_OP e OPC_OP_IMM) usate con OPC_OP / OPC_OP_IMM solo se si vuole decodifica esplicita, non necessarie con encoding diretto ALUCTRL = bit30 & funct3
     constant f3_add_sub : std_logic_vector(2 downto 0) := "000";
     constant f3_sll     : std_logic_vector(2 downto 0) := "001";
@@ -71,16 +77,10 @@ package pkg_riskv_types is
     constant f3_half_u : std_logic_vector(2 downto 0) := "101";  -- LHU
 
     -- Organizzazione della memoria
-    constant DATA_BASE_ADDRESS : word_t := x"00001000";
+    constant DATA_BASE_ADDRESS : word_t := x"00001100";
 
 end package pkg_riskv_types;
 
-/*
-    Questo package definisce i tipi di dati e le costanti utilizzati nel progetto RISC-V. In particolare, include:
-    - La definizione del tipo word_t come un vettore di 32 bit, che rappresenta una parola di dati.
-    - Le costanti per gli opcode delle istruzioni RISC-V, che identificano il tipo di operazione da eseguire.
-    - Le costanti per i codici ALU, che identificano univocamente l'operazione logico-aritmetica che l'ALU deve eseguire, facilitando la decodifica hardware nell'ALU Decoder.
-*/
 /*
 esempio alu decoder: process(ALUOp, funct3, bit30, is_R_type)
     variable use_bit30 : std_logic;

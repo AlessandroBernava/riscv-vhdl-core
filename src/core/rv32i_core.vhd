@@ -39,7 +39,9 @@ entity rv32i_core is
 
         dbg_alu_result  : out word_t;
         dbg_byte_enable : out std_logic_vector(3 downto 0);
-        dbg_mem_size    : out std_logic_vector(1 downto 0)
+        dbg_mem_size    : out std_logic_vector(1 downto 0);
+
+        dbg_mem_store_data : out word_t
     );
 end entity rv32i_core;
 
@@ -165,10 +167,10 @@ begin
 
     hazard_detection_unit_inst : entity work.hazard_detection_unit
     port map (
-        opc_ex_mem_i => ex_mem.opcode,
-        rs1_addr_i   => id_ex.rs1_addr,
-        rs2_addr_i   => id_ex.rs2_addr,
-        rd_addr_i    => ex_mem.rd_addr,
+        opc_ex_mem_i => id_ex.opcode,
+        rs1_addr_i   => id_ex_new.rs1_addr,
+        rs2_addr_i   => id_ex_new.rs2_addr,
+        rd_addr_i    => id_ex.rd_addr,
         stall_o      => stall
     );
 
@@ -248,6 +250,8 @@ begin
         if (clk'event and clk = '1') then
             if (res = '1') then
                 id_ex <= ID_EX_REG_RESET;
+            elsif stall = '1' then
+                id_ex <= ID_EX_REG_RESET;
             elsif (stall = '0') then      -- scambiare flush e stall, prima deve esservi stall
                 if (flush = '1') then
                     id_ex <= ID_EX_REG_RESET;
@@ -264,15 +268,14 @@ begin
     -- le istruzioni gia' in EX/MEM e MEM/WB devono completare normalmente.
     -- Il flush annulla solo le istruzioni errate in IF e ID (dopo un branch taken),
     -- non quelle gia' avanzate oltre EX che hanno gia' prodotto risultati corretti
-    -- edit: lo stall deve essere gestito
 
     ex_mem_reg : process (clk) is
     begin
         if (clk'event and clk = '1') then
             if (res = '1') then
                 ex_mem <= EX_MEM_REG_RESET;
-            elsif (stall = '1') then
-                ex_mem <= EX_MEM_REG_RESET;
+                -- elsif (stall = '1') then
+                --  ex_mem <= EX_MEM_REG_RESET;
             else
                 ex_mem <= ex_mem_new;
             end if;
@@ -298,11 +301,11 @@ begin
     alu_result;
 
     -- mux pre alu in ex
-    rs1_forwarded <= id_ex.rs1_data when forwardA = "00" else  -- problema congelo il registro id ex e con lui un dato id_ex.rs1_data vecchio di un ciclo, quindi se l'istruzione prima (2 prima di quella corrente) cambia il valore in quel registro, l'istruzione non prende il dato che è stato appena scritto (effettivamrnte lo è stato) nel registro, ma quello che c'era al ciclo prima
+    rs1_forwarded <= id_ex.rs1_data when forwardA = "00" or id_ex.rs1_addr = REG_X0 else  -- problema congelo il registro id ex e con lui un dato id_ex.rs1_data vecchio di un ciclo, quindi se l'istruzione prima (2 prima di quella corrente) cambia il valore in quel registro, l'istruzione non prende il dato che è stato appena scritto (effettivamrnte lo è stato) nel registro, ma quello che c'era al ciclo prima
     ex_mem.alu_result               when forwardA = "01" else
     write_data;
 
-    rs2_forwarded <= id_ex.rs2_data when forwardB = "00" else
+    rs2_forwarded <= id_ex.rs2_data when forwardB = "00"  or id_ex.rs2_addr = REG_X0 else
     ex_mem.alu_result               when forwardB = "01" else      -- errore: se ho una load non devo prendere il risultato  da
     write_data;
 
@@ -387,4 +390,6 @@ begin
 
     dbg_id_ex_rs1_addr <= id_ex.rs1_addr;
     dbg_id_ex_rs2_addr <= id_ex.rs2_addr;
+
+    dbg_mem_store_data <= mem_store_data;
 end architecture rtl;

@@ -1,6 +1,6 @@
 -- Generatore dell'immediato: riceve l'istruzione a 32 bit e il tipo
 -- (R, I, S, B, U, J come enum instr_type_t) e riassembla i bit dell'immediato
--- come da specifica RISC-V, con sign extension a 32 bit.
+-- come da specifica RV32I , con sign extension a 32 bit.
 -- Logica puramente combinatoria, nessun clock.
 -- Il tipo R non ha immediato: restituisce zero
 

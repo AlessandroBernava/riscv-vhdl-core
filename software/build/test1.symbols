@@ -1,0 +1,17 @@
+00000000 T _start
+00000018 t loop1
+00000028 t done
+00000030 t halt
+00000034 T main
+0000014c A __data_rom_start__
+00001000 B __out_start__
+00001100 D __data_start__
+00001100 B __out_end__
+00001100 D a
+00001110 D __bss_end__
+00001110 D __bss_start__
+00001110 D __data_end__
+00001110 D __end
+00001110 D __StackLimit
+00001110 B sum
+00002000 D __StackTop

@@ -6,7 +6,7 @@ GTKWAVE = gtkwave
 GHDLFLAGS = --std=08 --workdir=$(WORKDIR)
 
 TOP_TB = tb_rv32i_core
-STOP_TIME = 500ns
+STOP_TIME = 30us
 WAVEFILE = $(SIMDIR)/$(TOP_TB).ghw
 
 PKG = \
@@ -60,13 +60,13 @@ guarda: onda
 wave: guarda
 
 clean:
-	rm -rf $(WORKDIR) $(SIMDIR)
+	rm -rf $(WORKDIR) $(SIMDIR) $(SOFT_BUILD_DIR)
 
 # Sezione software: compilazione C -> ELF -> file memorie
 
 # Nome di default del programma C (main.c)
 
-APP ?= main# Sovrascrive main se app non è definita da nessuna parte, con make APP=foo oppure definendo APP in un punto del makefile main non viene sovrascritto
+APP ?= main# Sovrascrive main se app non è definita da nessuna parte, con make APP=... oppure definendo APP in un punto del makefile main non viene sovrascritto
 
 # Toolchain GNU RISC V
 
@@ -80,7 +80,8 @@ NM := riscv-none-elf-nm
 SOFT_SRC_DIR := software/src
 SOFT_BUILD_DIR := software/build
 SOFT_LINKER := software/linker/linker.ld
-SOFT_SCRIPT := software/scripts/hex_generator.py
+SOFT_SCRIPT_INSTR := software/scripts/hex_generator.py
+SOFT_SCRIPT_DATA := software/scripts/data_mem_hex_generator.py
 
 CFLAGS := -march=rv32i -mabi=ilp32 -ffreestanding -nostdlib -O0 -Wall -Wextra -mno-relax
 LDFLAGS := -T $(SOFT_LINKER) -march=rv32i -mabi=ilp32 -nostdlib -ffreestanding -Wl,--no-relax
@@ -119,16 +120,24 @@ dump: $(SOFT_ELF)
 	$(NM) -n $(SOFT_ELF) > $(SOFT_SYMS)
 
 mem: $(SOFT_ELF) | dump
-	python $(SOFT_SCRIPT) $(SOFT_ELF)
+	python $(SOFT_SCRIPT_INSTR) $(SOFT_ELF) | python $(SOFT_SCRIPT_DATA) $(SOFT_ELF)
 
 check-app:
 	@echo "APP = '$(APP)'"
 	@echo "origin(APP) = $(origin APP)"
+
 help:
 	@echo "Target make disponibili:"
-	@echo "  make / make simula   - analizza, elabora e simula il testbench"
-	@echo "  make onda            - genera waveform (.ghw) per GTKWave"
-	@echo "  make guarda / wave   - apre GTKWave sulla waveform"
-	@echo "  make analizza        - analizza tutti i file VHDL"
-	@echo "  make elabora         - elabora il testbench top"
-	@echo "  make clean           - pulisce obj/ e simu/"
+	@echo "  make / make simula       - analizza, elabora e simula il testbench"
+	@echo "                             usa di default APP=main (main.c)"
+	@echo "                             es: make APP=test1 simula"
+	@echo "                             -> usa software/src/test1.c al posto di main.c"
+	@echo "  make onda                - genera waveform (.ghw) per GTKWave"
+	@echo "  make guarda / wave       - apre GTKWave sulla waveform"
+	@echo "  make analizza            - analizza tutti i file VHDL"
+	@echo "  make elabora             - elabora il testbench top"
+	@echo "  make elf                 - produce l'eseguibile ELF del programma C"
+	@echo "  make dump                - genera dump, sezioni e simboli dell'ELF"
+	@echo "  make mem                 - genera i file di inizializzazione per le"
+	@echo "                             memorie istruzioni/dati a partire dall'ELF"
+	@echo "  make clean               - pulisce obj/, simu e build/"

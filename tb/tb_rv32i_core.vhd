@@ -3,6 +3,7 @@ library ieee;
 use ieee.numeric_std.all;
 use ieee.std_logic_1164.all;
 
+use work.pkg_riskv_pipeline.all;
 use work.pkg_riskv_types.all;
 
 entity tb_rv32i_core is
@@ -45,6 +46,8 @@ architecture tb of tb_rv32i_core is
 
     signal dbg_id_ex_rs1_addr_t : reg_addr_t;
     signal dbg_id_ex_rs2_addr_t : reg_addr_t;
+
+    signal dbg_mem_store_data_t : word_t;
 
     constant ESC    : string := character'val(27) & "[";
     constant RED    : string := ESC & "31m";
@@ -92,7 +95,9 @@ begin
         dbg_mem_size => dbg_mem_size_t,
 
         dbg_id_ex_rs1_addr => dbg_id_ex_rs1_addr_t,
-        dbg_id_ex_rs2_addr => dbg_id_ex_rs2_addr_t
+        dbg_id_ex_rs2_addr => dbg_id_ex_rs2_addr_t,
+
+        dbg_mem_store_data => dbg_mem_store_data_t
     );
 
     clk_gen : process is
@@ -145,12 +150,24 @@ begin
         alias rs1_forwarded_tb is
         << signal dut.rs1_forwarded : word_t>>;
 
+        alias mem_wb_result_src_tb is
+        << signal dut.mem_wb : mem_wb_reg_t >>;
+
+        alias word_index_tb is
+        << signal dut.data_memory_inst.word_index : integer >>;
+
         --   alias id_ers1data_tb is
         -- << signal dut.id_ex.rs1_data : word_t >>;
 
     begin
 
         wait until rising_edge(clk_t);
+        if rising_edge(clk_t) then
+            if regs_tb(15) = std_logic_vector(to_unsigned(121, regs_tb(14)'length)) then
+                report "x14 (a4) reached 120" severity note;
+                assert false report "STOP: a4 reached 120" severity failure;
+            end if;
+        end if;
         wait for 1 ns;
         if res_t = '0'  or res_t = '1' then
             /*
@@ -179,13 +196,16 @@ begin
             " pc+4=" & to_hstring(dbg_pc4_t) &
             " stall=" & std_logic'image(dbg_stall_t) &
             " alu_result=" & to_hstring(dbg_alu_result_t) &
+            " mem store data=" & to_hstring(dbg_mem_store_data_t) &
             " byte enable=" & to_bstring(dbg_byte_enable_t) &
             " mem size=" & to_bstring(dbg_mem_size_t) &
             " misaligned=" & std_logic'image(misaligned_t) &
             " forwardA=" & to_bstring(forwardA_tb) &
             " forwardB=" & to_bstring(forwardB_tb) &
             " AluSrcA=" & to_bstring(AluSrcA_tb) &
-            " rs1_forwarded=" & to_hstring(rs1_forwarded_tb)
+            " rs1_forwarded=" & to_hstring(rs1_forwarded_tb) &
+            " mem_wb_result_src_=" & to_bstring(mem_wb_result_src_tb.result_src)  &
+            " word_index=" & integer'image(word_index_tb)
             --  " id_ex_rs1data=" & to_hstring(id_ers1data_tb)
             severity note;
 
@@ -216,50 +236,58 @@ begin
         "  x17=" & to_hstring(regs_tb(17))
         severity note;
 
-        report "data_mem_tb(40) = 0x" & to_hstring(mem_tb(40))
+        report BLUE & "  [MEM] " &  RESET & "data_mem_tb(0) = 0x" & to_hstring(mem_tb(0))
         severity note;
 
-        report "data_mem_tb(41) = 0x" & to_hstring(mem_tb(41))
+        report "data_mem_tb(1) = 0x" & to_hstring(mem_tb(1))
         severity note;
 
-        report "data_mem_tb(42) = 0x" & to_hstring(mem_tb(42))
+        report "data_mem_tb(2) = 0x" & to_hstring(mem_tb(2))
         severity note;
-        report "data_mem_tb(43) = 0x" & to_hstring(mem_tb(43))
+        report "data_mem_tb(3) = 0x" & to_hstring(mem_tb(3))
         severity note;
-        report "data_mem_tb(44) = 0x" & to_hstring(mem_tb(44))
+        report "data_mem_tb(4) = 0x" & to_hstring(mem_tb(4))
         severity note;
-        report "data_mem_tb(45) = 0x" & to_hstring(mem_tb(45))
+        report "data_mem_tb(5) = 0x" & to_hstring(mem_tb(5))
         severity note;
-        report "data_mem_tb(46) = 0x" & to_hstring(mem_tb(46))
+        report "data_mem_tb(6) = 0x" & to_hstring(mem_tb(6))
         severity note;
-        report "data_mem_tb(47) = 0x" & to_hstring(mem_tb(47))
+        report "data_mem_tb(7) = 0x" & to_hstring(mem_tb(7))
         severity note;
-        report "data_mem_tb(48) = 0x" & to_hstring(mem_tb(48))
+        report "data_mem_tb(8) = 0x" & to_hstring(mem_tb(8))
         severity note;
-        report "data_mem_tb(49) = 0x" & to_hstring(mem_tb(49))
-        severity note;
-
-        report "data_mem_tb(0065) = 0x" & to_hstring(mem_tb(65))
+        report "data_mem_tb(9) = 0x" & to_hstring(mem_tb(9))
         severity note;
 
-        report "data_mem_tb(1000) = 0x" & to_hstring(mem_tb(1000))
+        report "data_mem_tb(10) = 0x" & to_hstring(mem_tb(10))
         severity note;
 
-        report "data_mem_tb(999) = 0x" & to_hstring(mem_tb(999))
+        report "data_mem_tb(11) = 0x" & to_hstring(mem_tb(11))
         severity note;
 
-        report "data_mem_tb(998) = 0x" & to_hstring(mem_tb(998))
+        report "data_mem_tb(12) = 0x" & to_hstring(mem_tb(12))
         severity note;
 
-        report "data_mem_tb(997) = 0x" & to_hstring(mem_tb(997))
+        report "data_mem_tb(13) = 0x" & to_hstring(mem_tb(13))
         severity note;
 
-        report "data_mem_tb(996) = 0x" & to_hstring(mem_tb(996))
+        report "data_mem_tb(14) = 0x" & to_hstring(mem_tb(14))
         severity note;
 
-        report "data_mem_tb(995) = 0x" & to_hstring(mem_tb(995))
+        report "data_mem_tb(15) = 0x" & to_hstring(mem_tb(15))
         severity note;
-
+        report "data_mem_tb(64) = 0x" & to_hstring(mem_tb(64))
+        severity note;
+        report "data_mem_tb(65) = 0x" & to_hstring(mem_tb(65))
+        severity note;
+        report "data_mem_tb(66) = 0x" & to_hstring(mem_tb(66))
+        severity note;
+        report "data_mem_tb(67) = 0x" & to_hstring(mem_tb(67))
+        severity note;
+        report "data_mem_tb(68) = 0x" & to_hstring(mem_tb(68))
+        severity note;
+        report "data_mem_tb(69) = 0x" & to_hstring(mem_tb(69))
+        severity note;
     end process monitor;
 end architecture tb;
 

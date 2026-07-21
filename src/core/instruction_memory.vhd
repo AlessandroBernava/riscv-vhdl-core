@@ -47,27 +47,26 @@ architecture rtl of instruction_memory is
         others => x"00000013"   -- nop
     );
 */
-    -- 1. Definisci il tuo tipo di memoria (lo avevi già, metti la tua dimensione reale)
 
-    -- 2. Scrivi la funzione che legge il file
-    impure function init_ram_hex return instr_mem_t is
-        -- Specifica il percorso del file. In simulazione parte dalla cartella dove lanci make.
+    -- Funzione che legge il file per inizializzare la memoria
+    impure function init_rom_hex return instr_mem_t is
+        -- Specifica il percorso del file. In simulazione parte dalla cartella dove viene lanciato make.
         file text_file       : text open read_mode is "software/build/instr.mem";
         variable text_line   : line;
-        variable ram_content : instr_mem_t := (others => (others => '0'));         -- Riempe di zeri il resto
+        variable rom_content : instr_mem_t := (others => (others => '0'));         -- Riempe di zeri il resto
         variable i           : integer := 0;
     begin
         while not endfile(text_file) loop
             readline(text_file, text_line);
             -- hread legge i caratteri esadecimali e li mette nel std_logic_vector
-            hread(text_line, ram_content(i));
+            hread(text_line, rom_content(i));
             i := i + 1;
         end loop;
-            return ram_content;
+            return rom_content;
         end function;
 
-        -- 3. Usa la funzione per inizializzare il segnale della memoria
-        signal mem : instr_mem_t := init_ram_hex;
+        -- 2- Usa la funzione per inizializzare il segnale della memoria
+        signal mem : instr_mem_t := init_rom_hex;
 
     begin
 
