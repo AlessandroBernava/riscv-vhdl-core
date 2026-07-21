@@ -100,11 +100,8 @@ In pratica, questo package centralizza la descrizione dell’ISA a livello hardw
 Definisce la struttura dei tre registri di pipeline principali:
 
  - if_id_reg_t: contiene PC, PC+4 e l’istruzione fetchata (instr_if).
-
  - id_ex_reg_t: contiene indirizzi rs1/rs2/rd, dati (pc, pc4, rs1_data, rs2_data, imm_ext), informazioni di decodifica (f3, f7b, opcode) e tutti i segnali di controllo necessari a EX/MEM/WB (ALUOp, sorgenti A/B, mem_read/write, mem_size/unsigned, reg_write, result_src).
-
  - ex_mem_reg_t e mem_wb_reg_t: propagano i risultati dell’ALU, l’indirizzo di store/load, i segnali per la memoria e i controlli di writeback.
-
  - Il package fornisce anche le costanti di reset (ID_EX_REG_RESET, EX_MEM_REG_RESET, MEM_WB_REG_RESET), usate nei process dei registri di pipeline per inserire bolle (NOP) in modo consistente durante reset, flush e stall. Questo approccio evita di ripetere manualmente i campi azzerati in ogni modulo, garantisce che tutti i segnali di controllo siano azzerati in modo uniforme e rende più chiaro cosa “contiene” ogni stadio della pipeline e come viene resettato.
 
 Queste astrazioni rendono il core più facile da estendere (nuovi segnali di controllo, nuovi tipi di istruzioni) e più leggibile, perché la struttura della pipeline e la codifica dell’ISA sono documentate in un unico posto, referenziato da tutti i moduli.
