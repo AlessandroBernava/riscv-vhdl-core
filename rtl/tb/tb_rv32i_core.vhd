@@ -183,11 +183,6 @@ begin
             " RD=" & to_bstring(dbg_id_ex_rd_t) &
             " Rs1=" & to_bstring(dbg_id_ex_rs1_addr_t) &
             " Rs2=" & to_bstring(dbg_id_ex_rs2_addr_t) &
-            " | EX/MEM WE=" & std_logic'image(dbg_ex_mem_we_t) &
-            " RD=" & to_bstring(dbg_ex_mem_rd_t) &
-            " | MEM/WB WE=" & std_logic'image(dbg_mem_wb_we_t) &
-            " RD=" & to_bstring(dbg_mem_wb_rd_t) &
-            " | WR_DATA=" & to_hstring(dbg_data_t) &
             " cu we=" & std_logic'image(dbg_cu_we_t) &
             " cu rd=" & to_hstring(dbg_cu_rd_t) &
             " imm_ext ID_EX=" & to_hstring(dbg_imm_ext_id_ex_t) &
@@ -198,14 +193,19 @@ begin
             " alu_result=" & to_hstring(dbg_alu_result_t) &
             " mem store data=" & to_hstring(dbg_mem_store_data_t) &
             " byte enable=" & to_bstring(dbg_byte_enable_t) &
-            " mem size=" & to_bstring(dbg_mem_size_t) &
-            " misaligned=" & std_logic'image(misaligned_t) &
             " forwardA=" & to_bstring(forwardA_tb) &
             " forwardB=" & to_bstring(forwardB_tb) &
             " AluSrcA=" & to_bstring(AluSrcA_tb) &
             " rs1_forwarded=" & to_hstring(rs1_forwarded_tb) &
-            " mem_wb_result_src_=" & to_bstring(mem_wb_result_src_tb.result_src)  &
-            " word_index=" & integer'image(word_index_tb)
+            " | EX/MEM WE=" & std_logic'image(dbg_ex_mem_we_t) &
+            " mem size=" & to_bstring(dbg_mem_size_t) &
+            " RD=" & to_bstring(dbg_ex_mem_rd_t) &
+            " | MEM/WB WE=" & std_logic'image(dbg_mem_wb_we_t) &
+            " misaligned=" & std_logic'image(misaligned_t) &
+            " RD=" & to_bstring(dbg_mem_wb_rd_t) &
+            " word_index=" & integer'image(word_index_tb) &
+            " | WR_DATA=" & to_hstring(dbg_data_t)
+
             --  " id_ex_rs1data=" & to_hstring(id_ers1data_tb)
             severity note;
 
