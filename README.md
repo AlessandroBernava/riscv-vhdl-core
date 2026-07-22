@@ -126,7 +126,7 @@ MAPPA DI MEMORIA E FLUSSO DI COMPILAZIONE
 Il sistema adotta un approccio bare-metal, senza sistema operativo, gestito tramite un linker script personalizzato (linker.ld) e una routine di bootstrap (start.S) scritta in Assembly.
 
 Mappa di Memoria:
-Il linker script divide l'indirizzamento in due regioni principali:
+Il linker script divide gli indirizzi in due regioni principali:
 
 - ROM (0x00000000 - 0x00000FFF, 4 KiB): Contiene il codice eseguibile (.text) e le costanti a sola lettura (.rodata).
 
