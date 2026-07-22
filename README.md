@@ -153,3 +153,26 @@ Il testbench fornisce un clock e un segnale di reset iniziale. Oltre a istanziar
 ![Simulazione core RV32I - comandi make](doc/img/simulation_log2.PNG)
 
 ![Simulazione core RV32I - monitor testuale](doc/img/simulation_log1.PNG)
+
+POSSIBILI AREE DI SVILUPPO
+
+A partire dallo stato attuale del progetto ho individuato le seguenti possibili aree di sviluppo:
+
+- Sintesi su FPGA e Memory-Mapped I/O:
+  implementazione del core su FPGA (molte scelte di design sono state fatte appunto in vista di questo obiettivo), eventualemente gestione di periferiche (gestite ad esempio tramite protocollo UART).
+
+- Estensione Zicsr e CSR:
+  aggiunta delle istruzioni  per la gestione dei CSR, tra cui registri di controllo (cycle, instret, ecc.) per supportare i test ufficiali RISC-V, misurare le performance e gestire eccezioni e interrupt.
+
+- Modalità privilegiate (M-Mode / U-Mode) e PMP:
+  introduzione di livelli di privilegio e di protezione  di memoria (Physical Memory Protection - PMP) per isolare regioni RAM/IO da accessi non autorizzati.
+
+- Estensione 'M' (moltiplicazioni/divisioni):
+  supporto hardware alle istruzioni di moltiplicazione/divisione RV32IM per eseguire software più complesso senza emulazione software.
+
+- Ottimizzazioni microarchitetturali:
+  studio di soluzioni per migliorare le prestazioni della pipeline (ad esempio schemi di branch prediction più avanzati, gestione degli hazard più avanzata,
+  ottimizzazione del critical path per aumentare la frequenza di clock).
+
+- Supporto RTOS:
+  integrazione di un semplice sistema operativo real-time (timer, interrupt, scheduler)  che sfrutti le modalità privilegiate e i CSR per la gestione dei task.
