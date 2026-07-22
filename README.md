@@ -130,5 +130,9 @@ Bootstrap: Al reset, l'hardware imposta il PC a 0x00000000. Qui risiede, come st
 
 Immagini di Memoria (Simulazione vs Sintesi): Poiché il codice VHDL parte con memorie vuote, l'ELF generato viene elaborato da script Python che estraggono la sezione .text e la sezione .data. Queste vengono salvate in file formattati che il testbench legge a runtime tramite TEXTIO, pre-caricando così le memorie prima che la simulazione inizi. Questo simula il comportamento che, su FPGA hardware, si otterrebbe pre-inizializzando le BRAM tramite file di configurazione (.coe o .mif) / bitstream.
 
+
+
 TESTBENCH E DEBUG
 Il testbench fornisce un clock e un segnale di reset iniziale. Oltre a istanziare la CPU, include un monitoraggio approfondito dello stato interno del processore: ad ogni colpo di clock stampa su terminale dati quali i valori del PC, dell'istruzione in corso, i segnali di write-enable nei vari stadi, i dati in scrittura, lo stato di alcuni registri (es. x1-x17) e le prime word della RAM. L'esecuzione si interrompe automaticamente se vengono soddisfatte specifiche condizioni di terminazione o errori architetturali inseriti nei programmi di test. I principali bug rilevati durante lo sviluppo della CPU sono stati descritti in doc/debug_core.txt
+![Simulazione core RV32I - comandi make](docs/img/simulation_log2.png)
+![Simulazione core RV32I - monitor testuale](docs/img/simulation_log2.png)
