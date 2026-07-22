@@ -117,18 +117,18 @@ Il linker script divide l'indirizzamento in due regioni principali:
 
 - RAM (0x00001000 - 0x00001FFF, 4 KiB): Contiene le variabili globali inizializzate (.data), quelle non inizializzate (.bss), una zona riservata per eventuale memory-mapped I/O (.out) e lo Stack, che cresce dall'indirizzo più alto (__StackTop) verso il basso. Lo Stack Pointer è allineato a 16 byte come da specifica della ABI RISC-V.
 
-Flusso di Bootstrap e Inizializzazione:
+FLUSSO DI BOOTSTRAP E INIZIALIZZAZIONE MEMORIE:
 
-Compilazione: Il codice C viene compilato assieme al file di bootstrap start.S.
+- Compilazione: Il codice C viene compilato assieme al file di bootstrap start.S.
 
-Bootstrap: Al reset, l'hardware imposta il PC a 0x00000000. Qui risiede, come stabilito dal linker script, la routine di bootstrap (_start) che si occupa di:
+- Bootstrap: Al reset, l'hardware imposta il PC a 0x00000000. Qui risiede, come stabilito dal linker script, la routine di bootstrap (_start) che si occupa di:
 
     - Inizializzare lo Stack Pointer (sp) alla cima della RAM.
     - Azzerare la sezione .bss.
     - Chiamare la funzione main in C.
     - In caso di uscita dal main, bloccarsi in un loop infinito di halt.
 
-Immagini di Memoria (Simulazione vs Sintesi): Poiché il codice VHDL parte con memorie vuote, l'ELF generato viene elaborato da script Python che estraggono la sezione .text e la sezione .data. Queste vengono salvate in file formattati che il testbench legge a runtime tramite TEXTIO, pre-caricando così le memorie prima che la simulazione inizi. Questo simula il comportamento che, su FPGA hardware, si otterrebbe pre-inizializzando le BRAM tramite file di configurazione (.coe o .mif) / bitstream.
+- Immagini di Memoria (Simulazione vs Sintesi): Poiché il codice VHDL parte con memorie vuote, l'ELF generato viene elaborato da script Python che estraggono la sezione .text e la sezione .data. Queste vengono salvate in file formattati che il testbench legge a runtime tramite TEXTIO, pre-caricando così le memorie prima che la simulazione inizi. Questo simula il comportamento che, su FPGA hardware, si otterrebbe pre-inizializzando le BRAM tramite file di configurazione (.coe o .mif) / bitstream.
 
 
 
