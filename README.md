@@ -58,6 +58,21 @@ Per far funzionare il tutto, è necessario avere installati i seguenti programmi
 5. Python 3
 6. pyelftools: libreria Python che serve agli script per leggere i file ELF. Installabile con: pip install pyelftools
 
+STRUTTURA DELLA REPOSITORY
+
+Le principali directory del progetto sono:
+
+- rtl/src : contiene il codice VHDL sintetizzabile della CPU (core e top-level)
+e i package architetturali.
+- rtl/tb/  : include i testbench VHDL (ad es. tb_rv32i_core.vhd per il top-level).
+- software/ :
+    - software/src/ : programmi C/Assembly (ad es. main.c, test.c, start.S)
+    - software/build/ : output della toolchain (ELF, dump, simboli) generato dal Makefile.
+    - software/scripts/ : script Python per estrarre le sezioni .text/.data dai file ELF e
+             generare i file .mem usati per inizializzare le memorie in simulazione.
+- doc/ : documentazione aggiuntiva (attualmente doc/debug_core.txt con i bug rilevati
+         durante lo sviluppo) e immagini dimostrative.
+
 ARCHITETTURA DELLA CPU E SCELTE PROGETTUALI
 
 Il processore è stato realizzato secondo la specifica RISC-V RV32I (32-bit), scritto in VHDL e pensato per essere implementato come softcore su FPGA. E' stato implementato con una pipeline a 5 stadi (Fetch, Decode, Execute, Memory, Writeback).
