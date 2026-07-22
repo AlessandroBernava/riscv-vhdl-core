@@ -133,6 +133,8 @@ Immagini di Memoria (Simulazione vs Sintesi): Poiché il codice VHDL parte con m
 
 
 TESTBENCH E DEBUG
-Il testbench fornisce un clock e un segnale di reset iniziale. Oltre a istanziare la CPU, include un monitoraggio approfondito dello stato interno del processore: ad ogni colpo di clock stampa su terminale dati quali i valori del PC, dell'istruzione in corso, i segnali di write-enable nei vari stadi, i dati in scrittura, lo stato di alcuni registri (es. x1-x17) e le prime word della RAM. L'esecuzione si interrompe automaticamente se vengono soddisfatte specifiche condizioni di terminazione o errori architetturali inseriti nei programmi di test. I principali bug rilevati durante lo sviluppo della CPU sono stati descritti in doc/debug_core.txt
-![Simulazione core RV32I - comandi make](doc/img/simulation_log2.png)
-![Simulazione core RV32I - monitor testuale](doc/img/simulation_log2.png)
+Il testbench fornisce un clock e un segnale di reset iniziale. Oltre a istanziare la CPU, include un monitoraggio approfondito dello stato interno del processore: ad ogni colpo di clock stampa su terminale dati quali i valori del PC, dell'istruzione in corso, i segnali di write-enable nei vari stadi, i dati in scrittura, lo stato di alcuni registri (es. x1-x17) e le prime word della RAM. L'esecuzione si interrompe automaticamente se vengono soddisfatte specifiche condizioni di terminazione o errori architetturali inseriti nei programmi di test. I principali bug rilevati durante lo sviluppo della CPU sono stati descritti in doc/debug_core.txt.
+
+![Simulazione core RV32I - comandi make](doc/img/simulation_log2.PNG)
+
+![Simulazione core RV32I - monitor testuale](doc/img/simulation_log1.PNG)
