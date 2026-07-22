@@ -23,24 +23,24 @@ Comandi principali:
 - make (oppure 'make simula')
     Compila main.c, genera l'ELF, crea i file .mem per le memorie, analizza/elabora i file VHDL e simula il testbench.
 
-- make APP=nome simula
+- 'make APP=nome simula'
     Fa lo stesso di make, ma invece di main.c usa il file nome.c (situato sempre in software/src/). In pratica, 'APP=nome'  permette di scegliere quale programma (presente in src/) far girare sulla CPU senza dover modificare il Makefile.
 
-- make onda
+- 'make onda'
     Come 'simula', ma alla fine genera anche il file .ghw con le forme d'onda da poter ispezionare.
 
-- make guarda
+- 'make guarda'
     Apre in automatico GTKWave caricando l'ultima simulazione effettuata.
 
-- make clean
+- 'make clean'
     Pulisce l'ambiente eliminando le cartelle generate (obj/, simu/ e software/build/).
 
 Comandi intermedi (per eseguire solo alcune fasi)
-- make analizza : analizza i file VHDL (core, testbench, package)
-- make elabora  : costruisce la gerarchia di simulazione per il testbench
-- make elf      : compila il programma C in un eseguibile ELF
-- make dump     : genera file di testo con il dump dell'assembly e delle sezioni
-- make mem      : lancia gli script Python per generare l'hex delle memorie
+- 'make analizza' : analizza i file VHDL (core, testbench, package)
+- 'make elabora'  : costruisce la gerarchia di simulazione per il testbench
+- 'make elf'      : compila il programma C in un eseguibile ELF
+- 'make dump'     : genera file di testo con il dump dell'assembly e delle sezioni
+- 'make mem'      : lancia gli script Python per generare l'hex delle memorie
 
 STRUMENTI NECESSARI
 
