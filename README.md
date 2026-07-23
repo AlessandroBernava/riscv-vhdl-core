@@ -16,7 +16,7 @@ I comandi Make sono eseguiti da terminale (PowerShell su Windows).
 
 UTILIZZO DEL MAKEFILE
 
-Di default, il Makefile, tramite comando make prenderà il file 'software/src/main.c' per compilarlo e caricarlo sulla CPU.
+Di default, il Makefile, tramite comando make prende il file 'software/src/main.c' per compilarlo e caricarlo sulla CPU.
 
 Comandi principali:
 
