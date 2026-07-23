@@ -148,7 +148,7 @@ FLUSSO DI BOOTSTRAP E INIZIALIZZAZIONE MEMORIE:
 
 
 TESTBENCH E DEBUG
-Il testbench fornisce un clock e un segnale di reset iniziale. Oltre a istanziare la CPU, include un monitoraggio approfondito dello stato interno del processore: ad ogni colpo di clock stampa su terminale dati quali i valori del PC, dell'istruzione in corso, i segnali di write-enable nei vari stadi, i dati in scrittura, lo stato di alcuni registri (es. x1-x17) e le prime word della RAM. L'esecuzione si interrompe automaticamente se vengono soddisfatte specifiche condizioni di terminazione o errori architetturali inseriti nei programmi di test. I principali bug rilevati durante lo sviluppo della CPU sono stati descritti in doc/debug_core.txt.
+Il testbench fornisce un clock e un segnale di reset iniziale. Oltre a istanziare la CPU, include un monitoraggio approfondito dello stato interno del processore: ad ogni colpo di clock stampa su terminale dati quali i valori del PC, dell'istruzione in corso, i segnali di write-enable nei vari stadi, i dati in scrittura, lo stato di alcuni registri (es. x1-x17) e le prime word della RAM. I principali bug rilevati durante lo sviluppo della CPU sono stati descritti in doc/debug_core.txt.
 
 ![Simulazione core RV32I - comandi make](doc/img/simulation_log2.PNG)
 
@@ -167,12 +167,12 @@ A partire dallo stato attuale del progetto ho individuato le seguenti possibili 
 - Modalità privilegiate (M-Mode / U-Mode) e PMP:
   introduzione di livelli di privilegio e di protezione  di memoria (Physical Memory Protection - PMP) per isolare regioni RAM/IO da accessi non autorizzati.
 
-- Estensione 'M' (moltiplicazioni/divisioni):
-  supporto hardware alle istruzioni di moltiplicazione/divisione RV32IM per eseguire software più complesso senza emulazione software.
+- Estensione 'M' (RV32IM):
+  supporto hardware alle istruzioni di moltiplicazione/divisione per eseguire software più complesso senza emulazione software.
 
 - Ottimizzazioni microarchitetturali:
   studio di soluzioni per migliorare le prestazioni della pipeline (ad esempio schemi di branch prediction più avanzati, gestione degli hazard più avanzata,
   ottimizzazione del critical path per aumentare la frequenza di clock).
 
 - Supporto RTOS:
-  integrazione di un semplice sistema operativo real-time (timer, interrupt, scheduler)  che sfrutti le modalità privilegiate e i CSR per la gestione dei task.
+  integrazione di un semplice sistema operativo real-time che sfrutti le modalità privilegiate e i CSR per la gestione dei task.
