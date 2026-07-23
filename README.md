@@ -109,17 +109,17 @@ Raccoglie tutti i tipi e le costanti comuni del progetto:
     - Costanti per gli opcode (opc_load, opc_op, opc_branch, opc_jal, ecc.) e per i codici ALU (alu_add, alu_sub, alu_sll, …).
     - Costanti funct3 per le varie classi di istruzioni (aritmetiche, branch, load/store) e per i formati (instr_type_t = R, I, S, B, U, J).
 
-In pratica, questo package centralizza la descrizione dell’ISA a livello hardware: tutti i moduli (Control Unit, ALU Control, Branch Unit, LSU) fanno riferimento alle stesse costanti, riducendo errori e duplicazioni.
+In pratica, questo package centralizza la descrizione dell’ISA: tutti i moduli fanno riferimento alle stesse costanti, riducendo errori e duplicazioni.
 
 - pkg_riskv_pipeline (registri di pipeline e reset)
-Definisce la struttura dei registri di pipeline:
+Definisce la struttura dei registri di pipeline, che propagano i segnali (controlli e dati) necessari al funzionamento dei moduli dei vari stadi:
 
     - if_id_reg_t: contiene PC, PC+4 e l’istruzione fetchata (instr_if); non utilizzato in quanto sostituito dal modulo Instruction Memory nelle sue funzioni.
-    - id_ex_reg_t: contiene indirizzi rs1/rs2/rd, dati (pc, pc4, rs1_data, rs2_data, imm_ext), informazioni di decodifica (f3, f7b, opcode) e tutti i segnali di controllo necessari a EX/MEM/WB (ALUOp, sorgenti A/B, mem_read/write, mem_size/unsigned, reg_write, result_src).
-    - ex_mem_reg_t e mem_wb_reg_t: propagano i risultati dell’ALU, l’indirizzo di store/load, i segnali per la memoria e i controlli di writeback.
+    - id_ex_reg_t: contiene indirizzi rs1/rs2/rd, dati (pc, pc4, rs1_data, rs2_data, imm_ext), informazioni di decodifica (f3, f7b, opcode) e tutti i segnali di controllo necessari a EX/MEM/WB.
+    - ex_mem_reg_t e mem_wb_reg_t: propagano i risultati dell’ALU, l’indirizzo di store/load e i segnalidi controllo per la memoria e writeback.
     - Il package fornisce anche le costanti di reset (ID_EX_REG_RESET, EX_MEM_REG_RESET, MEM_WB_REG_RESET), usate nei process dei registri di pipeline per inserire bolle (NOP) in modo consistente durante reset, flush e stall. Questo approccio evita di ripetere manualmente i campi azzerati in ogni modulo, garantisce che tutti i segnali di controllo siano azzerati in modo uniforme e rende più chiaro cosa contiene ogni stadio della pipeline e come viene resettato.
 
-Questa astrazione permette di gestire il flusso di segnali di controllo attraverso la pipeline, senza far esplodere la complessità. In questo modo il core è più facile da estendere (nuovi segnali di controllo, nuovi tipi di istruzioni) e più leggibile.
+Questa astrazione permette di gestire il flusso di segnali di controllo attraverso la pipeline, senza far esplodere la complessità. In questo modo il core è più facile da estendere (con nuovi segnali di controllo, nuovi tipi di istruzioni) e più leggibile.
 
 MAPPA DI MEMORIA E FLUSSO DI COMPILAZIONE
 
