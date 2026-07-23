@@ -79,7 +79,7 @@ Il processore è stato realizzato secondo la specifica RISC-V RV32I (32-bit), sc
 
 Principali scelte architetturali:
 
-- Memorie sincrone e inferenza delle BRAM: Sia l'Instruction Memory che la Data Memory sono implementate con lettura sincrona. Questa scelta permette agli strumenti di sintesi di mapparle direttamente su    blocchi BRAM (Block RAM) delle FPGA, evitando il consumo eccessivo di LUT. Data la latenza di un ciclo delle memorie sincrone, queste assorbono implicitamente le funzioni dei registri di pipeline adiacenti (l'Instruction Memory funge da registro IF/ID; la lettura della Data Memory sostituisce parte del registro MEM/WB).
+- Memorie sincrone e inferenza delle BRAM: Il core adotta un’architettura Harvard, con Instruction Memory e Data Memory fisicamente separate. Entrambe sono implementate con lettura sincrona. Questa scelta permette agli strumenti di sintesi di mapparle direttamente su blocchi BRAM (Block RAM) delle FPGA, evitando il consumo eccessivo di LUT. Data la latenza di un ciclo delle memorie sincrone, queste assorbono implicitamente le funzioni dei registri di pipeline adiacenti (l'Instruction Memory funge da registro IF/ID; la lettura della Data Memory sostituisce parte del registro MEM/WB).
 
 - Register file a 2 letture / 1 scrittura: il register file (32 registri  x 32 bit) è implementato come array di flip-flop con due porte di lettura asincrone e una porta di scrittura sincrona, quindi viene mappato dagli strumenti di sintesi su logica LUT/FF e non su BRAM (più adatta a memorie grandi). Questo schema è quello classico per il register file di una pipeline RISC: in ID gli operandi rs1/rs2 sono immediatamente disponibili, mentre in WB la scrittura avviene sul fronte di clock.
 
