@@ -112,7 +112,7 @@ Raccoglie tutti i tipi e le costanti comuni del progetto:
 In pratica, questo package centralizza la descrizione dell’ISA: tutti i moduli fanno riferimento alle stesse costanti, riducendo errori e duplicazioni.
 
 - pkg_riskv_pipeline (registri di pipeline e reset)
-Definisce la struttura dei registri di pipeline, che propagano i segnali (controlli e dati) necessari al funzionamento dei moduli dei vari stadi:
+Definisce la struttura dei registri di pipeline, che propagano i segnali (indirizzo dei registri, dati e controlli) necessari al funzionamento dei moduli dei vari stadi:
 
     - if_id_reg_t: contiene PC, PC+4 e l’istruzione fetchata (instr_if); non utilizzato in quanto sostituito dal modulo Instruction Memory nelle sue funzioni.
     - id_ex_reg_t: contiene indirizzi rs1/rs2/rd, dati (pc, pc4, rs1_data, rs2_data, imm_ext), informazioni di decodifica (f3, f7b, opcode) e tutti i segnali di controllo necessari a EX/MEM/WB.
@@ -128,7 +128,7 @@ Il sistema adotta un approccio bare-metal, senza sistema operativo, gestito tram
 Mappa di Memoria:
 Il linker script divide gli indirizzi in due regioni principali:
 
-- ROM (0x00000000 - 0x00000FFF, 4 KiB): Contiene il codice eseguibile (.text) e le costanti a sola lettura (.rodata).
+- ROM (0x00000000 - 0x00000FFF, 4 KiB): Contiene il codice eseguibile (.text) e le costanti di sola lettura (.rodata).
 
 - RAM (0x00001000 - 0x00001FFF, 4 KiB): Contiene le variabili globali inizializzate (.data), quelle non inizializzate (.bss), una zona riservata per eventuale memory-mapped I/O (.out) e lo Stack, che cresce dall'indirizzo più alto (__StackTop) verso il basso. Lo Stack Pointer è allineato a 16 byte come da specifica della ABI RISC-V.
 
