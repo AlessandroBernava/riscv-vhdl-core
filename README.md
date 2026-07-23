@@ -98,7 +98,7 @@ Principali scelte architetturali:
 
 PACKAGE VHDL UTILIZZATI
 
-Per mantenere il design modulare e leggibile, la CPU usa due package principali:
+Per mantenere il design modulare e leggibile, sono stati progettati due package principali:
 
 - Pkg_riskv_types (tipi e costanti ISA):
 Raccoglie tutti i tipi e le costanti comuni del progetto:
