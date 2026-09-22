@@ -310,7 +310,7 @@ begin
     write_data;
 
     alu_op_a <= id_ex.pc             when id_ex.alu_src_a = "01" else
-    (others => '0')                  when id_ex.alu_src_a = "10" else
+    (others => '0')                  when id_ex.alu_src_a = "10" else -- lui
     rs1_forwarded;
 
     alu_op_b <= rs2_forwarded when id_ex.alu_src_b = '0' else
