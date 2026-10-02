@@ -8,12 +8,13 @@ use work.pkg_riskv_types.all;
 
 entity rv32i_core is
     port (
-        res        : in  std_logic;
-        clk        : in  std_logic;
-        misaligned : out std_logic;
+        res     : in  std_logic;
+        clk     : in  std_logic;
+        led_reg : out word_t;
 
-        dbg_pc    : out word_t;
-        dbg_instr : out word_t;
+        dbg_pc       : out word_t;
+        dbg_instr    : out word_t;
+        dbg_pc_instr : out word_t;
         -- dbg_reg_we  : out std_logic;
         --dbg_rd_addr : out reg_addr_t;
         dbg_wr_data : out word_t;
@@ -88,8 +89,15 @@ architecture rtl of rv32i_core is
     signal misaligned_store_effective : std_logic;
     signal misaligned_load_effective  : std_logic;
     signal is_load_wb                 : std_logic;
+    -- attribute KEEP_HIERARCHY          : string;
+    -- attribute KEEP_HIERARCHY of load_unit_inst :
+    -- label is "TRUE";
+
+    --  attribute KEEP_HIERARCHY of store_unit_inst :
+    --  label is "TRUE";
 
 begin
+
     alu_ctrl_inst : entity work.alu_ctrl
     port map (
         aluop_i    => id_ex.alu_op,
@@ -241,7 +249,7 @@ begin
     misaligned_load_effective <= misaligned_load  and is_load_wb;
     misaligned_store_effective <= misaligned_store;  -- solo dallo stadio MEM
 
-    misaligned <= misaligned_store_effective or misaligned_load_effective;
+   -- misaligned <= misaligned_store_effective or misaligned_load_effective;
 
     flush <= jump;   -- aggiornare in caso di logica di flush piu' complessa
 
@@ -292,6 +300,19 @@ begin
             end if;
         end if;
     end process mem_wb_reg;
+
+    mmio : process (clk)
+    begin
+        if clk'event and clk = '1' then
+            if res = '1' then
+                led_reg <= (others => '0');
+
+            elsif ex_mem.mem_write = '1' and ex_mem.alu_result = LED_ADDR then
+                led_reg <= ex_mem.rs2_data;
+
+            end if;
+        end if;
+    end process mmio;
 
     ex_mem_new.alu_result <= alu_result;
 
@@ -352,13 +373,14 @@ begin
 
     dbg_pc <= pc;
     dbg_instr <= instr;
+    dbg_pc_instr <= id_ex_new.pc;
     --dbg_reg_we <= mem_wb.reg_write;
     -- dbg_rd_addr <= mem_wb.rd_addr;
     dbg_wr_data <= write_data;
 
     dbg_id_ex_we <= id_ex.reg_write;
     dbg_id_ex_rd <= id_ex.rd_addr;
-    dbg_ex_mem_we <= ex_mem.reg_write;
+    dbg_ex_mem_we <= ex_mem.mem_write;
     dbg_ex_mem_rd <= ex_mem.rd_addr;
     dbg_mem_wb_we <= mem_wb.reg_write;
     dbg_mem_wb_rd <= mem_wb.rd_addr;
@@ -392,4 +414,5 @@ begin
     dbg_id_ex_rs2_addr <= id_ex.rs2_addr;
 
     dbg_mem_store_data <= mem_store_data;
+
 end architecture rtl;

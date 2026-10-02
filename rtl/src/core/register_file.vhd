@@ -40,6 +40,8 @@ architecture rtl of register_file is
 
     signal reg : reg_file_t;
 
+    --  attribute ram_style        : string;
+    -- attribute ram_style of reg : signal is "distributed";
 begin
 
     rs1_data_o <= (others => '0') when rs1_addr_i = REG_X0 else

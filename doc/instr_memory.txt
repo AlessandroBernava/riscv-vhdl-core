@@ -1,0 +1,46 @@
+    /*         if (clk'event and clk = '1') then
+            if (res_i = '1') then
+                pc_o <= (others => '0');
+                pc4_o <= (others => '0');
+                instr_o <= INSTR_NOP;
+            elsif (flush_i = '1') then
+                pc_o <= (others => '0');
+                pc4_o <= (others => '0');
+                instr_o <= INSTR_NOP;
+            elsif (stall_i = '0') then
+                pc_o <= pc_i;
+                pc4_o <= std_logic_vector(unsigned(pc_i) + 4);
+                instr_o <= mem(to_integer(unsigned(pc_i(31 downto 2))));
+            end if;
+*/
+    /*
+00a08093
+01410113
+002081b3
+00302023
+00002203
+00a28293
+00a30313
+fe6282e3
+*/
+
+    /*
+        0 => x"00500093",  -- addi x1, x0, 5
+        1 => x"00300113",  -- addi x2, x0, 3
+        2 => x"002081B3",  -- add  x3, x1, x2        ; x3 = 8
+        3 => x"40110233",  -- sub  x4, x2, x1        ; x4 = -2
+        4 => x"0020F2B3",  -- and  x5, x1, x2
+        5 => x"0020E333",  -- or   x6, x1, x2
+
+        6  => x"002020A3",  -- sw   x2, 1(x0)
+        7  => x"00102623",  -- sw x1, 12(x0)
+        8  => x"00C02203",  -- lw x4, 12(x0)
+        9  => x"00102203",  -- lw   x4, 1(x0)
+        10 => x"0042D863",  -- bge x5 x4 +16
+        -- 9      => x"00718463",  -- beq  x3, x7, +8
+        11     => x"00100413",  -- addi x8, x0, 1         ; da saltare se beq preso
+        12     => x"00200493",  -- addi x9, x0, 2
+        13     => x"0080006F",  -- jal  x0, +8
+        14     => x"00300513",  -- addi x10, x0, 3        ; da saltare col jal
+        15     => x"00400593",  -- addi x11, x0, 4
+        */

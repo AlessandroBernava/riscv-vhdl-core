@@ -52,6 +52,7 @@ architecture rtl of store_unit is
 begin
     byte_enable_proc : process (all) is
     begin
+      byte_enable <= "0000";
         if mem_size_i = "00" then
             if addr_low_i = "00" then
                 byte_enable <= "0001";

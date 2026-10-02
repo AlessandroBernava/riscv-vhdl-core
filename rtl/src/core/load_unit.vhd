@@ -29,10 +29,11 @@ entity load_unit is
 end entity load_unit;
 
 architecture rtl of load_unit is
-  signal byte_enable : std_logic_vector(3 downto 0); -- posizioni della memoria da leggere
+    signal byte_enable : std_logic_vector(3 downto 0); -- posizioni della memoria da leggere
 begin
     byte_enable_proc : process (all) is
     begin
+        byte_enable <= "0000";
         if mem_size_i = "00" then
             if addr_low_i = "00" then
                 byte_enable <= "0001";
@@ -59,7 +60,7 @@ begin
     end process byte_enable_proc;
 
     formatting : process (all) is
-      variable formatted_data_v : word_t; --dato letto dalla memoria
+        variable formatted_data_v : word_t; --dato letto dalla memoria
     begin
         formatted_data_v := (others => '0');
 
@@ -82,7 +83,7 @@ begin
                 when "1000" => formatted_data_v(31 downto 8) := (others => data_i(31));
                 when "0011" => formatted_data_v(31 downto 16) := (others => data_i(15));
                 when "1100" => formatted_data_v(31 downto 16) := (others => data_i(31));
-                when others => null;
+                when others => formatted_data_v := (others => '0');
             end case;
         end if;
 
@@ -94,24 +95,24 @@ begin
     '0';
 end architecture rtl;
 
-/* formatting : process (all) is
-    begin
-        if mem_unsigned_i = '1' then
-            if mem_size_i = "00" then
-                formatted_data_o <= (31 downto 8 => '0') & data_i(7 downto 0);
-            elsif mem_size_i = "01" then
-                formatted_data_o <= (31 downto 16 => '0') & data_i(15 downto 0);
-            else
-                formatted_data_o <= data_i;
-            end if;
-        else
-            if mem_size_i = "00" then
-                formatted_data_o <= (31 downto 8 => data_i(7)) & data_i(7 downto 0);
-            elsif mem_size_i = "01" then
-                formatted_data_o <= (31 downto 16 => data_i(15)) & data_i(15 downto 0);
-            else
-                formatted_data_o <= data_i;
-
-            end if;
-        end if;
-    end process formatting; */
+--/* formatting : process (all) is
+--    begin
+--        if mem_unsigned_i = '1' then
+--            if mem_size_i = "00" then
+--               formatted_data_o <= (31 downto 8 => '0') & data_i(7 downto 0);
+--           elsif mem_size_i = "01" then
+--               formatted_data_o <= (31 downto 16 => '0') & data_i(15 downto 0);
+--           else
+--               formatted_data_o <= data_i;
+--           end if;
+--       else
+--           if mem_size_i = "00" then
+--               formatted_data_o <= (31 downto 8 => data_i(7)) & data_i(7 downto 0);
+--           elsif mem_size_i = "01" then
+--               formatted_data_o <= (31 downto 16 => data_i(15)) & data_i(15 downto 0);
+--           else
+--               formatted_data_o <= data_i;
+--
+--           end if;
+--       end if;
+--   end process formatting; */

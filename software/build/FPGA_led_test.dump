@@ -1,0 +1,81 @@
+
+software/build/FPGA_led_test.elf:     file format elf32-littleriscv
+
+
+Disassembly of section .text:
+
+00000000 <_start>:
+   0:	00002117          	auipc	sp,0x2
+   4:	00010113          	mv	sp,sp
+   8:	00001297          	auipc	t0,0x1
+   c:	0f828293          	addi	t0,t0,248 # 1100 <__StackLimit>
+  10:	00001317          	auipc	t1,0x1
+  14:	0f030313          	addi	t1,t1,240 # 1100 <__StackLimit>
+
+00000018 <loop1>:
+  18:	0062d863          	bge	t0,t1,28 <done>
+  1c:	0002a023          	sw	zero,0(t0)
+  20:	00428293          	addi	t0,t0,4
+  24:	ff5ff06f          	j	18 <loop1>
+
+00000028 <done>:
+  28:	00000097          	auipc	ra,0x0
+  2c:	00c080e7          	jalr	12(ra) # 34 <main>
+
+00000030 <halt>:
+  30:	0000006f          	j	30 <halt>
+
+00000034 <main>:
+  34:	ff010113          	addi	sp,sp,-16 # 1ff0 <__StackLimit+0xef0>
+  38:	00112623          	sw	ra,12(sp)
+  3c:	00812423          	sw	s0,8(sp)
+  40:	01010413          	addi	s0,sp,16
+  44:	000017b7          	lui	a5,0x1
+  48:	20078793          	addi	a5,a5,512 # 1200 <__StackLimit+0x100>
+  4c:	00100713          	li	a4,1
+  50:	00e7a023          	sw	a4,0(a5)
+  54:	00000013          	nop
+  58:	ffdff06f          	j	54 <main+0x20>
+
+Disassembly of section .riscv.attributes:
+
+00000000 <.riscv.attributes>:
+   0:	1b41                	.insn	2, 0x1b41
+   2:	0000                	.insn	2, 0x0000
+   4:	7200                	.insn	2, 0x7200
+   6:	7369                	.insn	2, 0x7369
+   8:	01007663          	bgeu	zero,a6,14 <_start+0x14>
+   c:	0011                	.insn	2, 0x0011
+   e:	0000                	.insn	2, 0x0000
+  10:	1004                	.insn	2, 0x1004
+  12:	7205                	.insn	2, 0x7205
+  14:	3376                	.insn	2, 0x3376
+  16:	6932                	.insn	2, 0x6932
+  18:	7032                	.insn	2, 0x7032
+  1a:	0031                	.insn	2, 0x0031
+
+Disassembly of section .comment:
+
+00000000 <.comment>:
+   0:	3a434347          	.insn	4, 0x3a434347
+   4:	2820                	.insn	2, 0x2820
+   6:	5078                	.insn	2, 0x5078
+   8:	6361                	.insn	2, 0x6361
+   a:	4e47206b          	.insn	4, 0x4e47206b
+   e:	2055                	.insn	2, 0x2055
+  10:	4952                	.insn	2, 0x4952
+  12:	562d4353          	.insn	4, 0x562d4353
+  16:	4520                	.insn	2, 0x4520
+  18:	626d                	.insn	2, 0x626d
+  1a:	6465                	.insn	2, 0x6465
+  1c:	6564                	.insn	2, 0x6564
+  1e:	2064                	.insn	2, 0x2064
+  20:	20434347          	.insn	4, 0x20434347
+  24:	3878                	.insn	2, 0x3878
+  26:	5f36                	.insn	2, 0x5f36
+  28:	3436                	.insn	2, 0x3436
+  2a:	2029                	.insn	2, 0x2029
+  2c:	3531                	.insn	2, 0x3531
+  2e:	322e                	.insn	2, 0x322e
+  30:	302e                	.insn	2, 0x302e
+	...

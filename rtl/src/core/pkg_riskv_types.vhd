@@ -1,11 +1,12 @@
-/*
-    Questo package definisce i tipi di dati e le costanti utilizzati nel progetto RISC-V. In particolare, include:
-    - La definizione del tipo word_t come un vettore di 32 bit, che rappresenta una parola di dati.
-    - Le costanti per gli opcode delle istruzioni RISC-V, che identificano il tipo di operazione da eseguire.
-    - Le costanti per i codici ALU, che identificano univocamente l'operazione logico-aritmetica che l'ALU deve eseguire, facilitando la decodifica hardware nell'ALU Decoder.
-*/
+--/*
+--    Questo package definisce i tipi di dati e le costanti utilizzati nel progetto RISC-V. In particolare, include:
+---   - La definizione del tipo word_t come un vettore di 32 bit, che rappresenta una parola di dati.
+--   - Le costanti per gli opcode delle istruzioni RISC-V, che identificano il tipo di operazione da eseguire.
+--    - Le costanti per i codici ALU, che identificano univocamente l'operazione logico-aritmetica che l'ALU deve eseguire, --facilitando la decodifica hardware nell'ALU Decoder.
+--*/
 
 library ieee;
+use ieee.numeric_std.all;
 use ieee.std_logic_1164.all;
 
 package pkg_riskv_types is
@@ -17,8 +18,17 @@ package pkg_riskv_types is
     constant INSTR_MEM_SIZE : integer := 1024;
     type instr_mem_t is array (0 to INSTR_MEM_SIZE -1) of word_t;
 
-    constant DMEM_SIZE : integer := 1024;
+    constant DMEM_SIZE : integer := 960;
+    constant MMIO_SIZE : integer := 64;
+
+    constant MMIO_BASE : unsigned(31 downto 0) := x"00001000";
+    constant MMIO_END  : unsigned(31 downto 0) := x"00001100";
+
+    constant DATA_BASE : unsigned(31 downto 0) := x"00001100";
+    constant DATA_END  : unsigned(31 downto 0) := x"00002000";
+
     type data_mem_t is array (0 to DMEM_SIZE -1) of word_t;
+    type mmio_mem_t is array (0 to MMIO_SIZE -1) of word_t;
 
     constant REG_X0    : reg_addr_t := "00000";
     constant INSTR_NOP : word_t := x"00000013";
@@ -77,34 +87,36 @@ package pkg_riskv_types is
     constant f3_half_u : std_logic_vector(2 downto 0) := "101";  -- LHU
 
     -- Organizzazione della memoria
-    constant DATA_BASE_ADDRESS : word_t := x"00001100";
+    constant DATA_BASE_ADDRESS : word_t := x"00001000";
+    constant RAM_OFFSET        : word_t := x"00000100";
 
+    constant LED_ADDR : word_t := x"00001000";
 end package pkg_riskv_types;
 
-/*
-esempio alu decoder: process(ALUOp, funct3, bit30, is_R_type)
-    variable use_bit30 : std_logic;
-begin
-    -- Capiamo se dobbiamo usare il bit 30 o forzarlo a zero
-    -- Lo usiamo se e' R-Type, OPPURE se e' I-Type ma e' uno shift (funct3 = "101")
-    if (is_R_type = '1' or funct3 = "101") then
-        use_bit30 := bit30;
-    else
-        use_bit30 := '0'; -- Nelle ADDI, ANDI ecc. forziamo a 0 per non far danni!
-    end if;
+--/*
+--esempio alu decoder: process(ALUOp, funct3, bit30, is_R_type)
+--   variable use_bit30 : std_logic;
+--begin
+-- Capiamo se dobbiamo usare il bit 30 o forzarlo a zero
+-- Lo usiamo se e' R-Type, OPPURE se e' I-Type ma e' uno shift (funct3 = "101")
+-- if (is_R_type = '1' or funct3 = "101") then
+--     use_bit30 := bit30;
+-- else
+--     use_bit30 := '0'; -- Nelle ADDI, ANDI ecc. forziamo a 0 per non far danni!
+-- end if;
 
-    -- Il classico MUX dell'ALU Decoder
-    if (ALUOp = "00") then
-        -- LOAD, STORE, AUIPC, LUI, JAL, JALR -> Forza Addizione
-        ALU_CTRL <= ALU_ADD; ("0000")
+-- Il classico MUX dell'ALU Decoder
+-- if (ALUOp = "00") then
+-- -    -- LOAD, STORE, AUIPC, LUI, JAL, JALR -> Forza Addizione
+--   ALU_CTRL <= ALU_ADD; ("0000")
 
-    elsif (ALUOp = "01") then
-        -- BRANCH -> Forza Sottrazione
-        ALU_CTRL <= ALU_SUB; ("1000")
+--  elsif (ALUOp = "01") then
+-- BRANCH -> Forza Sottrazione
+--     ALU_CTRL <= ALU_SUB; ("1000")
 
-    elsif (ALUOp = "10") then
-        -- OP o OP-IMM -> Incolla il bit 30 (filtrato) con funct3
-        ALU_CTRL <= use_bit30 & funct3;
-    end if;
-end process;
-*/
+-- elsif (ALUOp = "10") then
+-- OP o OP-IMM -> Incolla il bit 30 (filtrato) con funct3
+--     ALU_CTRL <= use_bit30 & funct3;
+-- end if;
+--end process;
+--*/

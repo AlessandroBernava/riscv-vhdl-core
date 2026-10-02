@@ -6,9 +6,10 @@ ENTRY(_start)
 MEMORY  {
     /* 4 KiB per il codice: 0x00000000 - 0x00000FFF */
     ROM (rx) : ORIGIN = 0x00000000, LENGTH = 4K
-
+ /* Periferiche: 0x00001000 - 0x000010FF */
+    MMIO (rw) : ORIGIN = 0x00001000, LENGTH = 0x100
     /* 4 KiB per i dati: 0x00001000 - 0x00001FFF */
-    RAM (rwx) : ORIGIN = 0x00001000, LENGTH = 4K
+    RAM (rwx) : ORIGIN = 0x00001100, LENGTH = 4K
 }
 
 SECTIONS    {
@@ -19,13 +20,7 @@ SECTIONS    {
         *(.rodata*) /* mette tutte le costanti in ROM */
     } > ROM
 
-     /*. = ORIGIN(RAM) + 0x100;  riserva 256 byte a out */
 
-    .out (NOLOAD) : {
-        __out_start__ = .;
-        . = . + 0x100 ;      /* 256 byte: 64 word */
-        __out_end__ = .;
-    } > RAM
     /* dati inizializzati in RAM */
     .data :  {
         __data_start__ = .;

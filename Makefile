@@ -6,6 +6,8 @@ GTKWAVE = gtkwave
 GHDLFLAGS = --std=08 --workdir=$(WORKDIR)
 
 TOP_TB = tb_rv32i_core
+FPGA_TOP_TB = tb_fpga_top
+
 STOP_TIME = 30us
 WAVEFILE = $(SIMDIR)/$(TOP_TB).ghw
 
@@ -29,10 +31,18 @@ CORE = \
 	rtl/src/core/data_memory.vhd \
 	rtl/src/top/rv32i_core.vhd
 
+FPGA_TOP = \
+	fpga/rtl/src/fpga_top.vhd
+
 TB = \
 	rtl/tb/tb_rv32i_core.vhd
 
+TB_TOP = \
+	fpga/rtl/tb/tb_fpga_top.vhd
+
 SRC = $(PKG) $(CORE) $(TB)
+
+SRC_FPGA = $(PKG) $(CORE) $(FPGA_TOP) $(TB_TOP)
 
 all: simula
 
@@ -50,6 +60,16 @@ elabora: analizza
 
 simula: elabora
 	$(GHDL) -r $(GHDLFLAGS) $(TOP_TB) --stop-time=$(STOP_TIME)
+
+analizza_fpga: $(WORKDIR) | mem
+	$(GHDL) -a $(GHDLFLAGS) $(SRC_FPGA)
+
+
+elabora_fpga: analizza_fpga
+	$(GHDL) -e $(GHDLFLAGS) $(FPGA_TOP_TB)
+
+simula_fpga: elabora_fpga
+	$(GHDL) -r $(GHDLFLAGS) $(FPGA_TOP_TB) --stop-time=$(STOP_TIME)
 
 onda: elabora $(SIMDIR)
 	$(GHDL) -r $(GHDLFLAGS) $(TOP_TB) --stop-time=$(STOP_TIME) --wave=$(WAVEFILE)
