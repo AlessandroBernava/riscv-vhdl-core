@@ -1,0 +1,58 @@
+Copyright 1986-2022 Xilinx, Inc. All Rights Reserved. Copyright 2022-2026 Advanced Micro Devices, Inc. All Rights Reserved.
+-----------------------------------------------------------------------------------------------------------------------------------------------------------
+| Tool Version : Vivado v.2026.1 (win64) Build 6511674 Tue Jun 16 11:02:23 MDT 2026
+| Date         : Sun Oct  4 17:03:09 2026
+| Host         : LAPTOP-U87GIL8U running 64-bit major release  (build 9200)
+| Command      : report_utilization -hierarchical -file D:/Vivado_Work/projects/fpga_test_1/reports_25MHz_mmio/fpga_top_synth_utilization_hierarchical.rpt
+| Design       : fpga_top
+| Device       : xc7a100tcsg324-1
+| Speed File   : -1
+| Design State : Synthesized
+-----------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Utilization Design Information
+
+Table of Contents
+-----------------
+1. Utilization by Hierarchy
+
+1. Utilization by Hierarchy
+---------------------------
+
++-------------------------------------------------------------------------+--------------------------------------------+------------+------------+---------+------+------+--------+--------+------------+
+|                                 Instance                                |                   Module                   | Total LUTs | Logic LUTs | LUTRAMs | SRLs |  FFs | RAMB36 | RAMB18 | DSP Blocks |
++-------------------------------------------------------------------------+--------------------------------------------+------------+------------+---------+------+------+--------+--------+------------+
+| fpga_top                                                                |                                      (top) |       2666 |       2409 |       0 |  257 | 3273 |      9 |      2 |          0 |
+|   (fpga_top)                                                            |                                      (top) |          2 |          2 |       0 |    0 |    2 |      0 |      0 |          0 |
+|   ila_inst                                                              |                                      ila_0 |       1132 |        875 |       0 |  257 | 1789 |      7 |      1 |          0 |
+|     U0                                                                  |                            ila_v6_2_20_ila |       1132 |        875 |       0 |  257 | 1789 |      7 |      1 |          0 |
+|       ila_core_inst                                                     |                       ila_v6_2_20_ila_core |       1131 |        874 |       0 |  257 | 1783 |      7 |      1 |          0 |
+|         (ila_core_inst)                                                 |                       ila_v6_2_20_ila_core |        258 |        129 |       0 |  129 |  172 |      0 |      0 |          0 |
+|         u_ila_cap_ctrl                                                  |            ila_v6_2_20_ila_cap_ctrl_legacy |        103 |         56 |       0 |   47 |  181 |      0 |      0 |          0 |
+|           u_cap_addrgen                                                 |                ila_v6_2_20_ila_cap_addrgen |         86 |         49 |       0 |   37 |  175 |      0 |      0 |          0 |
+|             (u_cap_addrgen)                                             |                ila_v6_2_20_ila_cap_addrgen |         29 |         28 |       0 |    1 |  117 |      0 |      0 |          0 |
+|         u_ila_regs                                                      |                   ila_v6_2_20_ila_register |        603 |        602 |       0 |    1 |  965 |      0 |      0 |          0 |
+|           (u_ila_regs)                                                  |                   ila_v6_2_20_ila_register |        275 |        274 |       0 |    1 |  160 |      0 |      0 |          0 |
+|           U_XSDB_SLAVE                                                  |                         xsdbs_v1_0_6_xsdbs |         76 |         76 |       0 |    0 |  213 |      0 |      0 |          0 |
+|         u_trig                                                          |                    ila_v6_2_20_ila_trigger |         79 |          1 |       0 |   78 |  276 |      0 |      0 |          0 |
+|           U_TM                                                          |                 ila_v6_2_20_ila_trig_match |         73 |          0 |       0 |   73 |  268 |      0 |      0 |          0 |
+|             N_DDR_MODE.G_NMU[4].U_M                                     |         ltlib_v1_0_4_match__parameterized0 |         17 |          0 |       0 |   17 |   66 |      0 |      0 |          0 |
+|               (allx_typeA_match_detection.ltlib_v1_0_4_allx_typeA_inst) |    ltlib_v1_0_4_allx_typeA__parameterized0 |          0 |          0 |       0 |    0 |   64 |      0 |      0 |          0 |
+|             N_DDR_MODE.G_NMU[0].U_M                                     |      ltlib_v1_0_4_match__parameterized0__1 |         17 |          0 |       0 |   17 |   66 |      0 |      0 |          0 |
+|               (allx_typeA_match_detection.ltlib_v1_0_4_allx_typeA_inst) | ltlib_v1_0_4_allx_typeA__parameterized0__1 |          0 |          0 |       0 |    0 |   64 |      0 |      0 |          0 |
+|             N_DDR_MODE.G_NMU[1].U_M                                     |      ltlib_v1_0_4_match__parameterized0__2 |         17 |          0 |       0 |   17 |   66 |      0 |      0 |          0 |
+|               (allx_typeA_match_detection.ltlib_v1_0_4_allx_typeA_inst) | ltlib_v1_0_4_allx_typeA__parameterized0__2 |          0 |          0 |       0 |    0 |   64 |      0 |      0 |          0 |
+|             N_DDR_MODE.G_NMU[2].U_M                                     |      ltlib_v1_0_4_match__parameterized0__3 |         17 |          0 |       0 |   17 |   66 |      0 |      0 |          0 |
+|               (allx_typeA_match_detection.ltlib_v1_0_4_allx_typeA_inst) | ltlib_v1_0_4_allx_typeA__parameterized0__3 |          0 |          0 |       0 |    0 |   64 |      0 |      0 |          0 |
+|         xsdb_memory_read_inst                                           |                 ltlib_v1_0_4_generic_memrd |         79 |         77 |       0 |    2 |  155 |      0 |      0 |          0 |
+|           (xsdb_memory_read_inst)                                       |                 ltlib_v1_0_4_generic_memrd |         31 |         29 |       0 |    2 |  155 |      0 |      0 |          0 |
+|   rv32i_core_inst                                                       |                                 rv32i_core |       1532 |       1532 |       0 |    0 | 1482 |      2 |      1 |          0 |
+|     (rv32i_core_inst)                                                   |                                 rv32i_core |        235 |        235 |       0 |    0 |  388 |      0 |      0 |          0 |
+|     alu_inst                                                            |                                        ALU |        432 |        432 |       0 |    0 |    0 |      0 |      0 |          0 |
+|     branch_jump_unit_inst                                               |                           branch_jump_unit |         52 |         52 |       0 |    0 |    0 |      0 |      0 |          0 |
+|     instruction_memory_inst                                             |                         instruction_memory |          4 |          4 |       0 |    0 |   63 |      1 |      0 |          0 |
+|     load_unit_inst                                                      |                                  load_unit |         51 |         51 |       0 |    0 |    0 |      0 |      0 |          0 |
+|     register_file_inst                                                  |                              register_file |        613 |        613 |       0 |    0 |  992 |      0 |      0 |          0 |
++-------------------------------------------------------------------------+--------------------------------------------+------------+------------+---------+------+------+--------+--------+------------+
+
+

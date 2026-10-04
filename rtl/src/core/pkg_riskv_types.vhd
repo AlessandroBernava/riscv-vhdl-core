@@ -34,6 +34,7 @@ package pkg_riskv_types is
     constant INSTR_NOP : word_t := x"00000013";
 
     type instr_type_t is (R_TYPE, I_TYPE, S_TYPE, B_TYPE, U_TYPE, J_TYPE);
+    type memory_type_t is (RAM, MMIO);
 
     -- opcodes
     constant opc_load   : std_logic_vector(6 downto 0) := "0000011";

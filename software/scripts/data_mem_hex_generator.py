@@ -9,7 +9,7 @@ elf_path = sys.argv[1]
 out_path = sys.argv[2] if len(sys.argv) >= 3 else "software/build/data.mem"   # Attualmente non passiamo l'output file
 
 DATA_BASE = 0x00001100
-DATA_SIZE = 1024 * 4
+DATA_SIZE = 960 * 4
 
 with open(elf_path, "rb") as f:
     elf = ELFFile(f)

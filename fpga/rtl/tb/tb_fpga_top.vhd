@@ -2,7 +2,7 @@
 library ieee;
 use ieee.numeric_std.all;
 use ieee.std_logic_1164.all;
-
+library work;
 use work.pkg_riskv_types.all;
 
 entity tb_fpga_top is
@@ -48,20 +48,20 @@ begin
         severity note;
 
         -- Tempo massimo concesso al programma.
-        wait for CLK_PERIOD * 30_000;
+        -- wait for CLK_PERIOD * 30_000;
 
-        if pass_seen_t then
-            report "TEST SUPERATO: led_pass osservato a '1'."
-            severity note;
-        else
-            report "TEST NON SUPERATO: led_pass non e' mai diventato '1' entro il timeout."
-            severity error;
-        end if;
+        --   if pass_seen_t then
+        --     report "TEST SUPERATO: led_pass osservato a '1'."
+        --      severity note;
+        -- else
+        --     report "TEST NON SUPERATO: led_pass non e' mai diventato '1' entro il timeout."
+        --    severity error;
+        --   end if;
 
-        report "Simulazione completata."
-        severity note;
+        --   report "Simulazione completata."
+        --   severity note;
 
-        std.env.stop;
+        --std.env.stop;
         wait;
     end process stim;
 

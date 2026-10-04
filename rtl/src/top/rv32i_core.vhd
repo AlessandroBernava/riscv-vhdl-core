@@ -55,21 +55,23 @@ architecture rtl of rv32i_core is
     signal mem_wb     : mem_wb_reg_t;
     signal mem_wb_new : mem_wb_reg_t;
 
-    signal alu_ctrl         : std_logic_vector(3 downto 0);
-    signal alu_op_a         : word_t;
-    signal alu_op_b         : word_t;
-    signal alu_result       : word_t;
-    signal alu_result_zero  : std_logic;
-    signal flush            : std_logic;
-    signal instr            : word_t;
-    signal instr_type       : instr_type_t;                  -- in input ad immediate generator
-    signal byte_enable      : std_logic_vector(3 downto 0);
-    signal mem_wb_load_data : word_t;
-    signal forwardA         : std_logic_vector(1 downto 0);  -- controllo del forwarding
-    signal forwardB         : std_logic_vector(1 downto 0);  -- controllo del forwarding
-    signal rs1_forwarded    : word_t;                        -- rs1 dopo eventuale forwarding
-    signal rs2_forwarded    : word_t;                        -- rs2 dopo eventuale forwarding
-    signal stall            : std_logic;
+    signal alu_ctrl              : std_logic_vector(3 downto 0);
+    signal alu_op_a              : word_t;
+    signal alu_op_b              : word_t;
+    signal alu_result            : word_t;
+    signal alu_result_zero       : std_logic;
+    signal flush                 : std_logic;
+    signal instr                 : word_t;
+    signal instr_type            : instr_type_t;                  -- in input ad immediate generator
+    signal byte_enable           : std_logic_vector(3 downto 0);
+    signal mem_wb_load_data_ram  : word_t;
+    signal mem_wb_load_data_mmio : word_t;
+    signal mem_wb_load_data      : word_t;
+    signal forwardA              : std_logic_vector(1 downto 0);  -- controllo del forwarding
+    signal forwardB              : std_logic_vector(1 downto 0);  -- controllo del forwarding
+    signal rs1_forwarded         : word_t;                        -- rs1 dopo eventuale forwarding
+    signal rs2_forwarded         : word_t;                        -- rs2 dopo eventuale forwarding
+    signal stall                 : std_logic;
     -- signal opcode           : std_logic_vector(6 downto 0);
     -- signal rs1_addr         : reg_addr_t;
     -- signal rs2_addr         : reg_addr_t;
@@ -95,6 +97,9 @@ architecture rtl of rv32i_core is
 
     --  attribute KEEP_HIERARCHY of store_unit_inst :
     --  label is "TRUE";
+
+    signal memory_enable_ram  : std_logic;
+    signal memory_enable_mmio : std_logic;
 
 begin
 
@@ -154,10 +159,25 @@ begin
         res_i         => res,
         mem_read_i    => ex_mem.mem_read,
         mem_write_i   => ex_mem.mem_write,
-        addr_i        => ex_mem.alu_result,  -- connettere alu result anche a mem_wb_new.alu_result
+        addr_i        => ex_mem.alu_result,    -- connettere alu result anche a mem_wb_new.alu_result
+        memory_e      => memory_enable_ram,
         write_data_i  => mem_store_data,
-        byte_enable_i => byte_enable,        --byte enable segnale prodotto dalla store unit
-        data_o        => mem_wb_load_data    -- dato in wb che viene formattato e messo nel registro in caso di load
+        byte_enable_i => byte_enable,          --byte enable segnale prodotto dalla store unit
+        data_o        => mem_wb_load_data_ram  -- dato in wb che viene formattato e messo nel registro in caso di load
+    );
+
+    mmio_memory_inst : entity work.mmio_memory
+    port map (
+        clk           => clk,
+        res_i         => res,
+        mem_read_i    => ex_mem.mem_read,
+        mem_write_i   => ex_mem.mem_write,
+        addr_i        => ex_mem.alu_result,      -- connettere alu result anche a mem_wb_new.alu_result
+        memory_e      => memory_enable_mmio,
+        write_data_i  => mem_store_data,
+        byte_enable_i => byte_enable,            --byte enable segnale prodotto dalla store unit
+        data_o        => mem_wb_load_data_mmio,
+        led_reg_o     => led_reg                 -- dato in wb che viene formattato e messo nel registro in caso di load
     );
 
     forwarding_unit_inst : entity work.forwarding_unit
@@ -249,7 +269,7 @@ begin
     misaligned_load_effective <= misaligned_load  and is_load_wb;
     misaligned_store_effective <= misaligned_store;  -- solo dallo stadio MEM
 
-   -- misaligned <= misaligned_store_effective or misaligned_load_effective;
+    -- misaligned <= misaligned_store_effective or misaligned_load_effective;
 
     flush <= jump;   -- aggiornare in caso di logica di flush piu' complessa
 
@@ -301,19 +321,6 @@ begin
         end if;
     end process mem_wb_reg;
 
-    mmio : process (clk)
-    begin
-        if clk'event and clk = '1' then
-            if res = '1' then
-                led_reg <= (others => '0');
-
-            elsif ex_mem.mem_write = '1' and ex_mem.alu_result = LED_ADDR then
-                led_reg <= ex_mem.rs2_data;
-
-            end if;
-        end if;
-    end process mmio;
-
     ex_mem_new.alu_result <= alu_result;
 
     pc_target <= std_logic_vector(unsigned(id_ex.pc) + unsigned(id_ex.imm_ext)) --mux pc target
@@ -341,6 +348,28 @@ begin
     write_data <= mem_wb.alu_result when mem_wb.result_src = "00" else
     wb_load_data                    when mem_wb.result_src = "01" else           -- dato formattato per la load, mem_wb_load_data e' quello non formattato
     mem_wb.pc4;
+
+    -- mux memoria dati/mmio
+
+    data_type : process (ex_mem.alu_result)
+    begin
+        memory_enable_ram <= '0';
+        memory_enable_mmio <= '0';
+        if unsigned(ex_mem.alu_result) >= DATA_BASE and unsigned(ex_mem.alu_result) <  DATA_END then
+            memory_enable_ram <= '1';
+            memory_enable_mmio <= '0';
+        elsif unsigned(ex_mem.alu_result) >= MMIO_BASE and unsigned(ex_mem.alu_result) < MMIO_END then
+            memory_enable_ram <= '0';
+            memory_enable_mmio <= '1';
+        end if;
+    end process data_type;
+
+    mem_wb_new.memory_enable_ram <= memory_enable_ram;
+    mem_wb_new.memory_enable_mmio <= memory_enable_mmio;
+
+    mem_wb_load_data <= mem_wb_load_data_ram when mem_wb.memory_enable_ram = '1' else
+    mem_wb_load_data_mmio                    when mem_wb.memory_enable_mmio = '1' else
+    (others => 'X');
 
     -- collegamenti diretti tra registri
 

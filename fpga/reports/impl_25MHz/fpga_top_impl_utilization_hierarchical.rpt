@@ -1,0 +1,79 @@
+Copyright 1986-2022 Xilinx, Inc. All Rights Reserved. Copyright 2022-2026 Advanced Micro Devices, Inc. All Rights Reserved.
+----------------------------------------------------------------------------------------------------------------------------------------------------------
+| Tool Version : Vivado v.2026.1 (win64) Build 6511674 Tue Jun 16 11:02:23 MDT 2026
+| Date         : Sun Oct  4 18:08:42 2026
+| Host         : LAPTOP-U87GIL8U running 64-bit major release  (build 9200)
+| Command      : report_utilization -hierarchical -file D:/Vivado_Work/projects/fpga_test_1/reports_25MHz_mmio/fpga_top_impl_utilization_hierarchical.rpt
+| Design       : fpga_top
+| Device       : xc7a100tcsg324-1
+| Speed File   : -1
+| Design State : Routed
+----------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Utilization Design Information
+
+Table of Contents
+-----------------
+1. Utilization by Hierarchy
+
+1. Utilization by Hierarchy
+---------------------------
+
++-------------------------------------------------------------------------+----------------------------------------------+------------+------------+---------+------+------+--------+--------+------------+
+|                                 Instance                                |                    Module                    | Total LUTs | Logic LUTs | LUTRAMs | SRLs |  FFs | RAMB36 | RAMB18 | DSP Blocks |
++-------------------------------------------------------------------------+----------------------------------------------+------------+------------+---------+------+------+--------+--------+------------+
+| fpga_top                                                                |                                        (top) |       2989 |       2772 |      24 |  193 | 3970 |      9 |      2 |          0 |
+|   (fpga_top)                                                            |                                        (top) |          1 |          1 |       0 |    0 |    2 |      0 |      0 |          0 |
+|   dbg_hub                                                               |                                      dbg_hub |        449 |        425 |      24 |    0 |  741 |      0 |      0 |          0 |
+|     inst                                                                |                           xsdbm_v3_0_6_xsdbm |        449 |        425 |      24 |    0 |  741 |      0 |      0 |          0 |
+|       BSCANID.u_xsdbm_id                                                |                        xsdbm_v3_0_6_xsdbm_id |        449 |        425 |      24 |    0 |  741 |      0 |      0 |          0 |
+|         SWITCH_N_EXT_BSCAN.bscan_switch                                 |                    xsdbm_v3_0_6_bscan_switch |        124 |        124 |       0 |    0 |  125 |      0 |      0 |          0 |
+|         CORE_XSDB.UUT_MASTER                                            |                       xsdbm_v3_0_6_icon2xsdb |        273 |        249 |      24 |    0 |  554 |      0 |      0 |          0 |
+|           U_ICON_INTERFACE                                              |                              xsdbm_v3_0_6_if |        163 |        139 |      24 |    0 |  450 |      0 |      0 |          0 |
+|             U_CMD6_WR                                                   |                           xsdbm_v3_0_6_wrreg |         46 |         34 |      12 |    0 |  110 |      0 |      0 |          0 |
+|               U_WR_FIFO                                                 |                          xsdbm_v3_0_6_wrfifo |         44 |         32 |      12 |    0 |   90 |      0 |      0 |          0 |
+|                 SUBCORE_FIFO.xsdbm_v3_0_6_wrfifo_inst                   |                       fifo_generator_v13_1_6 |         42 |         30 |      12 |    0 |   90 |      0 |      0 |          0 |
+|                   inst_fifo_gen                                         |                 fifo_generator_v13_1_6_synth |         42 |         30 |      12 |    0 |   90 |      0 |      0 |          0 |
+|                     gconvfifo.rf                                        |                           fifo_generator_top |         42 |         30 |      12 |    0 |   90 |      0 |      0 |          0 |
+|                       grf.rf                                            |                       fifo_generator_ramfifo |         42 |         30 |      12 |    0 |   90 |      0 |      0 |          0 |
+|             U_CMD4                                                      |         xsdbm_v3_0_6_ctl_reg__parameterized0 |          9 |          9 |       0 |    0 |   62 |      0 |      0 |          0 |
+|             U_CMD6_RD                                                   |                           xsdbm_v3_0_6_rdreg |         67 |         55 |      12 |    0 |  134 |      0 |      0 |          0 |
+|               U_RD_FIFO                                                 |                          xsdbm_v3_0_6_rdfifo |         65 |         53 |      12 |    0 |  114 |      0 |      0 |          0 |
+|                 SUBCORE_FIFO.xsdbm_v3_0_6_rdfifo_inst                   |       fifo_generator_v13_1_6__parameterized0 |         47 |         35 |      12 |    0 |  114 |      0 |      0 |          0 |
+|                   inst_fifo_gen                                         | fifo_generator_v13_1_6_synth__parameterized0 |         47 |         35 |      12 |    0 |  114 |      0 |      0 |          0 |
+|                     gconvfifo.rf                                        |           fifo_generator_top__parameterized0 |         47 |         35 |      12 |    0 |  114 |      0 |      0 |          0 |
+|                       grf.rf                                            |       fifo_generator_ramfifo__parameterized0 |         47 |         35 |      12 |    0 |  114 |      0 |      0 |          0 |
+|           U_XSDB_BUS_CONTROLLER                                         |                         xsdbm_v3_0_6_bus_ctl |         70 |         70 |       0 |    0 |   48 |      0 |      0 |          0 |
+|   ila_inst                                                              |                                        ila_0 |       1030 |        837 |       0 |  193 | 1745 |      7 |      1 |          0 |
+|     U0                                                                  |                              ila_v6_2_20_ila |       1030 |        837 |       0 |  193 | 1745 |      7 |      1 |          0 |
+|       ila_core_inst                                                     |                         ila_v6_2_20_ila_core |       1029 |        836 |       0 |  193 | 1739 |      7 |      1 |          0 |
+|         (ila_core_inst)                                                 |                         ila_v6_2_20_ila_core |        194 |        129 |       0 |   65 |  172 |      0 |      0 |          0 |
+|         u_ila_cap_ctrl                                                  |              ila_v6_2_20_ila_cap_ctrl_legacy |         85 |         38 |       0 |   47 |  137 |      0 |      0 |          0 |
+|           u_cap_addrgen                                                 |                  ila_v6_2_20_ila_cap_addrgen |         69 |         32 |       0 |   37 |  131 |      0 |      0 |          0 |
+|             (u_cap_addrgen)                                             |                  ila_v6_2_20_ila_cap_addrgen |         13 |         12 |       0 |    1 |   73 |      0 |      0 |          0 |
+|         u_ila_regs                                                      |                     ila_v6_2_20_ila_register |        583 |        582 |       0 |    1 |  965 |      0 |      0 |          0 |
+|           (u_ila_regs)                                                  |                     ila_v6_2_20_ila_register |        270 |        269 |       0 |    1 |  160 |      0 |      0 |          0 |
+|           U_XSDB_SLAVE                                                  |                           xsdbs_v1_0_6_xsdbs |         76 |         76 |       0 |    0 |  213 |      0 |      0 |          0 |
+|         u_trig                                                          |                      ila_v6_2_20_ila_trigger |         79 |          1 |       0 |   78 |  276 |      0 |      0 |          0 |
+|           U_TM                                                          |                   ila_v6_2_20_ila_trig_match |         73 |          0 |       0 |   73 |  268 |      0 |      0 |          0 |
+|             N_DDR_MODE.G_NMU[0].U_M                                     |        ltlib_v1_0_4_match__parameterized0__1 |         17 |          0 |       0 |   17 |   66 |      0 |      0 |          0 |
+|               (allx_typeA_match_detection.ltlib_v1_0_4_allx_typeA_inst) |   ltlib_v1_0_4_allx_typeA__parameterized0__1 |          0 |          0 |       0 |    0 |   64 |      0 |      0 |          0 |
+|             N_DDR_MODE.G_NMU[1].U_M                                     |        ltlib_v1_0_4_match__parameterized0__2 |         17 |          0 |       0 |   17 |   66 |      0 |      0 |          0 |
+|               (allx_typeA_match_detection.ltlib_v1_0_4_allx_typeA_inst) |   ltlib_v1_0_4_allx_typeA__parameterized0__2 |          0 |          0 |       0 |    0 |   64 |      0 |      0 |          0 |
+|             N_DDR_MODE.G_NMU[2].U_M                                     |        ltlib_v1_0_4_match__parameterized0__3 |         17 |          0 |       0 |   17 |   66 |      0 |      0 |          0 |
+|               (allx_typeA_match_detection.ltlib_v1_0_4_allx_typeA_inst) |   ltlib_v1_0_4_allx_typeA__parameterized0__3 |          0 |          0 |       0 |    0 |   64 |      0 |      0 |          0 |
+|             N_DDR_MODE.G_NMU[4].U_M                                     |           ltlib_v1_0_4_match__parameterized0 |         17 |          0 |       0 |   17 |   66 |      0 |      0 |          0 |
+|               (allx_typeA_match_detection.ltlib_v1_0_4_allx_typeA_inst) |      ltlib_v1_0_4_allx_typeA__parameterized0 |          0 |          0 |       0 |    0 |   64 |      0 |      0 |          0 |
+|         xsdb_memory_read_inst                                           |                   ltlib_v1_0_4_generic_memrd |         79 |         77 |       0 |    2 |  155 |      0 |      0 |          0 |
+|           (xsdb_memory_read_inst)                                       |                   ltlib_v1_0_4_generic_memrd |         31 |         29 |       0 |    2 |  155 |      0 |      0 |          0 |
+|   rv32i_core_inst                                                       |                                   rv32i_core |       1509 |       1509 |       0 |    0 | 1482 |      2 |      1 |          0 |
+|     (rv32i_core_inst)                                                   |                                   rv32i_core |        235 |        235 |       0 |    0 |  388 |      0 |      0 |          0 |
+|     alu_inst                                                            |                                          ALU |        430 |        430 |       0 |    0 |    0 |      0 |      0 |          0 |
+|     branch_jump_unit_inst                                               |                             branch_jump_unit |         52 |         52 |       0 |    0 |    0 |      0 |      0 |          0 |
+|     instruction_memory_inst                                             |                           instruction_memory |          3 |          3 |       0 |    0 |   63 |      1 |      0 |          0 |
+|     load_unit_inst                                                      |                                    load_unit |         51 |         51 |       0 |    0 |    0 |      0 |      0 |          0 |
+|     register_file_inst                                                  |                                register_file |        613 |        613 |       0 |    0 |  992 |      0 |      0 |          0 |
++-------------------------------------------------------------------------+----------------------------------------------+------------+------------+---------+------+------+--------+--------+------------+
+* Note: The sum of lower-level cells may be larger than their parent cells total, due to cross-hierarchy LUT combining
+
+

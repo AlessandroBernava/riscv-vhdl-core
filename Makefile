@@ -29,6 +29,7 @@ CORE = \
 	rtl/src/core/forwarding_unit.vhd \
 	rtl/src/core/hazard_detection_unit.vhd \
 	rtl/src/core/data_memory.vhd \
+	rtl/src/core/mmio_memory.vhd \
 	rtl/src/top/rv32i_core.vhd
 
 FPGA_TOP = \

@@ -9,7 +9,8 @@ MEMORY  {
  /* Periferiche: 0x00001000 - 0x000010FF */
     MMIO (rw) : ORIGIN = 0x00001000, LENGTH = 0x100
     /* 4 KiB per i dati: 0x00001000 - 0x00001FFF */
-    RAM (rwx) : ORIGIN = 0x00001100, LENGTH = 4K
+    RAM (rwx) : ORIGIN = 0x00001100,  LENGTH = 0xF00
+
 }
 
 SECTIONS    {

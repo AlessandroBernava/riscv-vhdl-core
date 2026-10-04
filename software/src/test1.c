@@ -1,9 +1,9 @@
 #include <stdint.h>
 
-#define OUT ((volatile uint32_t *)0x00001200u)
+#define OUT ((volatile uint32_t *)0x00001000u)
 // volatile unsigned int *OUT = (volatile unsigned int *)0x00001104u;
 uint32_t a[4] = {1, 2, 3, 4};
-uint32_t sum = 0;
+uint32_t sum = 20;
 
 int main(void)
 {

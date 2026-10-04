@@ -31,11 +31,10 @@ Disassembly of section .text:
   3c:	00812423          	sw	s0,8(sp)
   40:	01010413          	addi	s0,sp,16
   44:	000017b7          	lui	a5,0x1
-  48:	20078793          	addi	a5,a5,512 # 1200 <__StackLimit+0x100>
-  4c:	00100713          	li	a4,1
-  50:	00e7a023          	sw	a4,0(a5)
-  54:	00000013          	nop
-  58:	ffdff06f          	j	54 <main+0x20>
+  48:	00100713          	li	a4,1
+  4c:	00e7a023          	sw	a4,0(a5) # 1000 <__data_rom_start__+0xfa8>
+  50:	00000013          	nop
+  54:	ffdff06f          	j	50 <main+0x1c>
 
 Disassembly of section .riscv.attributes:
 

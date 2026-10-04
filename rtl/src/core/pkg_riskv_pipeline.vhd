@@ -81,6 +81,9 @@ package pkg_riskv_pipeline is
 
         reg_write  : std_logic;                     -- per wb
         result_src : std_logic_vector(1 downto 0);  -- 00 ALU 01 memoria (load) 11 pc+4
+
+        memory_enable_ram  : std_logic;
+        memory_enable_mmio : std_logic;
     end record;
 
     -- costanti di reset registri
@@ -130,10 +133,12 @@ package pkg_riskv_pipeline is
         pc4        => (others => '0'),
         alu_result => (others => '0'),
         --mem_data   => (others => '0'),
-        mem_size     => (others => '0'),
-        mem_unsigned => '0',
-        reg_write    => '0',
-        result_src   => (others => '0')
+        mem_size           => (others => '0'),
+        mem_unsigned       => '0',
+        reg_write          => '0',
+        result_src         => (others => '0'),
+        memory_enable_ram  => '0',
+        memory_enable_mmio => '0'
     );
 
 end package pkg_riskv_pipeline;

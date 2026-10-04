@@ -83,6 +83,7 @@ begin
                 when "1000" => formatted_data_v(31 downto 8) := (others => data_i(31));
                 when "0011" => formatted_data_v(31 downto 16) := (others => data_i(15));
                 when "1100" => formatted_data_v(31 downto 16) := (others => data_i(31));
+                when "1111" => null;                                                      -- Mantiene la word copiata nel primo case.
                 when others => formatted_data_v := (others => '0');
             end case;
         end if;

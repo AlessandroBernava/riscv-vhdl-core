@@ -62,9 +62,9 @@ begin
 
     dut : entity work.rv32i_core
     port map (
-        res        => res_t,
-        clk        => clk_t,
-        misaligned => misaligned_t,
+        res => res_t,
+        clk => clk_t,
+        -- misaligned => misaligned_t,
 
         dbg_pc    => dbg_pc_t,
         dbg_instr => dbg_instr_t,
@@ -138,6 +138,9 @@ begin
         alias mem_tb is
         << signal dut.data_memory_inst.mem : data_mem_t >>;
 
+        alias mem_mmio_tb is
+        << signal dut.mmio_memory_inst.mem : mmio_mem_t >>;
+
         alias forwardA_tb is
         << signal dut.forwardA : std_logic_vector(1 downto 0) >>;
 
@@ -153,8 +156,8 @@ begin
         alias mem_wb_result_src_tb is
         << signal dut.mem_wb : mem_wb_reg_t >>;
 
-        alias word_index_tb is
-        << signal dut.data_memory_inst.word_index : integer >>;
+        -- alias word_index_tb is
+        -- << signal dut.data_memory_inst.word_index : integer >>;
 
         --   alias id_ers1data_tb is
         -- << signal dut.id_ex.rs1_data : word_t >>;
@@ -203,7 +206,7 @@ begin
             " | MEM/WB WE=" & std_logic'image(dbg_mem_wb_we_t) &
             " misaligned=" & std_logic'image(misaligned_t) &
             " RD=" & to_bstring(dbg_mem_wb_rd_t) &
-            " word_index=" & integer'image(word_index_tb) &
+            -- " word_index=" & integer'image(word_index_tb) &
             " | WR_DATA=" & to_hstring(dbg_data_t)
 
             --  " id_ex_rs1data=" & to_hstring(id_ers1data_tb)
@@ -236,19 +239,19 @@ begin
         "  x17=" & to_hstring(regs_tb(17))
         severity note;
 
-        report BLUE & "  [MEM] " &  RESET & "data_mem_tb(0) = 0x" & to_hstring(mem_tb(0))
+        report BLUE & "  [MEM] " &  RESET & "data_mem_tb(0) = 0x" & to_hstring(mem_mmio_tb(0))
         severity note;
 
-        report "data_mem_tb(1) = 0x" & to_hstring(mem_tb(1))
+        report "data_mem_tb(1) = 0x" & to_hstring(mem_mmio_tb(63))
         severity note;
 
-        report "data_mem_tb(2) = 0x" & to_hstring(mem_tb(2))
+        report "data_mem_tb(2) = 0x" & to_hstring(mem_tb(0))
         severity note;
-        report "data_mem_tb(3) = 0x" & to_hstring(mem_tb(3))
+        report "data_mem_tb(3) = 0x" & to_hstring(mem_mmio_tb(3))
         severity note;
-        report "data_mem_tb(4) = 0x" & to_hstring(mem_tb(4))
+        report "data_mem_tb(4) = 0x" & to_hstring(mem_mmio_tb(4))
         severity note;
-        report "data_mem_tb(5) = 0x" & to_hstring(mem_tb(5))
+        report "data_mem_tb(5) = 0x" & to_hstring(mem_mmio_tb(5))
         severity note;
         report "data_mem_tb(6) = 0x" & to_hstring(mem_tb(6))
         severity note;

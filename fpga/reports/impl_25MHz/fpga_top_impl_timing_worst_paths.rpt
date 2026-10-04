@@ -1,0 +1,807 @@
+Copyright 1986-2022 Xilinx, Inc. All Rights Reserved. Copyright 2022-2026 Advanced Micro Devices, Inc. All Rights Reserved.
+------------------------------------------------------------------------------------------------------------------------------------------------------------
+| Tool Version : Vivado v.2026.1 (win64) Build 6511674 Tue Jun 16 11:02:23 MDT 2026
+| Date         : Sun Oct  4 18:09:30 2026
+| Host         : LAPTOP-U87GIL8U running 64-bit major release  (build 9200)
+| Command      : report_timing -path_type full -nworst 10 -file D:/Vivado_Work/projects/fpga_test_1/reports_25MHz_mmio/fpga_top_impl_timing_worst_paths.rpt
+| Design       : fpga_top
+| Device       : 7a100t-csg324
+| Speed File   : -1  PRODUCTION 1.23 2018-06-13
+| Design State : Routed
+------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Timing Report
+
+Slack (MET) :             17.614ns  (required time - arrival time)
+  Source:                 rv32i_core_inst/data_memory_inst/mem_reg/CLKBWRCLK
+                            (rising edge-triggered cell RAMB36E1 clocked by clk_out1_clk_wiz_0  {rise@0.000ns fall@20.000ns period=40.000ns})
+  Destination:            rv32i_core_inst/id_ex_reg[rs1_data][7]/R
+                            (rising edge-triggered cell FDRE clocked by clk_out1_clk_wiz_0  {rise@0.000ns fall@20.000ns period=40.000ns})
+  Path Group:             clk_out1_clk_wiz_0
+  Path Type:              Setup (Max at Slow Process Corner)
+  Requirement:            40.000ns  (clk_out1_clk_wiz_0 rise@40.000ns - clk_out1_clk_wiz_0 rise@0.000ns)
+  Data Path Delay:        21.513ns  (logic 5.124ns (23.818%)  route 16.389ns (76.182%))
+  Logic Levels:           16  (LUT3=4 LUT4=1 LUT5=2 LUT6=9)
+  Clock Path Skew:        -0.142ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    -1.332ns = ( 38.668 - 40.000 ) 
+    Source Clock Delay      (SCD):    -0.693ns
+    Clock Pessimism Removal (CPR):    0.496ns
+  Clock Uncertainty:      0.098ns  ((TSJ^2 + DJ^2)^1/2) / 2 + PE
+    Total System Jitter     (TSJ):    0.071ns
+    Discrete Jitter          (DJ):    0.182ns
+    Phase Error              (PE):    0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock clk_out1_clk_wiz_0 rise edge)
+                                                      0.000     0.000 r  <hidden>
+                         clock source latency        -4.355    -4.355    <hidden>
+                         propagated clock network latency
+                                                      3.662    -0.693    <hidden>
+    RAMB36_X1Y8          RAMB36E1                     0.000    -0.693 r  rv32i_core_inst/data_memory_inst/mem_reg/CLKBWRCLK
+    RAMB36_X1Y8          RAMB36E1 (Prop_ramb36e1_CLKBWRCLK_DOBDO[26])
+                                                      2.454     1.761 r  rv32i_core_inst/data_memory_inst/mem_reg/DOBDO[26]
+                         net (fo=1, routed)           1.533     3.294    rv32i_core_inst/mem_wb_load_data_ram[26]
+    SLICE_X62Y48         LUT3 (Prop_lut3_I0_O)        0.153     3.447 r  rv32i_core_inst/load_unit_inst_i_6/O
+                         net (fo=3, routed)           1.044     4.491    rv32i_core_inst/load_unit_inst/data_i[26]
+    SLICE_X60Y50         LUT6 (Prop_lut6_I0_O)        0.331     4.822 r  rv32i_core_inst/load_unit_inst/formatted_data_o[2]_INST_0_i_1/O
+                         net (fo=1, routed)           0.452     5.274    rv32i_core_inst/load_unit_inst/formatted_data_o[2]_INST_0_i_1_n_0
+    SLICE_X60Y50         LUT6 (Prop_lut6_I5_O)        0.124     5.398 r  rv32i_core_inst/load_unit_inst/formatted_data_o[2]_INST_0/O
+                         net (fo=1, routed)           0.584     5.981    rv32i_core_inst/wb_load_data[2]
+    SLICE_X55Y50         LUT5 (Prop_lut5_I2_O)        0.124     6.105 r  rv32i_core_inst/register_file_inst_i_30/O
+                         net (fo=35, routed)          0.785     6.890    rv32i_core_inst/register_file_inst_i_30_n_0
+    SLICE_X46Y48         LUT6 (Prop_lut6_I5_O)        0.124     7.014 r  rv32i_core_inst/branch_jump_unit_inst_i_62/O
+                         net (fo=8, routed)           1.108     8.122    rv32i_core_inst/rs2_forwarded[2]
+    SLICE_X49Y56         LUT3 (Prop_lut3_I2_O)        0.150     8.272 r  rv32i_core_inst/alu_inst_i_62/O
+                         net (fo=114, routed)         1.527     9.799    rv32i_core_inst/alu_inst/b_i[2]
+    SLICE_X37Y68         LUT6 (Prop_lut6_I1_O)        0.326    10.125 f  rv32i_core_inst/alu_inst/result_o[14]_INST_0_i_12/O
+                         net (fo=2, routed)           1.292    11.417    rv32i_core_inst/alu_inst/result_o[14]_INST_0_i_12_n_0
+    SLICE_X37Y63         LUT3 (Prop_lut3_I2_O)        0.152    11.569 f  rv32i_core_inst/alu_inst/result_o[12]_INST_0_i_6/O
+                         net (fo=2, routed)           0.451    12.020    rv32i_core_inst/alu_inst/result_o[12]_INST_0_i_6_n_0
+    SLICE_X37Y63         LUT6 (Prop_lut6_I3_O)        0.326    12.346 f  rv32i_core_inst/alu_inst/result_o[12]_INST_0_i_2/O
+                         net (fo=1, routed)           0.827    13.173    rv32i_core_inst/alu_inst/result_o[12]_INST_0_i_2_n_0
+    SLICE_X34Y62         LUT6 (Prop_lut6_I2_O)        0.124    13.297 f  rv32i_core_inst/alu_inst/result_o[12]_INST_0/O
+                         net (fo=3, routed)           1.305    14.603    rv32i_core_inst/alu_inst/result_o[12]
+    SLICE_X48Y60         LUT6 (Prop_lut6_I2_O)        0.124    14.727 r  rv32i_core_inst/alu_inst/zero_o_INST_0_i_5/O
+                         net (fo=1, routed)           0.670    15.397    rv32i_core_inst/alu_inst/zero_o_INST_0_i_5_n_0
+    SLICE_X48Y60         LUT4 (Prop_lut4_I0_O)        0.124    15.521 r  rv32i_core_inst/alu_inst/zero_o_INST_0_i_1/O
+                         net (fo=1, routed)           0.574    16.095    rv32i_core_inst/alu_inst/zero_o_INST_0_i_1_n_0
+    SLICE_X48Y61         LUT6 (Prop_lut6_I0_O)        0.124    16.219 r  rv32i_core_inst/alu_inst/zero_o_INST_0/O
+                         net (fo=1, routed)           0.621    16.840    rv32i_core_inst/branch_jump_unit_inst/zero_i
+    SLICE_X52Y58         LUT6 (Prop_lut6_I1_O)        0.124    16.964 r  rv32i_core_inst/branch_jump_unit_inst/jump_o_INST_0_i_2/O
+                         net (fo=1, routed)           0.421    17.384    rv32i_core_inst/branch_jump_unit_inst/jump_o_INST_0_i_2_n_0
+    SLICE_X52Y57         LUT5 (Prop_lut5_I2_O)        0.124    17.508 r  rv32i_core_inst/branch_jump_unit_inst/jump_o_INST_0/O
+                         net (fo=34, routed)          0.987    18.496    rv32i_core_inst/branch_jump_unit_inst_n_0
+    SLICE_X58Y63         LUT3 (Prop_lut3_I1_O)        0.116    18.612 r  rv32i_core_inst/id_ex[result_src][1]_i_1/O
+                         net (fo=197, routed)         2.208    20.820    rv32i_core_inst/id_ex[result_src][0]
+    SLICE_X27Y47         FDRE                                         r  rv32i_core_inst/id_ex_reg[rs1_data][7]/R
+  -------------------------------------------------------------------    -------------------
+
+                         (clock clk_out1_clk_wiz_0 rise edge)
+                                                     40.000    40.000 r  <hidden>
+                         clock source latency        -4.751    35.249    <hidden>
+                         propagated clock network latency
+                                                      3.419    38.668    <hidden>
+                         clock pessimism              0.496    39.164    <hidden>
+                         clock uncertainty           -0.098    39.067    <hidden>
+    SLICE_X27Y47         FDRE (Setup_fdre_C_R)       -0.633    38.434    rv32i_core_inst/id_ex_reg[rs1_data][7]
+  -------------------------------------------------------------------
+                         required time                         38.434    <hidden>
+                         arrival time                         -20.820    <hidden>
+  -------------------------------------------------------------------
+                         slack                                 17.614    <hidden>
+
+Slack (MET) :             17.614ns  (required time - arrival time)
+  Source:                 rv32i_core_inst/data_memory_inst/mem_reg/CLKBWRCLK
+                            (rising edge-triggered cell RAMB36E1 clocked by clk_out1_clk_wiz_0  {rise@0.000ns fall@20.000ns period=40.000ns})
+  Destination:            rv32i_core_inst/id_ex_reg[rs1_data][7]/R
+                            (rising edge-triggered cell FDRE clocked by clk_out1_clk_wiz_0  {rise@0.000ns fall@20.000ns period=40.000ns})
+  Path Group:             clk_out1_clk_wiz_0
+  Path Type:              Setup (Max at Slow Process Corner)
+  Requirement:            40.000ns  (clk_out1_clk_wiz_0 rise@40.000ns - clk_out1_clk_wiz_0 rise@0.000ns)
+  Data Path Delay:        21.513ns  (logic 5.124ns (23.818%)  route 16.389ns (76.182%))
+  Logic Levels:           16  (LUT3=4 LUT4=1 LUT5=2 LUT6=9)
+  Clock Path Skew:        -0.142ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    -1.332ns = ( 38.668 - 40.000 ) 
+    Source Clock Delay      (SCD):    -0.693ns
+    Clock Pessimism Removal (CPR):    0.496ns
+  Clock Uncertainty:      0.098ns  ((TSJ^2 + DJ^2)^1/2) / 2 + PE
+    Total System Jitter     (TSJ):    0.071ns
+    Discrete Jitter          (DJ):    0.182ns
+    Phase Error              (PE):    0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock clk_out1_clk_wiz_0 rise edge)
+                                                      0.000     0.000 r  <hidden>
+                         clock source latency        -4.355    -4.355    <hidden>
+                         propagated clock network latency
+                                                      3.662    -0.693    <hidden>
+    RAMB36_X1Y8          RAMB36E1                     0.000    -0.693 r  rv32i_core_inst/data_memory_inst/mem_reg/CLKBWRCLK
+    RAMB36_X1Y8          RAMB36E1 (Prop_ramb36e1_CLKBWRCLK_DOBDO[26])
+                                                      2.454     1.761 f  rv32i_core_inst/data_memory_inst/mem_reg/DOBDO[26]
+                         net (fo=1, routed)           1.533     3.294    rv32i_core_inst/mem_wb_load_data_ram[26]
+    SLICE_X62Y48         LUT3 (Prop_lut3_I0_O)        0.153     3.447 f  rv32i_core_inst/load_unit_inst_i_6/O
+                         net (fo=3, routed)           1.044     4.491    rv32i_core_inst/load_unit_inst/data_i[26]
+    SLICE_X60Y50         LUT6 (Prop_lut6_I0_O)        0.331     4.822 f  rv32i_core_inst/load_unit_inst/formatted_data_o[2]_INST_0_i_1/O
+                         net (fo=1, routed)           0.452     5.274    rv32i_core_inst/load_unit_inst/formatted_data_o[2]_INST_0_i_1_n_0
+    SLICE_X60Y50         LUT6 (Prop_lut6_I5_O)        0.124     5.398 f  rv32i_core_inst/load_unit_inst/formatted_data_o[2]_INST_0/O
+                         net (fo=1, routed)           0.584     5.981    rv32i_core_inst/wb_load_data[2]
+    SLICE_X55Y50         LUT5 (Prop_lut5_I2_O)        0.124     6.105 f  rv32i_core_inst/register_file_inst_i_30/O
+                         net (fo=35, routed)          0.785     6.890    rv32i_core_inst/register_file_inst_i_30_n_0
+    SLICE_X46Y48         LUT6 (Prop_lut6_I5_O)        0.124     7.014 f  rv32i_core_inst/branch_jump_unit_inst_i_62/O
+                         net (fo=8, routed)           1.108     8.122    rv32i_core_inst/rs2_forwarded[2]
+    SLICE_X49Y56         LUT3 (Prop_lut3_I2_O)        0.150     8.272 f  rv32i_core_inst/alu_inst_i_62/O
+                         net (fo=114, routed)         1.527     9.799    rv32i_core_inst/alu_inst/b_i[2]
+    SLICE_X37Y68         LUT6 (Prop_lut6_I1_O)        0.326    10.125 f  rv32i_core_inst/alu_inst/result_o[14]_INST_0_i_12/O
+                         net (fo=2, routed)           1.292    11.417    rv32i_core_inst/alu_inst/result_o[14]_INST_0_i_12_n_0
+    SLICE_X37Y63         LUT3 (Prop_lut3_I2_O)        0.152    11.569 f  rv32i_core_inst/alu_inst/result_o[12]_INST_0_i_6/O
+                         net (fo=2, routed)           0.451    12.020    rv32i_core_inst/alu_inst/result_o[12]_INST_0_i_6_n_0
+    SLICE_X37Y63         LUT6 (Prop_lut6_I3_O)        0.326    12.346 f  rv32i_core_inst/alu_inst/result_o[12]_INST_0_i_2/O
+                         net (fo=1, routed)           0.827    13.173    rv32i_core_inst/alu_inst/result_o[12]_INST_0_i_2_n_0
+    SLICE_X34Y62         LUT6 (Prop_lut6_I2_O)        0.124    13.297 f  rv32i_core_inst/alu_inst/result_o[12]_INST_0/O
+                         net (fo=3, routed)           1.305    14.603    rv32i_core_inst/alu_inst/result_o[12]
+    SLICE_X48Y60         LUT6 (Prop_lut6_I2_O)        0.124    14.727 r  rv32i_core_inst/alu_inst/zero_o_INST_0_i_5/O
+                         net (fo=1, routed)           0.670    15.397    rv32i_core_inst/alu_inst/zero_o_INST_0_i_5_n_0
+    SLICE_X48Y60         LUT4 (Prop_lut4_I0_O)        0.124    15.521 r  rv32i_core_inst/alu_inst/zero_o_INST_0_i_1/O
+                         net (fo=1, routed)           0.574    16.095    rv32i_core_inst/alu_inst/zero_o_INST_0_i_1_n_0
+    SLICE_X48Y61         LUT6 (Prop_lut6_I0_O)        0.124    16.219 r  rv32i_core_inst/alu_inst/zero_o_INST_0/O
+                         net (fo=1, routed)           0.621    16.840    rv32i_core_inst/branch_jump_unit_inst/zero_i
+    SLICE_X52Y58         LUT6 (Prop_lut6_I1_O)        0.124    16.964 r  rv32i_core_inst/branch_jump_unit_inst/jump_o_INST_0_i_2/O
+                         net (fo=1, routed)           0.421    17.384    rv32i_core_inst/branch_jump_unit_inst/jump_o_INST_0_i_2_n_0
+    SLICE_X52Y57         LUT5 (Prop_lut5_I2_O)        0.124    17.508 r  rv32i_core_inst/branch_jump_unit_inst/jump_o_INST_0/O
+                         net (fo=34, routed)          0.987    18.496    rv32i_core_inst/branch_jump_unit_inst_n_0
+    SLICE_X58Y63         LUT3 (Prop_lut3_I1_O)        0.116    18.612 r  rv32i_core_inst/id_ex[result_src][1]_i_1/O
+                         net (fo=197, routed)         2.208    20.820    rv32i_core_inst/id_ex[result_src][0]
+    SLICE_X27Y47         FDRE                                         r  rv32i_core_inst/id_ex_reg[rs1_data][7]/R
+  -------------------------------------------------------------------    -------------------
+
+                         (clock clk_out1_clk_wiz_0 rise edge)
+                                                     40.000    40.000 r  <hidden>
+                         clock source latency        -4.751    35.249    <hidden>
+                         propagated clock network latency
+                                                      3.419    38.668    <hidden>
+                         clock pessimism              0.496    39.164    <hidden>
+                         clock uncertainty           -0.098    39.067    <hidden>
+    SLICE_X27Y47         FDRE (Setup_fdre_C_R)       -0.633    38.434    rv32i_core_inst/id_ex_reg[rs1_data][7]
+  -------------------------------------------------------------------
+                         required time                         38.434    <hidden>
+                         arrival time                         -20.820    <hidden>
+  -------------------------------------------------------------------
+                         slack                                 17.614    <hidden>
+
+Slack (MET) :             17.614ns  (required time - arrival time)
+  Source:                 rv32i_core_inst/data_memory_inst/mem_reg/CLKBWRCLK
+                            (rising edge-triggered cell RAMB36E1 clocked by clk_out1_clk_wiz_0  {rise@0.000ns fall@20.000ns period=40.000ns})
+  Destination:            rv32i_core_inst/id_ex_reg[rs1_data][7]/R
+                            (rising edge-triggered cell FDRE clocked by clk_out1_clk_wiz_0  {rise@0.000ns fall@20.000ns period=40.000ns})
+  Path Group:             clk_out1_clk_wiz_0
+  Path Type:              Setup (Max at Slow Process Corner)
+  Requirement:            40.000ns  (clk_out1_clk_wiz_0 rise@40.000ns - clk_out1_clk_wiz_0 rise@0.000ns)
+  Data Path Delay:        21.513ns  (logic 5.124ns (23.818%)  route 16.389ns (76.182%))
+  Logic Levels:           16  (LUT3=4 LUT4=1 LUT5=2 LUT6=9)
+  Clock Path Skew:        -0.142ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    -1.332ns = ( 38.668 - 40.000 ) 
+    Source Clock Delay      (SCD):    -0.693ns
+    Clock Pessimism Removal (CPR):    0.496ns
+  Clock Uncertainty:      0.098ns  ((TSJ^2 + DJ^2)^1/2) / 2 + PE
+    Total System Jitter     (TSJ):    0.071ns
+    Discrete Jitter          (DJ):    0.182ns
+    Phase Error              (PE):    0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock clk_out1_clk_wiz_0 rise edge)
+                                                      0.000     0.000 r  <hidden>
+                         clock source latency        -4.355    -4.355    <hidden>
+                         propagated clock network latency
+                                                      3.662    -0.693    <hidden>
+    RAMB36_X1Y8          RAMB36E1                     0.000    -0.693 r  rv32i_core_inst/data_memory_inst/mem_reg/CLKBWRCLK
+    RAMB36_X1Y8          RAMB36E1 (Prop_ramb36e1_CLKBWRCLK_DOBDO[26])
+                                                      2.454     1.761 r  rv32i_core_inst/data_memory_inst/mem_reg/DOBDO[26]
+                         net (fo=1, routed)           1.533     3.294    rv32i_core_inst/mem_wb_load_data_ram[26]
+    SLICE_X62Y48         LUT3 (Prop_lut3_I0_O)        0.153     3.447 r  rv32i_core_inst/load_unit_inst_i_6/O
+                         net (fo=3, routed)           1.044     4.491    rv32i_core_inst/load_unit_inst/data_i[26]
+    SLICE_X60Y50         LUT6 (Prop_lut6_I0_O)        0.331     4.822 r  rv32i_core_inst/load_unit_inst/formatted_data_o[2]_INST_0_i_1/O
+                         net (fo=1, routed)           0.452     5.274    rv32i_core_inst/load_unit_inst/formatted_data_o[2]_INST_0_i_1_n_0
+    SLICE_X60Y50         LUT6 (Prop_lut6_I5_O)        0.124     5.398 r  rv32i_core_inst/load_unit_inst/formatted_data_o[2]_INST_0/O
+                         net (fo=1, routed)           0.584     5.981    rv32i_core_inst/wb_load_data[2]
+    SLICE_X55Y50         LUT5 (Prop_lut5_I2_O)        0.124     6.105 r  rv32i_core_inst/register_file_inst_i_30/O
+                         net (fo=35, routed)          0.785     6.890    rv32i_core_inst/register_file_inst_i_30_n_0
+    SLICE_X46Y48         LUT6 (Prop_lut6_I5_O)        0.124     7.014 r  rv32i_core_inst/branch_jump_unit_inst_i_62/O
+                         net (fo=8, routed)           1.108     8.122    rv32i_core_inst/rs2_forwarded[2]
+    SLICE_X49Y56         LUT3 (Prop_lut3_I2_O)        0.150     8.272 r  rv32i_core_inst/alu_inst_i_62/O
+                         net (fo=114, routed)         1.527     9.799    rv32i_core_inst/alu_inst/b_i[2]
+    SLICE_X37Y68         LUT6 (Prop_lut6_I1_O)        0.326    10.125 r  rv32i_core_inst/alu_inst/result_o[14]_INST_0_i_12/O
+                         net (fo=2, routed)           1.292    11.417    rv32i_core_inst/alu_inst/result_o[14]_INST_0_i_12_n_0
+    SLICE_X37Y63         LUT3 (Prop_lut3_I2_O)        0.152    11.569 r  rv32i_core_inst/alu_inst/result_o[12]_INST_0_i_6/O
+                         net (fo=2, routed)           0.451    12.020    rv32i_core_inst/alu_inst/result_o[12]_INST_0_i_6_n_0
+    SLICE_X37Y63         LUT6 (Prop_lut6_I3_O)        0.326    12.346 r  rv32i_core_inst/alu_inst/result_o[12]_INST_0_i_2/O
+                         net (fo=1, routed)           0.827    13.173    rv32i_core_inst/alu_inst/result_o[12]_INST_0_i_2_n_0
+    SLICE_X34Y62         LUT6 (Prop_lut6_I2_O)        0.124    13.297 r  rv32i_core_inst/alu_inst/result_o[12]_INST_0/O
+                         net (fo=3, routed)           1.305    14.603    rv32i_core_inst/alu_inst/result_o[12]
+    SLICE_X48Y60         LUT6 (Prop_lut6_I2_O)        0.124    14.727 f  rv32i_core_inst/alu_inst/zero_o_INST_0_i_5/O
+                         net (fo=1, routed)           0.670    15.397    rv32i_core_inst/alu_inst/zero_o_INST_0_i_5_n_0
+    SLICE_X48Y60         LUT4 (Prop_lut4_I0_O)        0.124    15.521 f  rv32i_core_inst/alu_inst/zero_o_INST_0_i_1/O
+                         net (fo=1, routed)           0.574    16.095    rv32i_core_inst/alu_inst/zero_o_INST_0_i_1_n_0
+    SLICE_X48Y61         LUT6 (Prop_lut6_I0_O)        0.124    16.219 f  rv32i_core_inst/alu_inst/zero_o_INST_0/O
+                         net (fo=1, routed)           0.621    16.840    rv32i_core_inst/branch_jump_unit_inst/zero_i
+    SLICE_X52Y58         LUT6 (Prop_lut6_I1_O)        0.124    16.964 r  rv32i_core_inst/branch_jump_unit_inst/jump_o_INST_0_i_2/O
+                         net (fo=1, routed)           0.421    17.384    rv32i_core_inst/branch_jump_unit_inst/jump_o_INST_0_i_2_n_0
+    SLICE_X52Y57         LUT5 (Prop_lut5_I2_O)        0.124    17.508 r  rv32i_core_inst/branch_jump_unit_inst/jump_o_INST_0/O
+                         net (fo=34, routed)          0.987    18.496    rv32i_core_inst/branch_jump_unit_inst_n_0
+    SLICE_X58Y63         LUT3 (Prop_lut3_I1_O)        0.116    18.612 r  rv32i_core_inst/id_ex[result_src][1]_i_1/O
+                         net (fo=197, routed)         2.208    20.820    rv32i_core_inst/id_ex[result_src][0]
+    SLICE_X27Y47         FDRE                                         r  rv32i_core_inst/id_ex_reg[rs1_data][7]/R
+  -------------------------------------------------------------------    -------------------
+
+                         (clock clk_out1_clk_wiz_0 rise edge)
+                                                     40.000    40.000 r  <hidden>
+                         clock source latency        -4.751    35.249    <hidden>
+                         propagated clock network latency
+                                                      3.419    38.668    <hidden>
+                         clock pessimism              0.496    39.164    <hidden>
+                         clock uncertainty           -0.098    39.067    <hidden>
+    SLICE_X27Y47         FDRE (Setup_fdre_C_R)       -0.633    38.434    rv32i_core_inst/id_ex_reg[rs1_data][7]
+  -------------------------------------------------------------------
+                         required time                         38.434    <hidden>
+                         arrival time                         -20.820    <hidden>
+  -------------------------------------------------------------------
+                         slack                                 17.614    <hidden>
+
+Slack (MET) :             17.614ns  (required time - arrival time)
+  Source:                 rv32i_core_inst/data_memory_inst/mem_reg/CLKBWRCLK
+                            (rising edge-triggered cell RAMB36E1 clocked by clk_out1_clk_wiz_0  {rise@0.000ns fall@20.000ns period=40.000ns})
+  Destination:            rv32i_core_inst/id_ex_reg[rs1_data][7]/R
+                            (rising edge-triggered cell FDRE clocked by clk_out1_clk_wiz_0  {rise@0.000ns fall@20.000ns period=40.000ns})
+  Path Group:             clk_out1_clk_wiz_0
+  Path Type:              Setup (Max at Slow Process Corner)
+  Requirement:            40.000ns  (clk_out1_clk_wiz_0 rise@40.000ns - clk_out1_clk_wiz_0 rise@0.000ns)
+  Data Path Delay:        21.513ns  (logic 5.124ns (23.818%)  route 16.389ns (76.182%))
+  Logic Levels:           16  (LUT3=4 LUT4=1 LUT5=2 LUT6=9)
+  Clock Path Skew:        -0.142ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    -1.332ns = ( 38.668 - 40.000 ) 
+    Source Clock Delay      (SCD):    -0.693ns
+    Clock Pessimism Removal (CPR):    0.496ns
+  Clock Uncertainty:      0.098ns  ((TSJ^2 + DJ^2)^1/2) / 2 + PE
+    Total System Jitter     (TSJ):    0.071ns
+    Discrete Jitter          (DJ):    0.182ns
+    Phase Error              (PE):    0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock clk_out1_clk_wiz_0 rise edge)
+                                                      0.000     0.000 r  <hidden>
+                         clock source latency        -4.355    -4.355    <hidden>
+                         propagated clock network latency
+                                                      3.662    -0.693    <hidden>
+    RAMB36_X1Y8          RAMB36E1                     0.000    -0.693 r  rv32i_core_inst/data_memory_inst/mem_reg/CLKBWRCLK
+    RAMB36_X1Y8          RAMB36E1 (Prop_ramb36e1_CLKBWRCLK_DOBDO[26])
+                                                      2.454     1.761 f  rv32i_core_inst/data_memory_inst/mem_reg/DOBDO[26]
+                         net (fo=1, routed)           1.533     3.294    rv32i_core_inst/mem_wb_load_data_ram[26]
+    SLICE_X62Y48         LUT3 (Prop_lut3_I0_O)        0.153     3.447 f  rv32i_core_inst/load_unit_inst_i_6/O
+                         net (fo=3, routed)           1.044     4.491    rv32i_core_inst/load_unit_inst/data_i[26]
+    SLICE_X60Y50         LUT6 (Prop_lut6_I0_O)        0.331     4.822 f  rv32i_core_inst/load_unit_inst/formatted_data_o[2]_INST_0_i_1/O
+                         net (fo=1, routed)           0.452     5.274    rv32i_core_inst/load_unit_inst/formatted_data_o[2]_INST_0_i_1_n_0
+    SLICE_X60Y50         LUT6 (Prop_lut6_I5_O)        0.124     5.398 f  rv32i_core_inst/load_unit_inst/formatted_data_o[2]_INST_0/O
+                         net (fo=1, routed)           0.584     5.981    rv32i_core_inst/wb_load_data[2]
+    SLICE_X55Y50         LUT5 (Prop_lut5_I2_O)        0.124     6.105 f  rv32i_core_inst/register_file_inst_i_30/O
+                         net (fo=35, routed)          0.785     6.890    rv32i_core_inst/register_file_inst_i_30_n_0
+    SLICE_X46Y48         LUT6 (Prop_lut6_I5_O)        0.124     7.014 f  rv32i_core_inst/branch_jump_unit_inst_i_62/O
+                         net (fo=8, routed)           1.108     8.122    rv32i_core_inst/rs2_forwarded[2]
+    SLICE_X49Y56         LUT3 (Prop_lut3_I2_O)        0.150     8.272 f  rv32i_core_inst/alu_inst_i_62/O
+                         net (fo=114, routed)         1.527     9.799    rv32i_core_inst/alu_inst/b_i[2]
+    SLICE_X37Y68         LUT6 (Prop_lut6_I1_O)        0.326    10.125 r  rv32i_core_inst/alu_inst/result_o[14]_INST_0_i_12/O
+                         net (fo=2, routed)           1.292    11.417    rv32i_core_inst/alu_inst/result_o[14]_INST_0_i_12_n_0
+    SLICE_X37Y63         LUT3 (Prop_lut3_I2_O)        0.152    11.569 r  rv32i_core_inst/alu_inst/result_o[12]_INST_0_i_6/O
+                         net (fo=2, routed)           0.451    12.020    rv32i_core_inst/alu_inst/result_o[12]_INST_0_i_6_n_0
+    SLICE_X37Y63         LUT6 (Prop_lut6_I3_O)        0.326    12.346 r  rv32i_core_inst/alu_inst/result_o[12]_INST_0_i_2/O
+                         net (fo=1, routed)           0.827    13.173    rv32i_core_inst/alu_inst/result_o[12]_INST_0_i_2_n_0
+    SLICE_X34Y62         LUT6 (Prop_lut6_I2_O)        0.124    13.297 r  rv32i_core_inst/alu_inst/result_o[12]_INST_0/O
+                         net (fo=3, routed)           1.305    14.603    rv32i_core_inst/alu_inst/result_o[12]
+    SLICE_X48Y60         LUT6 (Prop_lut6_I2_O)        0.124    14.727 f  rv32i_core_inst/alu_inst/zero_o_INST_0_i_5/O
+                         net (fo=1, routed)           0.670    15.397    rv32i_core_inst/alu_inst/zero_o_INST_0_i_5_n_0
+    SLICE_X48Y60         LUT4 (Prop_lut4_I0_O)        0.124    15.521 f  rv32i_core_inst/alu_inst/zero_o_INST_0_i_1/O
+                         net (fo=1, routed)           0.574    16.095    rv32i_core_inst/alu_inst/zero_o_INST_0_i_1_n_0
+    SLICE_X48Y61         LUT6 (Prop_lut6_I0_O)        0.124    16.219 f  rv32i_core_inst/alu_inst/zero_o_INST_0/O
+                         net (fo=1, routed)           0.621    16.840    rv32i_core_inst/branch_jump_unit_inst/zero_i
+    SLICE_X52Y58         LUT6 (Prop_lut6_I1_O)        0.124    16.964 r  rv32i_core_inst/branch_jump_unit_inst/jump_o_INST_0_i_2/O
+                         net (fo=1, routed)           0.421    17.384    rv32i_core_inst/branch_jump_unit_inst/jump_o_INST_0_i_2_n_0
+    SLICE_X52Y57         LUT5 (Prop_lut5_I2_O)        0.124    17.508 r  rv32i_core_inst/branch_jump_unit_inst/jump_o_INST_0/O
+                         net (fo=34, routed)          0.987    18.496    rv32i_core_inst/branch_jump_unit_inst_n_0
+    SLICE_X58Y63         LUT3 (Prop_lut3_I1_O)        0.116    18.612 r  rv32i_core_inst/id_ex[result_src][1]_i_1/O
+                         net (fo=197, routed)         2.208    20.820    rv32i_core_inst/id_ex[result_src][0]
+    SLICE_X27Y47         FDRE                                         r  rv32i_core_inst/id_ex_reg[rs1_data][7]/R
+  -------------------------------------------------------------------    -------------------
+
+                         (clock clk_out1_clk_wiz_0 rise edge)
+                                                     40.000    40.000 r  <hidden>
+                         clock source latency        -4.751    35.249    <hidden>
+                         propagated clock network latency
+                                                      3.419    38.668    <hidden>
+                         clock pessimism              0.496    39.164    <hidden>
+                         clock uncertainty           -0.098    39.067    <hidden>
+    SLICE_X27Y47         FDRE (Setup_fdre_C_R)       -0.633    38.434    rv32i_core_inst/id_ex_reg[rs1_data][7]
+  -------------------------------------------------------------------
+                         required time                         38.434    <hidden>
+                         arrival time                         -20.820    <hidden>
+  -------------------------------------------------------------------
+                         slack                                 17.614    <hidden>
+
+Slack (MET) :             17.614ns  (required time - arrival time)
+  Source:                 rv32i_core_inst/data_memory_inst/mem_reg/CLKBWRCLK
+                            (rising edge-triggered cell RAMB36E1 clocked by clk_out1_clk_wiz_0  {rise@0.000ns fall@20.000ns period=40.000ns})
+  Destination:            rv32i_core_inst/id_ex_reg[rs1_data][7]/R
+                            (rising edge-triggered cell FDRE clocked by clk_out1_clk_wiz_0  {rise@0.000ns fall@20.000ns period=40.000ns})
+  Path Group:             clk_out1_clk_wiz_0
+  Path Type:              Setup (Max at Slow Process Corner)
+  Requirement:            40.000ns  (clk_out1_clk_wiz_0 rise@40.000ns - clk_out1_clk_wiz_0 rise@0.000ns)
+  Data Path Delay:        21.513ns  (logic 5.124ns (23.818%)  route 16.389ns (76.182%))
+  Logic Levels:           16  (LUT3=4 LUT4=1 LUT5=2 LUT6=9)
+  Clock Path Skew:        -0.142ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    -1.332ns = ( 38.668 - 40.000 ) 
+    Source Clock Delay      (SCD):    -0.693ns
+    Clock Pessimism Removal (CPR):    0.496ns
+  Clock Uncertainty:      0.098ns  ((TSJ^2 + DJ^2)^1/2) / 2 + PE
+    Total System Jitter     (TSJ):    0.071ns
+    Discrete Jitter          (DJ):    0.182ns
+    Phase Error              (PE):    0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock clk_out1_clk_wiz_0 rise edge)
+                                                      0.000     0.000 r  <hidden>
+                         clock source latency        -4.355    -4.355    <hidden>
+                         propagated clock network latency
+                                                      3.662    -0.693    <hidden>
+    RAMB36_X1Y8          RAMB36E1                     0.000    -0.693 r  rv32i_core_inst/data_memory_inst/mem_reg/CLKBWRCLK
+    RAMB36_X1Y8          RAMB36E1 (Prop_ramb36e1_CLKBWRCLK_DOBDO[26])
+                                                      2.454     1.761 r  rv32i_core_inst/data_memory_inst/mem_reg/DOBDO[26]
+                         net (fo=1, routed)           1.533     3.294    rv32i_core_inst/mem_wb_load_data_ram[26]
+    SLICE_X62Y48         LUT3 (Prop_lut3_I0_O)        0.153     3.447 r  rv32i_core_inst/load_unit_inst_i_6/O
+                         net (fo=3, routed)           1.044     4.491    rv32i_core_inst/load_unit_inst/data_i[26]
+    SLICE_X60Y50         LUT6 (Prop_lut6_I0_O)        0.331     4.822 r  rv32i_core_inst/load_unit_inst/formatted_data_o[2]_INST_0_i_1/O
+                         net (fo=1, routed)           0.452     5.274    rv32i_core_inst/load_unit_inst/formatted_data_o[2]_INST_0_i_1_n_0
+    SLICE_X60Y50         LUT6 (Prop_lut6_I5_O)        0.124     5.398 r  rv32i_core_inst/load_unit_inst/formatted_data_o[2]_INST_0/O
+                         net (fo=1, routed)           0.584     5.981    rv32i_core_inst/wb_load_data[2]
+    SLICE_X55Y50         LUT5 (Prop_lut5_I2_O)        0.124     6.105 r  rv32i_core_inst/register_file_inst_i_30/O
+                         net (fo=35, routed)          0.785     6.890    rv32i_core_inst/register_file_inst_i_30_n_0
+    SLICE_X46Y48         LUT6 (Prop_lut6_I5_O)        0.124     7.014 r  rv32i_core_inst/branch_jump_unit_inst_i_62/O
+                         net (fo=8, routed)           1.108     8.122    rv32i_core_inst/rs2_forwarded[2]
+    SLICE_X49Y56         LUT3 (Prop_lut3_I2_O)        0.150     8.272 r  rv32i_core_inst/alu_inst_i_62/O
+                         net (fo=114, routed)         1.527     9.799    rv32i_core_inst/alu_inst/b_i[2]
+    SLICE_X37Y68         LUT6 (Prop_lut6_I1_O)        0.326    10.125 f  rv32i_core_inst/alu_inst/result_o[14]_INST_0_i_12/O
+                         net (fo=2, routed)           1.292    11.417    rv32i_core_inst/alu_inst/result_o[14]_INST_0_i_12_n_0
+    SLICE_X37Y63         LUT3 (Prop_lut3_I2_O)        0.152    11.569 f  rv32i_core_inst/alu_inst/result_o[12]_INST_0_i_6/O
+                         net (fo=2, routed)           0.451    12.020    rv32i_core_inst/alu_inst/result_o[12]_INST_0_i_6_n_0
+    SLICE_X37Y63         LUT6 (Prop_lut6_I3_O)        0.326    12.346 f  rv32i_core_inst/alu_inst/result_o[12]_INST_0_i_2/O
+                         net (fo=1, routed)           0.827    13.173    rv32i_core_inst/alu_inst/result_o[12]_INST_0_i_2_n_0
+    SLICE_X34Y62         LUT6 (Prop_lut6_I2_O)        0.124    13.297 f  rv32i_core_inst/alu_inst/result_o[12]_INST_0/O
+                         net (fo=3, routed)           1.305    14.603    rv32i_core_inst/alu_inst/result_o[12]
+    SLICE_X48Y60         LUT6 (Prop_lut6_I2_O)        0.124    14.727 r  rv32i_core_inst/alu_inst/zero_o_INST_0_i_5/O
+                         net (fo=1, routed)           0.670    15.397    rv32i_core_inst/alu_inst/zero_o_INST_0_i_5_n_0
+    SLICE_X48Y60         LUT4 (Prop_lut4_I0_O)        0.124    15.521 r  rv32i_core_inst/alu_inst/zero_o_INST_0_i_1/O
+                         net (fo=1, routed)           0.574    16.095    rv32i_core_inst/alu_inst/zero_o_INST_0_i_1_n_0
+    SLICE_X48Y61         LUT6 (Prop_lut6_I0_O)        0.124    16.219 r  rv32i_core_inst/alu_inst/zero_o_INST_0/O
+                         net (fo=1, routed)           0.621    16.840    rv32i_core_inst/branch_jump_unit_inst/zero_i
+    SLICE_X52Y58         LUT6 (Prop_lut6_I1_O)        0.124    16.964 f  rv32i_core_inst/branch_jump_unit_inst/jump_o_INST_0_i_2/O
+                         net (fo=1, routed)           0.421    17.384    rv32i_core_inst/branch_jump_unit_inst/jump_o_INST_0_i_2_n_0
+    SLICE_X52Y57         LUT5 (Prop_lut5_I2_O)        0.124    17.508 f  rv32i_core_inst/branch_jump_unit_inst/jump_o_INST_0/O
+                         net (fo=34, routed)          0.987    18.496    rv32i_core_inst/branch_jump_unit_inst_n_0
+    SLICE_X58Y63         LUT3 (Prop_lut3_I1_O)        0.116    18.612 f  rv32i_core_inst/id_ex[result_src][1]_i_1/O
+                         net (fo=197, routed)         2.208    20.820    rv32i_core_inst/id_ex[result_src][0]
+    SLICE_X27Y47         FDRE                                         f  rv32i_core_inst/id_ex_reg[rs1_data][7]/R
+  -------------------------------------------------------------------    -------------------
+
+                         (clock clk_out1_clk_wiz_0 rise edge)
+                                                     40.000    40.000 r  <hidden>
+                         clock source latency        -4.751    35.249    <hidden>
+                         propagated clock network latency
+                                                      3.419    38.668    <hidden>
+                         clock pessimism              0.496    39.164    <hidden>
+                         clock uncertainty           -0.098    39.067    <hidden>
+    SLICE_X27Y47         FDRE (Setup_fdre_C_R)       -0.633    38.434    rv32i_core_inst/id_ex_reg[rs1_data][7]
+  -------------------------------------------------------------------
+                         required time                         38.434    <hidden>
+                         arrival time                         -20.820    <hidden>
+  -------------------------------------------------------------------
+                         slack                                 17.614    <hidden>
+
+Slack (MET) :             17.614ns  (required time - arrival time)
+  Source:                 rv32i_core_inst/data_memory_inst/mem_reg/CLKBWRCLK
+                            (rising edge-triggered cell RAMB36E1 clocked by clk_out1_clk_wiz_0  {rise@0.000ns fall@20.000ns period=40.000ns})
+  Destination:            rv32i_core_inst/id_ex_reg[rs1_data][7]/R
+                            (rising edge-triggered cell FDRE clocked by clk_out1_clk_wiz_0  {rise@0.000ns fall@20.000ns period=40.000ns})
+  Path Group:             clk_out1_clk_wiz_0
+  Path Type:              Setup (Max at Slow Process Corner)
+  Requirement:            40.000ns  (clk_out1_clk_wiz_0 rise@40.000ns - clk_out1_clk_wiz_0 rise@0.000ns)
+  Data Path Delay:        21.513ns  (logic 5.124ns (23.818%)  route 16.389ns (76.182%))
+  Logic Levels:           16  (LUT3=4 LUT4=1 LUT5=2 LUT6=9)
+  Clock Path Skew:        -0.142ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    -1.332ns = ( 38.668 - 40.000 ) 
+    Source Clock Delay      (SCD):    -0.693ns
+    Clock Pessimism Removal (CPR):    0.496ns
+  Clock Uncertainty:      0.098ns  ((TSJ^2 + DJ^2)^1/2) / 2 + PE
+    Total System Jitter     (TSJ):    0.071ns
+    Discrete Jitter          (DJ):    0.182ns
+    Phase Error              (PE):    0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock clk_out1_clk_wiz_0 rise edge)
+                                                      0.000     0.000 r  <hidden>
+                         clock source latency        -4.355    -4.355    <hidden>
+                         propagated clock network latency
+                                                      3.662    -0.693    <hidden>
+    RAMB36_X1Y8          RAMB36E1                     0.000    -0.693 r  rv32i_core_inst/data_memory_inst/mem_reg/CLKBWRCLK
+    RAMB36_X1Y8          RAMB36E1 (Prop_ramb36e1_CLKBWRCLK_DOBDO[26])
+                                                      2.454     1.761 f  rv32i_core_inst/data_memory_inst/mem_reg/DOBDO[26]
+                         net (fo=1, routed)           1.533     3.294    rv32i_core_inst/mem_wb_load_data_ram[26]
+    SLICE_X62Y48         LUT3 (Prop_lut3_I0_O)        0.153     3.447 f  rv32i_core_inst/load_unit_inst_i_6/O
+                         net (fo=3, routed)           1.044     4.491    rv32i_core_inst/load_unit_inst/data_i[26]
+    SLICE_X60Y50         LUT6 (Prop_lut6_I0_O)        0.331     4.822 f  rv32i_core_inst/load_unit_inst/formatted_data_o[2]_INST_0_i_1/O
+                         net (fo=1, routed)           0.452     5.274    rv32i_core_inst/load_unit_inst/formatted_data_o[2]_INST_0_i_1_n_0
+    SLICE_X60Y50         LUT6 (Prop_lut6_I5_O)        0.124     5.398 f  rv32i_core_inst/load_unit_inst/formatted_data_o[2]_INST_0/O
+                         net (fo=1, routed)           0.584     5.981    rv32i_core_inst/wb_load_data[2]
+    SLICE_X55Y50         LUT5 (Prop_lut5_I2_O)        0.124     6.105 f  rv32i_core_inst/register_file_inst_i_30/O
+                         net (fo=35, routed)          0.785     6.890    rv32i_core_inst/register_file_inst_i_30_n_0
+    SLICE_X46Y48         LUT6 (Prop_lut6_I5_O)        0.124     7.014 f  rv32i_core_inst/branch_jump_unit_inst_i_62/O
+                         net (fo=8, routed)           1.108     8.122    rv32i_core_inst/rs2_forwarded[2]
+    SLICE_X49Y56         LUT3 (Prop_lut3_I2_O)        0.150     8.272 f  rv32i_core_inst/alu_inst_i_62/O
+                         net (fo=114, routed)         1.527     9.799    rv32i_core_inst/alu_inst/b_i[2]
+    SLICE_X37Y68         LUT6 (Prop_lut6_I1_O)        0.326    10.125 f  rv32i_core_inst/alu_inst/result_o[14]_INST_0_i_12/O
+                         net (fo=2, routed)           1.292    11.417    rv32i_core_inst/alu_inst/result_o[14]_INST_0_i_12_n_0
+    SLICE_X37Y63         LUT3 (Prop_lut3_I2_O)        0.152    11.569 f  rv32i_core_inst/alu_inst/result_o[12]_INST_0_i_6/O
+                         net (fo=2, routed)           0.451    12.020    rv32i_core_inst/alu_inst/result_o[12]_INST_0_i_6_n_0
+    SLICE_X37Y63         LUT6 (Prop_lut6_I3_O)        0.326    12.346 f  rv32i_core_inst/alu_inst/result_o[12]_INST_0_i_2/O
+                         net (fo=1, routed)           0.827    13.173    rv32i_core_inst/alu_inst/result_o[12]_INST_0_i_2_n_0
+    SLICE_X34Y62         LUT6 (Prop_lut6_I2_O)        0.124    13.297 f  rv32i_core_inst/alu_inst/result_o[12]_INST_0/O
+                         net (fo=3, routed)           1.305    14.603    rv32i_core_inst/alu_inst/result_o[12]
+    SLICE_X48Y60         LUT6 (Prop_lut6_I2_O)        0.124    14.727 r  rv32i_core_inst/alu_inst/zero_o_INST_0_i_5/O
+                         net (fo=1, routed)           0.670    15.397    rv32i_core_inst/alu_inst/zero_o_INST_0_i_5_n_0
+    SLICE_X48Y60         LUT4 (Prop_lut4_I0_O)        0.124    15.521 r  rv32i_core_inst/alu_inst/zero_o_INST_0_i_1/O
+                         net (fo=1, routed)           0.574    16.095    rv32i_core_inst/alu_inst/zero_o_INST_0_i_1_n_0
+    SLICE_X48Y61         LUT6 (Prop_lut6_I0_O)        0.124    16.219 r  rv32i_core_inst/alu_inst/zero_o_INST_0/O
+                         net (fo=1, routed)           0.621    16.840    rv32i_core_inst/branch_jump_unit_inst/zero_i
+    SLICE_X52Y58         LUT6 (Prop_lut6_I1_O)        0.124    16.964 f  rv32i_core_inst/branch_jump_unit_inst/jump_o_INST_0_i_2/O
+                         net (fo=1, routed)           0.421    17.384    rv32i_core_inst/branch_jump_unit_inst/jump_o_INST_0_i_2_n_0
+    SLICE_X52Y57         LUT5 (Prop_lut5_I2_O)        0.124    17.508 f  rv32i_core_inst/branch_jump_unit_inst/jump_o_INST_0/O
+                         net (fo=34, routed)          0.987    18.496    rv32i_core_inst/branch_jump_unit_inst_n_0
+    SLICE_X58Y63         LUT3 (Prop_lut3_I1_O)        0.116    18.612 f  rv32i_core_inst/id_ex[result_src][1]_i_1/O
+                         net (fo=197, routed)         2.208    20.820    rv32i_core_inst/id_ex[result_src][0]
+    SLICE_X27Y47         FDRE                                         f  rv32i_core_inst/id_ex_reg[rs1_data][7]/R
+  -------------------------------------------------------------------    -------------------
+
+                         (clock clk_out1_clk_wiz_0 rise edge)
+                                                     40.000    40.000 r  <hidden>
+                         clock source latency        -4.751    35.249    <hidden>
+                         propagated clock network latency
+                                                      3.419    38.668    <hidden>
+                         clock pessimism              0.496    39.164    <hidden>
+                         clock uncertainty           -0.098    39.067    <hidden>
+    SLICE_X27Y47         FDRE (Setup_fdre_C_R)       -0.633    38.434    rv32i_core_inst/id_ex_reg[rs1_data][7]
+  -------------------------------------------------------------------
+                         required time                         38.434    <hidden>
+                         arrival time                         -20.820    <hidden>
+  -------------------------------------------------------------------
+                         slack                                 17.614    <hidden>
+
+Slack (MET) :             17.614ns  (required time - arrival time)
+  Source:                 rv32i_core_inst/data_memory_inst/mem_reg/CLKBWRCLK
+                            (rising edge-triggered cell RAMB36E1 clocked by clk_out1_clk_wiz_0  {rise@0.000ns fall@20.000ns period=40.000ns})
+  Destination:            rv32i_core_inst/id_ex_reg[rs1_data][7]/R
+                            (rising edge-triggered cell FDRE clocked by clk_out1_clk_wiz_0  {rise@0.000ns fall@20.000ns period=40.000ns})
+  Path Group:             clk_out1_clk_wiz_0
+  Path Type:              Setup (Max at Slow Process Corner)
+  Requirement:            40.000ns  (clk_out1_clk_wiz_0 rise@40.000ns - clk_out1_clk_wiz_0 rise@0.000ns)
+  Data Path Delay:        21.513ns  (logic 5.124ns (23.818%)  route 16.389ns (76.182%))
+  Logic Levels:           16  (LUT3=4 LUT4=1 LUT5=2 LUT6=9)
+  Clock Path Skew:        -0.142ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    -1.332ns = ( 38.668 - 40.000 ) 
+    Source Clock Delay      (SCD):    -0.693ns
+    Clock Pessimism Removal (CPR):    0.496ns
+  Clock Uncertainty:      0.098ns  ((TSJ^2 + DJ^2)^1/2) / 2 + PE
+    Total System Jitter     (TSJ):    0.071ns
+    Discrete Jitter          (DJ):    0.182ns
+    Phase Error              (PE):    0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock clk_out1_clk_wiz_0 rise edge)
+                                                      0.000     0.000 r  <hidden>
+                         clock source latency        -4.355    -4.355    <hidden>
+                         propagated clock network latency
+                                                      3.662    -0.693    <hidden>
+    RAMB36_X1Y8          RAMB36E1                     0.000    -0.693 r  rv32i_core_inst/data_memory_inst/mem_reg/CLKBWRCLK
+    RAMB36_X1Y8          RAMB36E1 (Prop_ramb36e1_CLKBWRCLK_DOBDO[26])
+                                                      2.454     1.761 r  rv32i_core_inst/data_memory_inst/mem_reg/DOBDO[26]
+                         net (fo=1, routed)           1.533     3.294    rv32i_core_inst/mem_wb_load_data_ram[26]
+    SLICE_X62Y48         LUT3 (Prop_lut3_I0_O)        0.153     3.447 r  rv32i_core_inst/load_unit_inst_i_6/O
+                         net (fo=3, routed)           1.044     4.491    rv32i_core_inst/load_unit_inst/data_i[26]
+    SLICE_X60Y50         LUT6 (Prop_lut6_I0_O)        0.331     4.822 r  rv32i_core_inst/load_unit_inst/formatted_data_o[2]_INST_0_i_1/O
+                         net (fo=1, routed)           0.452     5.274    rv32i_core_inst/load_unit_inst/formatted_data_o[2]_INST_0_i_1_n_0
+    SLICE_X60Y50         LUT6 (Prop_lut6_I5_O)        0.124     5.398 r  rv32i_core_inst/load_unit_inst/formatted_data_o[2]_INST_0/O
+                         net (fo=1, routed)           0.584     5.981    rv32i_core_inst/wb_load_data[2]
+    SLICE_X55Y50         LUT5 (Prop_lut5_I2_O)        0.124     6.105 r  rv32i_core_inst/register_file_inst_i_30/O
+                         net (fo=35, routed)          0.785     6.890    rv32i_core_inst/register_file_inst_i_30_n_0
+    SLICE_X46Y48         LUT6 (Prop_lut6_I5_O)        0.124     7.014 r  rv32i_core_inst/branch_jump_unit_inst_i_62/O
+                         net (fo=8, routed)           1.108     8.122    rv32i_core_inst/rs2_forwarded[2]
+    SLICE_X49Y56         LUT3 (Prop_lut3_I2_O)        0.150     8.272 r  rv32i_core_inst/alu_inst_i_62/O
+                         net (fo=114, routed)         1.527     9.799    rv32i_core_inst/alu_inst/b_i[2]
+    SLICE_X37Y68         LUT6 (Prop_lut6_I1_O)        0.326    10.125 r  rv32i_core_inst/alu_inst/result_o[14]_INST_0_i_12/O
+                         net (fo=2, routed)           1.292    11.417    rv32i_core_inst/alu_inst/result_o[14]_INST_0_i_12_n_0
+    SLICE_X37Y63         LUT3 (Prop_lut3_I2_O)        0.152    11.569 r  rv32i_core_inst/alu_inst/result_o[12]_INST_0_i_6/O
+                         net (fo=2, routed)           0.451    12.020    rv32i_core_inst/alu_inst/result_o[12]_INST_0_i_6_n_0
+    SLICE_X37Y63         LUT6 (Prop_lut6_I3_O)        0.326    12.346 r  rv32i_core_inst/alu_inst/result_o[12]_INST_0_i_2/O
+                         net (fo=1, routed)           0.827    13.173    rv32i_core_inst/alu_inst/result_o[12]_INST_0_i_2_n_0
+    SLICE_X34Y62         LUT6 (Prop_lut6_I2_O)        0.124    13.297 r  rv32i_core_inst/alu_inst/result_o[12]_INST_0/O
+                         net (fo=3, routed)           1.305    14.603    rv32i_core_inst/alu_inst/result_o[12]
+    SLICE_X48Y60         LUT6 (Prop_lut6_I2_O)        0.124    14.727 f  rv32i_core_inst/alu_inst/zero_o_INST_0_i_5/O
+                         net (fo=1, routed)           0.670    15.397    rv32i_core_inst/alu_inst/zero_o_INST_0_i_5_n_0
+    SLICE_X48Y60         LUT4 (Prop_lut4_I0_O)        0.124    15.521 f  rv32i_core_inst/alu_inst/zero_o_INST_0_i_1/O
+                         net (fo=1, routed)           0.574    16.095    rv32i_core_inst/alu_inst/zero_o_INST_0_i_1_n_0
+    SLICE_X48Y61         LUT6 (Prop_lut6_I0_O)        0.124    16.219 f  rv32i_core_inst/alu_inst/zero_o_INST_0/O
+                         net (fo=1, routed)           0.621    16.840    rv32i_core_inst/branch_jump_unit_inst/zero_i
+    SLICE_X52Y58         LUT6 (Prop_lut6_I1_O)        0.124    16.964 f  rv32i_core_inst/branch_jump_unit_inst/jump_o_INST_0_i_2/O
+                         net (fo=1, routed)           0.421    17.384    rv32i_core_inst/branch_jump_unit_inst/jump_o_INST_0_i_2_n_0
+    SLICE_X52Y57         LUT5 (Prop_lut5_I2_O)        0.124    17.508 f  rv32i_core_inst/branch_jump_unit_inst/jump_o_INST_0/O
+                         net (fo=34, routed)          0.987    18.496    rv32i_core_inst/branch_jump_unit_inst_n_0
+    SLICE_X58Y63         LUT3 (Prop_lut3_I1_O)        0.116    18.612 f  rv32i_core_inst/id_ex[result_src][1]_i_1/O
+                         net (fo=197, routed)         2.208    20.820    rv32i_core_inst/id_ex[result_src][0]
+    SLICE_X27Y47         FDRE                                         f  rv32i_core_inst/id_ex_reg[rs1_data][7]/R
+  -------------------------------------------------------------------    -------------------
+
+                         (clock clk_out1_clk_wiz_0 rise edge)
+                                                     40.000    40.000 r  <hidden>
+                         clock source latency        -4.751    35.249    <hidden>
+                         propagated clock network latency
+                                                      3.419    38.668    <hidden>
+                         clock pessimism              0.496    39.164    <hidden>
+                         clock uncertainty           -0.098    39.067    <hidden>
+    SLICE_X27Y47         FDRE (Setup_fdre_C_R)       -0.633    38.434    rv32i_core_inst/id_ex_reg[rs1_data][7]
+  -------------------------------------------------------------------
+                         required time                         38.434    <hidden>
+                         arrival time                         -20.820    <hidden>
+  -------------------------------------------------------------------
+                         slack                                 17.614    <hidden>
+
+Slack (MET) :             17.614ns  (required time - arrival time)
+  Source:                 rv32i_core_inst/data_memory_inst/mem_reg/CLKBWRCLK
+                            (rising edge-triggered cell RAMB36E1 clocked by clk_out1_clk_wiz_0  {rise@0.000ns fall@20.000ns period=40.000ns})
+  Destination:            rv32i_core_inst/id_ex_reg[rs1_data][7]/R
+                            (rising edge-triggered cell FDRE clocked by clk_out1_clk_wiz_0  {rise@0.000ns fall@20.000ns period=40.000ns})
+  Path Group:             clk_out1_clk_wiz_0
+  Path Type:              Setup (Max at Slow Process Corner)
+  Requirement:            40.000ns  (clk_out1_clk_wiz_0 rise@40.000ns - clk_out1_clk_wiz_0 rise@0.000ns)
+  Data Path Delay:        21.513ns  (logic 5.124ns (23.818%)  route 16.389ns (76.182%))
+  Logic Levels:           16  (LUT3=4 LUT4=1 LUT5=2 LUT6=9)
+  Clock Path Skew:        -0.142ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    -1.332ns = ( 38.668 - 40.000 ) 
+    Source Clock Delay      (SCD):    -0.693ns
+    Clock Pessimism Removal (CPR):    0.496ns
+  Clock Uncertainty:      0.098ns  ((TSJ^2 + DJ^2)^1/2) / 2 + PE
+    Total System Jitter     (TSJ):    0.071ns
+    Discrete Jitter          (DJ):    0.182ns
+    Phase Error              (PE):    0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock clk_out1_clk_wiz_0 rise edge)
+                                                      0.000     0.000 r  <hidden>
+                         clock source latency        -4.355    -4.355    <hidden>
+                         propagated clock network latency
+                                                      3.662    -0.693    <hidden>
+    RAMB36_X1Y8          RAMB36E1                     0.000    -0.693 r  rv32i_core_inst/data_memory_inst/mem_reg/CLKBWRCLK
+    RAMB36_X1Y8          RAMB36E1 (Prop_ramb36e1_CLKBWRCLK_DOBDO[26])
+                                                      2.454     1.761 f  rv32i_core_inst/data_memory_inst/mem_reg/DOBDO[26]
+                         net (fo=1, routed)           1.533     3.294    rv32i_core_inst/mem_wb_load_data_ram[26]
+    SLICE_X62Y48         LUT3 (Prop_lut3_I0_O)        0.153     3.447 f  rv32i_core_inst/load_unit_inst_i_6/O
+                         net (fo=3, routed)           1.044     4.491    rv32i_core_inst/load_unit_inst/data_i[26]
+    SLICE_X60Y50         LUT6 (Prop_lut6_I0_O)        0.331     4.822 f  rv32i_core_inst/load_unit_inst/formatted_data_o[2]_INST_0_i_1/O
+                         net (fo=1, routed)           0.452     5.274    rv32i_core_inst/load_unit_inst/formatted_data_o[2]_INST_0_i_1_n_0
+    SLICE_X60Y50         LUT6 (Prop_lut6_I5_O)        0.124     5.398 f  rv32i_core_inst/load_unit_inst/formatted_data_o[2]_INST_0/O
+                         net (fo=1, routed)           0.584     5.981    rv32i_core_inst/wb_load_data[2]
+    SLICE_X55Y50         LUT5 (Prop_lut5_I2_O)        0.124     6.105 f  rv32i_core_inst/register_file_inst_i_30/O
+                         net (fo=35, routed)          0.785     6.890    rv32i_core_inst/register_file_inst_i_30_n_0
+    SLICE_X46Y48         LUT6 (Prop_lut6_I5_O)        0.124     7.014 f  rv32i_core_inst/branch_jump_unit_inst_i_62/O
+                         net (fo=8, routed)           1.108     8.122    rv32i_core_inst/rs2_forwarded[2]
+    SLICE_X49Y56         LUT3 (Prop_lut3_I2_O)        0.150     8.272 f  rv32i_core_inst/alu_inst_i_62/O
+                         net (fo=114, routed)         1.527     9.799    rv32i_core_inst/alu_inst/b_i[2]
+    SLICE_X37Y68         LUT6 (Prop_lut6_I1_O)        0.326    10.125 r  rv32i_core_inst/alu_inst/result_o[14]_INST_0_i_12/O
+                         net (fo=2, routed)           1.292    11.417    rv32i_core_inst/alu_inst/result_o[14]_INST_0_i_12_n_0
+    SLICE_X37Y63         LUT3 (Prop_lut3_I2_O)        0.152    11.569 r  rv32i_core_inst/alu_inst/result_o[12]_INST_0_i_6/O
+                         net (fo=2, routed)           0.451    12.020    rv32i_core_inst/alu_inst/result_o[12]_INST_0_i_6_n_0
+    SLICE_X37Y63         LUT6 (Prop_lut6_I3_O)        0.326    12.346 r  rv32i_core_inst/alu_inst/result_o[12]_INST_0_i_2/O
+                         net (fo=1, routed)           0.827    13.173    rv32i_core_inst/alu_inst/result_o[12]_INST_0_i_2_n_0
+    SLICE_X34Y62         LUT6 (Prop_lut6_I2_O)        0.124    13.297 r  rv32i_core_inst/alu_inst/result_o[12]_INST_0/O
+                         net (fo=3, routed)           1.305    14.603    rv32i_core_inst/alu_inst/result_o[12]
+    SLICE_X48Y60         LUT6 (Prop_lut6_I2_O)        0.124    14.727 f  rv32i_core_inst/alu_inst/zero_o_INST_0_i_5/O
+                         net (fo=1, routed)           0.670    15.397    rv32i_core_inst/alu_inst/zero_o_INST_0_i_5_n_0
+    SLICE_X48Y60         LUT4 (Prop_lut4_I0_O)        0.124    15.521 f  rv32i_core_inst/alu_inst/zero_o_INST_0_i_1/O
+                         net (fo=1, routed)           0.574    16.095    rv32i_core_inst/alu_inst/zero_o_INST_0_i_1_n_0
+    SLICE_X48Y61         LUT6 (Prop_lut6_I0_O)        0.124    16.219 f  rv32i_core_inst/alu_inst/zero_o_INST_0/O
+                         net (fo=1, routed)           0.621    16.840    rv32i_core_inst/branch_jump_unit_inst/zero_i
+    SLICE_X52Y58         LUT6 (Prop_lut6_I1_O)        0.124    16.964 f  rv32i_core_inst/branch_jump_unit_inst/jump_o_INST_0_i_2/O
+                         net (fo=1, routed)           0.421    17.384    rv32i_core_inst/branch_jump_unit_inst/jump_o_INST_0_i_2_n_0
+    SLICE_X52Y57         LUT5 (Prop_lut5_I2_O)        0.124    17.508 f  rv32i_core_inst/branch_jump_unit_inst/jump_o_INST_0/O
+                         net (fo=34, routed)          0.987    18.496    rv32i_core_inst/branch_jump_unit_inst_n_0
+    SLICE_X58Y63         LUT3 (Prop_lut3_I1_O)        0.116    18.612 f  rv32i_core_inst/id_ex[result_src][1]_i_1/O
+                         net (fo=197, routed)         2.208    20.820    rv32i_core_inst/id_ex[result_src][0]
+    SLICE_X27Y47         FDRE                                         f  rv32i_core_inst/id_ex_reg[rs1_data][7]/R
+  -------------------------------------------------------------------    -------------------
+
+                         (clock clk_out1_clk_wiz_0 rise edge)
+                                                     40.000    40.000 r  <hidden>
+                         clock source latency        -4.751    35.249    <hidden>
+                         propagated clock network latency
+                                                      3.419    38.668    <hidden>
+                         clock pessimism              0.496    39.164    <hidden>
+                         clock uncertainty           -0.098    39.067    <hidden>
+    SLICE_X27Y47         FDRE (Setup_fdre_C_R)       -0.633    38.434    rv32i_core_inst/id_ex_reg[rs1_data][7]
+  -------------------------------------------------------------------
+                         required time                         38.434    <hidden>
+                         arrival time                         -20.820    <hidden>
+  -------------------------------------------------------------------
+                         slack                                 17.614    <hidden>
+
+Slack (MET) :             17.658ns  (required time - arrival time)
+  Source:                 rv32i_core_inst/data_memory_inst/mem_reg/CLKBWRCLK
+                            (rising edge-triggered cell RAMB36E1 clocked by clk_out1_clk_wiz_0  {rise@0.000ns fall@20.000ns period=40.000ns})
+  Destination:            rv32i_core_inst/id_ex_reg[rs1_data][18]/R
+                            (rising edge-triggered cell FDRE clocked by clk_out1_clk_wiz_0  {rise@0.000ns fall@20.000ns period=40.000ns})
+  Path Group:             clk_out1_clk_wiz_0
+  Path Type:              Setup (Max at Slow Process Corner)
+  Requirement:            40.000ns  (clk_out1_clk_wiz_0 rise@40.000ns - clk_out1_clk_wiz_0 rise@0.000ns)
+  Data Path Delay:        21.294ns  (logic 5.124ns (24.064%)  route 16.170ns (75.936%))
+  Logic Levels:           16  (LUT3=4 LUT4=1 LUT5=2 LUT6=9)
+  Clock Path Skew:        -0.317ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    -1.498ns = ( 38.502 - 40.000 ) 
+    Source Clock Delay      (SCD):    -0.693ns
+    Clock Pessimism Removal (CPR):    0.487ns
+  Clock Uncertainty:      0.098ns  ((TSJ^2 + DJ^2)^1/2) / 2 + PE
+    Total System Jitter     (TSJ):    0.071ns
+    Discrete Jitter          (DJ):    0.182ns
+    Phase Error              (PE):    0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock clk_out1_clk_wiz_0 rise edge)
+                                                      0.000     0.000 r  <hidden>
+                         clock source latency        -4.355    -4.355    <hidden>
+                         propagated clock network latency
+                                                      3.662    -0.693    <hidden>
+    RAMB36_X1Y8          RAMB36E1                     0.000    -0.693 r  rv32i_core_inst/data_memory_inst/mem_reg/CLKBWRCLK
+    RAMB36_X1Y8          RAMB36E1 (Prop_ramb36e1_CLKBWRCLK_DOBDO[26])
+                                                      2.454     1.761 r  rv32i_core_inst/data_memory_inst/mem_reg/DOBDO[26]
+                         net (fo=1, routed)           1.533     3.294    rv32i_core_inst/mem_wb_load_data_ram[26]
+    SLICE_X62Y48         LUT3 (Prop_lut3_I0_O)        0.153     3.447 r  rv32i_core_inst/load_unit_inst_i_6/O
+                         net (fo=3, routed)           1.044     4.491    rv32i_core_inst/load_unit_inst/data_i[26]
+    SLICE_X60Y50         LUT6 (Prop_lut6_I0_O)        0.331     4.822 r  rv32i_core_inst/load_unit_inst/formatted_data_o[2]_INST_0_i_1/O
+                         net (fo=1, routed)           0.452     5.274    rv32i_core_inst/load_unit_inst/formatted_data_o[2]_INST_0_i_1_n_0
+    SLICE_X60Y50         LUT6 (Prop_lut6_I5_O)        0.124     5.398 r  rv32i_core_inst/load_unit_inst/formatted_data_o[2]_INST_0/O
+                         net (fo=1, routed)           0.584     5.981    rv32i_core_inst/wb_load_data[2]
+    SLICE_X55Y50         LUT5 (Prop_lut5_I2_O)        0.124     6.105 r  rv32i_core_inst/register_file_inst_i_30/O
+                         net (fo=35, routed)          0.785     6.890    rv32i_core_inst/register_file_inst_i_30_n_0
+    SLICE_X46Y48         LUT6 (Prop_lut6_I5_O)        0.124     7.014 r  rv32i_core_inst/branch_jump_unit_inst_i_62/O
+                         net (fo=8, routed)           1.108     8.122    rv32i_core_inst/rs2_forwarded[2]
+    SLICE_X49Y56         LUT3 (Prop_lut3_I2_O)        0.150     8.272 r  rv32i_core_inst/alu_inst_i_62/O
+                         net (fo=114, routed)         1.527     9.799    rv32i_core_inst/alu_inst/b_i[2]
+    SLICE_X37Y68         LUT6 (Prop_lut6_I1_O)        0.326    10.125 f  rv32i_core_inst/alu_inst/result_o[14]_INST_0_i_12/O
+                         net (fo=2, routed)           1.292    11.417    rv32i_core_inst/alu_inst/result_o[14]_INST_0_i_12_n_0
+    SLICE_X37Y63         LUT3 (Prop_lut3_I2_O)        0.152    11.569 f  rv32i_core_inst/alu_inst/result_o[12]_INST_0_i_6/O
+                         net (fo=2, routed)           0.451    12.020    rv32i_core_inst/alu_inst/result_o[12]_INST_0_i_6_n_0
+    SLICE_X37Y63         LUT6 (Prop_lut6_I3_O)        0.326    12.346 f  rv32i_core_inst/alu_inst/result_o[12]_INST_0_i_2/O
+                         net (fo=1, routed)           0.827    13.173    rv32i_core_inst/alu_inst/result_o[12]_INST_0_i_2_n_0
+    SLICE_X34Y62         LUT6 (Prop_lut6_I2_O)        0.124    13.297 f  rv32i_core_inst/alu_inst/result_o[12]_INST_0/O
+                         net (fo=3, routed)           1.305    14.603    rv32i_core_inst/alu_inst/result_o[12]
+    SLICE_X48Y60         LUT6 (Prop_lut6_I2_O)        0.124    14.727 r  rv32i_core_inst/alu_inst/zero_o_INST_0_i_5/O
+                         net (fo=1, routed)           0.670    15.397    rv32i_core_inst/alu_inst/zero_o_INST_0_i_5_n_0
+    SLICE_X48Y60         LUT4 (Prop_lut4_I0_O)        0.124    15.521 r  rv32i_core_inst/alu_inst/zero_o_INST_0_i_1/O
+                         net (fo=1, routed)           0.574    16.095    rv32i_core_inst/alu_inst/zero_o_INST_0_i_1_n_0
+    SLICE_X48Y61         LUT6 (Prop_lut6_I0_O)        0.124    16.219 r  rv32i_core_inst/alu_inst/zero_o_INST_0/O
+                         net (fo=1, routed)           0.621    16.840    rv32i_core_inst/branch_jump_unit_inst/zero_i
+    SLICE_X52Y58         LUT6 (Prop_lut6_I1_O)        0.124    16.964 r  rv32i_core_inst/branch_jump_unit_inst/jump_o_INST_0_i_2/O
+                         net (fo=1, routed)           0.421    17.384    rv32i_core_inst/branch_jump_unit_inst/jump_o_INST_0_i_2_n_0
+    SLICE_X52Y57         LUT5 (Prop_lut5_I2_O)        0.124    17.508 r  rv32i_core_inst/branch_jump_unit_inst/jump_o_INST_0/O
+                         net (fo=34, routed)          0.987    18.496    rv32i_core_inst/branch_jump_unit_inst_n_0
+    SLICE_X58Y63         LUT3 (Prop_lut3_I1_O)        0.116    18.612 r  rv32i_core_inst/id_ex[result_src][1]_i_1/O
+                         net (fo=197, routed)         1.989    20.600    rv32i_core_inst/id_ex[result_src][0]
+    SLICE_X28Y52         FDRE                                         r  rv32i_core_inst/id_ex_reg[rs1_data][18]/R
+  -------------------------------------------------------------------    -------------------
+
+                         (clock clk_out1_clk_wiz_0 rise edge)
+                                                     40.000    40.000 r  <hidden>
+                         clock source latency        -4.751    35.249    <hidden>
+                         propagated clock network latency
+                                                      3.253    38.502    <hidden>
+                         clock pessimism              0.487    38.989    <hidden>
+                         clock uncertainty           -0.098    38.892    <hidden>
+    SLICE_X28Y52         FDRE (Setup_fdre_C_R)       -0.633    38.259    rv32i_core_inst/id_ex_reg[rs1_data][18]
+  -------------------------------------------------------------------
+                         required time                         38.259    <hidden>
+                         arrival time                         -20.600    <hidden>
+  -------------------------------------------------------------------
+                         slack                                 17.658    <hidden>
+
+Slack (MET) :             17.658ns  (required time - arrival time)
+  Source:                 rv32i_core_inst/data_memory_inst/mem_reg/CLKBWRCLK
+                            (rising edge-triggered cell RAMB36E1 clocked by clk_out1_clk_wiz_0  {rise@0.000ns fall@20.000ns period=40.000ns})
+  Destination:            rv32i_core_inst/id_ex_reg[rs1_data][18]/R
+                            (rising edge-triggered cell FDRE clocked by clk_out1_clk_wiz_0  {rise@0.000ns fall@20.000ns period=40.000ns})
+  Path Group:             clk_out1_clk_wiz_0
+  Path Type:              Setup (Max at Slow Process Corner)
+  Requirement:            40.000ns  (clk_out1_clk_wiz_0 rise@40.000ns - clk_out1_clk_wiz_0 rise@0.000ns)
+  Data Path Delay:        21.294ns  (logic 5.124ns (24.064%)  route 16.170ns (75.936%))
+  Logic Levels:           16  (LUT3=4 LUT4=1 LUT5=2 LUT6=9)
+  Clock Path Skew:        -0.317ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    -1.498ns = ( 38.502 - 40.000 ) 
+    Source Clock Delay      (SCD):    -0.693ns
+    Clock Pessimism Removal (CPR):    0.487ns
+  Clock Uncertainty:      0.098ns  ((TSJ^2 + DJ^2)^1/2) / 2 + PE
+    Total System Jitter     (TSJ):    0.071ns
+    Discrete Jitter          (DJ):    0.182ns
+    Phase Error              (PE):    0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock clk_out1_clk_wiz_0 rise edge)
+                                                      0.000     0.000 r  <hidden>
+                         clock source latency        -4.355    -4.355    <hidden>
+                         propagated clock network latency
+                                                      3.662    -0.693    <hidden>
+    RAMB36_X1Y8          RAMB36E1                     0.000    -0.693 r  rv32i_core_inst/data_memory_inst/mem_reg/CLKBWRCLK
+    RAMB36_X1Y8          RAMB36E1 (Prop_ramb36e1_CLKBWRCLK_DOBDO[26])
+                                                      2.454     1.761 f  rv32i_core_inst/data_memory_inst/mem_reg/DOBDO[26]
+                         net (fo=1, routed)           1.533     3.294    rv32i_core_inst/mem_wb_load_data_ram[26]
+    SLICE_X62Y48         LUT3 (Prop_lut3_I0_O)        0.153     3.447 f  rv32i_core_inst/load_unit_inst_i_6/O
+                         net (fo=3, routed)           1.044     4.491    rv32i_core_inst/load_unit_inst/data_i[26]
+    SLICE_X60Y50         LUT6 (Prop_lut6_I0_O)        0.331     4.822 f  rv32i_core_inst/load_unit_inst/formatted_data_o[2]_INST_0_i_1/O
+                         net (fo=1, routed)           0.452     5.274    rv32i_core_inst/load_unit_inst/formatted_data_o[2]_INST_0_i_1_n_0
+    SLICE_X60Y50         LUT6 (Prop_lut6_I5_O)        0.124     5.398 f  rv32i_core_inst/load_unit_inst/formatted_data_o[2]_INST_0/O
+                         net (fo=1, routed)           0.584     5.981    rv32i_core_inst/wb_load_data[2]
+    SLICE_X55Y50         LUT5 (Prop_lut5_I2_O)        0.124     6.105 f  rv32i_core_inst/register_file_inst_i_30/O
+                         net (fo=35, routed)          0.785     6.890    rv32i_core_inst/register_file_inst_i_30_n_0
+    SLICE_X46Y48         LUT6 (Prop_lut6_I5_O)        0.124     7.014 f  rv32i_core_inst/branch_jump_unit_inst_i_62/O
+                         net (fo=8, routed)           1.108     8.122    rv32i_core_inst/rs2_forwarded[2]
+    SLICE_X49Y56         LUT3 (Prop_lut3_I2_O)        0.150     8.272 f  rv32i_core_inst/alu_inst_i_62/O
+                         net (fo=114, routed)         1.527     9.799    rv32i_core_inst/alu_inst/b_i[2]
+    SLICE_X37Y68         LUT6 (Prop_lut6_I1_O)        0.326    10.125 f  rv32i_core_inst/alu_inst/result_o[14]_INST_0_i_12/O
+                         net (fo=2, routed)           1.292    11.417    rv32i_core_inst/alu_inst/result_o[14]_INST_0_i_12_n_0
+    SLICE_X37Y63         LUT3 (Prop_lut3_I2_O)        0.152    11.569 f  rv32i_core_inst/alu_inst/result_o[12]_INST_0_i_6/O
+                         net (fo=2, routed)           0.451    12.020    rv32i_core_inst/alu_inst/result_o[12]_INST_0_i_6_n_0
+    SLICE_X37Y63         LUT6 (Prop_lut6_I3_O)        0.326    12.346 f  rv32i_core_inst/alu_inst/result_o[12]_INST_0_i_2/O
+                         net (fo=1, routed)           0.827    13.173    rv32i_core_inst/alu_inst/result_o[12]_INST_0_i_2_n_0
+    SLICE_X34Y62         LUT6 (Prop_lut6_I2_O)        0.124    13.297 f  rv32i_core_inst/alu_inst/result_o[12]_INST_0/O
+                         net (fo=3, routed)           1.305    14.603    rv32i_core_inst/alu_inst/result_o[12]
+    SLICE_X48Y60         LUT6 (Prop_lut6_I2_O)        0.124    14.727 r  rv32i_core_inst/alu_inst/zero_o_INST_0_i_5/O
+                         net (fo=1, routed)           0.670    15.397    rv32i_core_inst/alu_inst/zero_o_INST_0_i_5_n_0
+    SLICE_X48Y60         LUT4 (Prop_lut4_I0_O)        0.124    15.521 r  rv32i_core_inst/alu_inst/zero_o_INST_0_i_1/O
+                         net (fo=1, routed)           0.574    16.095    rv32i_core_inst/alu_inst/zero_o_INST_0_i_1_n_0
+    SLICE_X48Y61         LUT6 (Prop_lut6_I0_O)        0.124    16.219 r  rv32i_core_inst/alu_inst/zero_o_INST_0/O
+                         net (fo=1, routed)           0.621    16.840    rv32i_core_inst/branch_jump_unit_inst/zero_i
+    SLICE_X52Y58         LUT6 (Prop_lut6_I1_O)        0.124    16.964 r  rv32i_core_inst/branch_jump_unit_inst/jump_o_INST_0_i_2/O
+                         net (fo=1, routed)           0.421    17.384    rv32i_core_inst/branch_jump_unit_inst/jump_o_INST_0_i_2_n_0
+    SLICE_X52Y57         LUT5 (Prop_lut5_I2_O)        0.124    17.508 r  rv32i_core_inst/branch_jump_unit_inst/jump_o_INST_0/O
+                         net (fo=34, routed)          0.987    18.496    rv32i_core_inst/branch_jump_unit_inst_n_0
+    SLICE_X58Y63         LUT3 (Prop_lut3_I1_O)        0.116    18.612 r  rv32i_core_inst/id_ex[result_src][1]_i_1/O
+                         net (fo=197, routed)         1.989    20.600    rv32i_core_inst/id_ex[result_src][0]
+    SLICE_X28Y52         FDRE                                         r  rv32i_core_inst/id_ex_reg[rs1_data][18]/R
+  -------------------------------------------------------------------    -------------------
+
+                         (clock clk_out1_clk_wiz_0 rise edge)
+                                                     40.000    40.000 r  <hidden>
+                         clock source latency        -4.751    35.249    <hidden>
+                         propagated clock network latency
+                                                      3.253    38.502    <hidden>
+                         clock pessimism              0.487    38.989    <hidden>
+                         clock uncertainty           -0.098    38.892    <hidden>
+    SLICE_X28Y52         FDRE (Setup_fdre_C_R)       -0.633    38.259    rv32i_core_inst/id_ex_reg[rs1_data][18]
+  -------------------------------------------------------------------
+                         required time                         38.259    <hidden>
+                         arrival time                         -20.600    <hidden>
+  -------------------------------------------------------------------
+                         slack                                 17.658    <hidden>
+
+
+
+

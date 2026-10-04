@@ -59,85 +59,110 @@ architecture rtl of fpga_top is
     signal led_reg        : word_t;
     signal ila_pc         : word_t;
     signal ila_instr      : word_t;
-    signal ila_mem_addr   : reg_addr_t;
+    signal ila_mem_addr   : word_t;
     signal ila_mem_we     : std_logic;
     signal ila_store_data : word_t;
 
+    component ila_0
+    port (
+        clk : in std_logic;
+
+        probe0 : in std_logic_vector(31 downto 0);
+        probe1 : in std_logic_vector(31 downto 0);
+        probe2 : in std_logic_vector(31 downto 0);
+        probe3 : in std_logic_vector(0 downto 0);
+        probe4 : in std_logic_vector(31 downto 0)
+    );
+end component;
+
+component clk_wiz_0
+port
+(-- Clock in ports
+    -- Clock out ports
+    clk_out1 : out    std_logic;
+    -- Status and control signals
+    reset   : in  std_logic;
+    locked  : out std_logic;
+    clk_in1 : in  std_logic
+);
+end component  ;
+
 begin
 
-    res_req <= not res_n or not clk_locked;
+res_req <= not res_n or not clk_locked;--
 
-    -- RESET SYNCHRONIZER: per evitare metastabilita'
+-- RESET SYNCHRONIZER: per evitare metastabilita'
 
-    res_sync : process (clk_core)
-    begin
-        if clk_core'event and clk = '1' then
-            if res_req = '1' then
-                res_req <= "11";
-            else
-                res_req(0) <= '0';
-                res_req(1) <= res_req(0);
-            end if;
+res_sync : process (clk_core)
+begin
+    if clk_core'event and clk_core = '1' then
+        if res_req = '1' then
+            res_pipe <= "11";
+        else
+            res_pipe(0) <= '0';
+            res_pipe(1) <= res_pipe(0);
         end if;
-    end process res_sync;
+    end if;
+end process res_sync;
 
-    res_core <= res_req(1);
+res_core <= res_pipe(1);
 
-    rv32i_core_inst : entity work.rv32i_core
-    port map (
-        clk                => clk_core,
-        res                => res_core,
-        led_reg            => led_reg,
-        dbg_pc             => dbg_pc,
-        dbg_instr          => dbg_instr,
-        dbg_pc_instr       => dbg_pc_instr,
-        dbg_wr_data        => dbg_wr_data,
-        dbg_id_ex_we       => dbg_id_ex_we,
-        dbg_id_ex_rd       => dbg_id_ex_rd,
-        dbg_id_ex_rs1_addr => dbg_id_ex_rs1_addr,
-        dbg_id_ex_rs2_addr => dbg_id_ex_rs2_addr,
-        dbg_ex_mem_we      => dbg_ex_mem_we,
-        dbg_ex_mem_rd      => dbg_ex_mem_rd,
-        dbg_cu_we          => dbg_cu_we,
-        dbg_cu_rd          => dbg_cu_rd,
-        dbg_imm_ext_id_ex  => dbg_imm_ext_id_ex,
-        dbg_jump           => dbg_jump,
-        dbg_pctarget       => dbg_pctarget,
-        dbg_pc4            => dbg_pc4,
-        dbg_stall          => dbg_stall,
-        dbg_alu_result     => dbg_alu_result,
-        dbg_byte_enable    => dbg_byte_enable,
-        dbg_mem_size       => dbg_mem_size,
-        dbg_mem_store_data => dbg_mem_store_data
-    );
+rv32i_core_inst : entity work.rv32i_core
+port map (
+    clk                => clk_core,
+    res                => res_core,
+    led_reg            => led_reg,
+    dbg_pc             => dbg_pc,
+    dbg_instr          => dbg_instr,
+    dbg_pc_instr       => dbg_pc_instr,
+    dbg_wr_data        => dbg_wr_data,
+    dbg_id_ex_we       => dbg_id_ex_we,
+    dbg_id_ex_rd       => dbg_id_ex_rd,
+    dbg_id_ex_rs1_addr => dbg_id_ex_rs1_addr,
+    dbg_id_ex_rs2_addr => dbg_id_ex_rs2_addr,
+    dbg_ex_mem_we      => dbg_ex_mem_we,
+    dbg_ex_mem_rd      => dbg_ex_mem_rd,
+    dbg_cu_we          => dbg_cu_we,
+    dbg_cu_rd          => dbg_cu_rd,
+    dbg_imm_ext_id_ex  => dbg_imm_ext_id_ex,
+    dbg_jump           => dbg_jump,
+    dbg_pctarget       => dbg_pctarget,
+    dbg_pc4            => dbg_pc4,
+    dbg_stall          => dbg_stall,
+    dbg_alu_result     => dbg_alu_result,
+    dbg_byte_enable    => dbg_byte_enable,
+    dbg_mem_size       => dbg_mem_size,
+    dbg_mem_store_data => dbg_mem_store_data
+);
 
-    -- MMIO
+-- MMIO
 
-    led_pass <= led_reg(0);
+led_pass <= led_reg(0);
 
-    -- ILA Vivado
+ila_inst : ila_0
+port map (
+    clk       => clk_core,
+    probe0    => ila_pc,
+    probe1    => ila_instr,
+    probe2    => ila_mem_addr,
+    probe3(0) => ila_mem_we,
+    probe4    => ila_store_data
+);
 
-    ila_pc <= dbg_pc_instr;  -- pc allineato all'instr
-    ila_instr <= dbg_instr;
-    ila_mem_addr <= dbg_alu_result;
-    ila_mem_we <= dbg_ex_mem_we;
-    ila_store_data <= dbg_mem_store_data;
+clk_wiz_inst : clk_wiz_0
+port map (
+    clk_in1  => clk,
+    reset    => not res_n,  -- il clk wiz ha reset active high (?)
+    clk_out1 => clk_core,
+    locked   => clk_locked
+);
 
-    ila_inst : entity work.ila_0
-    port map (
-        clk    => clk_core,
-        probe0 => ila_pc,
-        probe1 => ila_instr,
-        probe2 => ila_mem_addr,
-        probe3 => ila_mem_we,
-        probe4 => ila_store_data
-    );
+-- ILA Vivado
 
-    clk_wiz_inst : entity work.clk_wiz_0
-    port map (
-        clk_in1  => clk,
-        reset    => res_n,
-        clk_out1 => clk_core,
-        locked   => clk_locked
-    );
+ila_pc <= dbg_pc_instr;  -- pc allineato all'instr
+ila_instr <= dbg_instr;
+ila_mem_addr <= dbg_alu_result;
+ila_mem_we <= dbg_ex_mem_we;
+ila_store_data <= dbg_mem_store_data;
+
 end architecture rtl;
