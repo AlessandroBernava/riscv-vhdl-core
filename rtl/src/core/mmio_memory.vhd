@@ -115,15 +115,16 @@ begin
                     if addr_i = LED_ADDR then
                         led_reg <= write_data_i;
                     end if;
+
+                    if (mem_read_i = '1') then                            
+                        data_o <= mem(word_index_mmio);
+                    else
+                        data_o <= (others => '0');
+                    end if;
                 end if;
 
                 -- lettura sincrona
 
-                if (mem_read_i = '1') then                              -- nota: se io scrivo in memoria ad un indirizzo e lo leggo durante lo stesso ciclo di clk, sul successivo fronte del clk leggo l'indirizzo vecchio. Non è un problema dato che nessuna istruzione legge e scrive contemparaneamente in memoria
-                    data_o <= mem(word_index_mmio);
-                else
-                    data_o <= (others => '0');
-                end if;
             end if;
 
         end if;

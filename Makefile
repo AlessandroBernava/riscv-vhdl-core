@@ -8,7 +8,7 @@ GHDLFLAGS = --std=08 --workdir=$(WORKDIR)
 TOP_TB = tb_rv32i_core
 FPGA_TOP_TB = tb_fpga_top
 
-STOP_TIME = 30us
+STOP_TIME = 1000us
 WAVEFILE = $(SIMDIR)/$(TOP_TB).ghw
 
 PKG = \

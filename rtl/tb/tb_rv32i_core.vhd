@@ -116,7 +116,7 @@ begin
         wait for CLK_PERIOD * 3;
         res_t <= '0';
 
-        wait for CLK_PERIOD * 30_000;
+        wait for CLK_PERIOD * 1_000_000;
 
         -- Stampa stato finale
         report "Simulazione completata" severity note;
@@ -126,6 +126,24 @@ begin
     end process stim;
 
     -- stampa ad ogni clock cosa succede
+    /*
+    pass_monitor : process
+    alias mem_tb is
+        << signal dut.data_memory_inst.mem : data_mem_t >>;
+
+        alias mem_mmio_tb is
+        << signal dut.mmio_memory_inst.mem : mmio_mem_t >>;
+    begin
+        wait until rising_edge(clk_i_t);
+
+        if mem_mmio_tb(63) = x"0000CAFE" then
+            report "SELF-TEST PASS" severity note;
+            std.env.finish;
+        elsif mem_mmio_tb(63) = x"0000DEAD" then
+            report "SELF-TEST FAIL" severity error;
+            std.env.finish;
+        end if;
+    end process pass_monitor; */
 
     monitor : process
     alias regs_tb is
@@ -242,14 +260,24 @@ begin
         report BLUE & "  [MEM] " &  RESET & "data_mem_tb(0) = 0x" & to_hstring(mem_mmio_tb(0))
         severity note;
 
-        report "data_mem_tb(1) = 0x" & to_hstring(mem_mmio_tb(63))
+        report "data_mem_tb(1) = 0x" & to_hstring(mem_mmio_tb(1))
         severity note;
 
-        report "data_mem_tb(2) = 0x" & to_hstring(mem_tb(0))
+        report "data_mem_tb(2) = 0x" & to_hstring(mem_mmio_tb(2))
         severity note;
+
         report "data_mem_tb(3) = 0x" & to_hstring(mem_mmio_tb(3))
         severity note;
+
         report "data_mem_tb(4) = 0x" & to_hstring(mem_mmio_tb(4))
+        severity note;
+
+        report "data_mem_tb(5) = 0x" & to_hstring(mem_mmio_tb(5))
+        severity note;
+
+        report "data_mem_tb(6) = 0x" & to_hstring(mem_mmio_tb(6))
+        severity note;
+        report "data_mem_tb(7) = 0x" & to_hstring(mem_mmio_tb(63))
         severity note;
         report "data_mem_tb(5) = 0x" & to_hstring(mem_mmio_tb(5))
         severity note;
