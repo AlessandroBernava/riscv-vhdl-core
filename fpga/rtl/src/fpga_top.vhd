@@ -97,15 +97,14 @@ res_req <= not res_n or not clk_locked;--
 
 -- RESET SYNCHRONIZER: per evitare metastabilita'
 
-res_sync : process (clk_core)
+-- Asserzione asincrona, rilascio sincronizzato a clk_core
+res_sync : process (clk_core, res_req)
 begin
-    if clk_core'event and clk_core = '1' then
-        if res_req = '1' then
-            res_pipe <= "11";
-        else
-            res_pipe(0) <= '0';
-            res_pipe(1) <= res_pipe(0);
-        end if;
+    if res_req = '1' then
+        res_pipe <= "11";
+    elsif rising_edge(clk_core) then
+        res_pipe(0) <= '0';
+        res_pipe(1) <= res_pipe(0);
     end if;
 end process res_sync;
 
@@ -145,7 +144,7 @@ port map (
 
 -- MMIO
 
-led_pass <= led_reg(0);
+led_pass <= '0' when res_core = '1' else led_reg(0);
 
 ila_inst : ila_0
 port map (
