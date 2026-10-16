@@ -164,6 +164,11 @@ vivado_project: mem
 		-log "$(VIVADO_LOG_DIR)/create_project.log" \
 		-journal "$(VIVADO_LOG_DIR)/create_project.jou"
 
+.PHONY: clean_vivado
+
+clean_vivado:
+	rm -rf -- "fpga/build"
+
 help:
 	@echo "Target make disponibili:"
 	@echo "  make / make simula       - analizza, elabora e simula il testbench"
