@@ -1,66 +1,83 @@
 WORKDIR = obj
 SIMDIR = simu
 
+
 GHDL = ghdl
 GTKWAVE = gtkwave
 GHDLFLAGS = --std=08 --workdir=$(WORKDIR)
 
+
 TOP_TB = tb_rv32i_core
 FPGA_TOP_TB = tb_fpga_top
+
 
 STOP_TIME = 1000us
 WAVEFILE = $(SIMDIR)/$(TOP_TB).ghw
 
+
 PKG = \
-	rtl/src/core/pkg_riskv_types.vhd \
-	rtl/src/core/pkg_riskv_pipeline.vhd
+    rtl/src/core/pkg_riskv_types.vhd \
+    rtl/src/core/pkg_riskv_pipeline.vhd
+
 
 CORE = \
-	rtl/src/core/program_counter.vhd \
-	rtl/src/core/instruction_memory.vhd \
-	rtl/src/core/register_file.vhd \
-	rtl/src/core/immediate_generator.vhd \
-	rtl/src/core/alu_ctrl.vhd \
-	rtl/src/core/alu.vhd \
-	rtl/src/core/branch_jump_unit.vhd \
-	rtl/src/core/load_unit.vhd \
-	rtl/src/core/store_unit.vhd \
-	rtl/src/core/control_unit.vhd \
-	rtl/src/core/forwarding_unit.vhd \
-	rtl/src/core/hazard_detection_unit.vhd \
-	rtl/src/core/data_memory.vhd \
-	rtl/src/core/mmio_memory.vhd \
-	rtl/src/top/rv32i_core.vhd
+    rtl/src/core/program_counter.vhd \
+    rtl/src/core/instruction_memory.vhd \
+    rtl/src/core/register_file.vhd \
+    rtl/src/core/immediate_generator.vhd \
+    rtl/src/core/alu_ctrl.vhd \
+    rtl/src/core/alu.vhd \
+    rtl/src/core/branch_jump_unit.vhd \
+    rtl/src/core/load_unit.vhd \
+    rtl/src/core/store_unit.vhd \
+    rtl/src/core/control_unit.vhd \
+    rtl/src/core/forwarding_unit.vhd \
+    rtl/src/core/hazard_detection_unit.vhd \
+    rtl/src/core/data_memory.vhd \
+    rtl/src/core/mmio_memory.vhd \
+    rtl/src/top/rv32i_core.vhd
+
 
 FPGA_TOP = \
-	fpga/rtl/src/fpga_top.vhd
+    fpga/rtl/src/fpga_top.vhd
+
 
 TB = \
-	rtl/tb/tb_rv32i_core.vhd
+    rtl/tb/tb_rv32i_core.vhd
+
 
 TB_TOP = \
-	fpga/rtl/tb/tb_fpga_top.vhd
+    fpga/rtl/tb/tb_fpga_top.vhd
+
 
 SRC = $(PKG) $(CORE) $(TB)
 
+
 SRC_FPGA = $(PKG) $(CORE) $(FPGA_TOP) $(TB_TOP)
 
+
 all: simula
+
 
 $(WORKDIR):
 	mkdir -p $(WORKDIR)
 
+
 $(SIMDIR):
 	mkdir -p $(SIMDIR)
+
 
 analizza: $(WORKDIR) | mem
 	$(GHDL) -a $(GHDLFLAGS) $(SRC)
 
+
 elabora: analizza
 	$(GHDL) -e $(GHDLFLAGS) $(TOP_TB)
 
+
 simula: elabora
 	$(GHDL) -r $(GHDLFLAGS) $(TOP_TB) --stop-time=$(STOP_TIME)
+
 
 analizza_fpga: $(WORKDIR) | mem
 	$(GHDL) -a $(GHDLFLAGS) $(SRC_FPGA)
@@ -69,34 +86,48 @@ analizza_fpga: $(WORKDIR) | mem
 elabora_fpga: analizza_fpga
 	$(GHDL) -e $(GHDLFLAGS) $(FPGA_TOP_TB)
 
+
 simula_fpga: elabora_fpga
 	$(GHDL) -r $(GHDLFLAGS) $(FPGA_TOP_TB) --stop-time=$(STOP_TIME)
+
 
 onda: elabora $(SIMDIR)
 	$(GHDL) -r $(GHDLFLAGS) $(TOP_TB) --stop-time=$(STOP_TIME) --wave=$(WAVEFILE)
 
+
 guarda: onda
 	$(GTKWAVE) $(WAVEFILE)
 
+
 wave: guarda
+
 
 clean:
 	rm -rf $(WORKDIR) $(SIMDIR) $(SOFT_BUILD_DIR)
 
+
 # Sezione software: compilazione C -> ELF -> file memorie
+
 
 # Nome di default del programma C (main.c)
 
-APP ?= main# Sovrascrive main se app non è definita da nessuna parte, con make APP=... oppure definendo APP in un punto del makefile main non viene sovrascritto
+
+APP ?= main
+# Sovrascrive main se APP non è definito altrove:
+# make APP=nome oppure definendo APP nel Makefile.
+
 
 # Toolchain GNU RISC V
+
 
 CC := riscv-none-elf-gcc
 OBJDUMP := riscv-none-elf-objdump
 READELF := riscv-none-elf-readelf
 NM := riscv-none-elf-nm
 
+
 # Cartelle
+
 
 SOFT_SRC_DIR := software/src
 SOFT_BUILD_DIR := software/build
@@ -104,13 +135,17 @@ SOFT_LINKER := software/linker/linker.ld
 SOFT_SCRIPT_INSTR := software/scripts/hex_generator.py
 SOFT_SCRIPT_DATA := software/scripts/data_mem_hex_generator.py
 
+
 CFLAGS := -march=rv32i -mabi=ilp32 -ffreestanding -nostdlib -O0 -Wall -Wextra -mno-relax
 LDFLAGS := -T $(SOFT_LINKER) -march=rv32i -mabi=ilp32 -nostdlib -ffreestanding -Wl,--no-relax
 
+
 # Sorgenti
+
 
 SOFT_ASM_SRC := $(SOFT_SRC_DIR)/start.S
 SOFT_C_SRC := $(SOFT_SRC_DIR)/$(APP).c
+
 
 SOFT_START_O := $(SOFT_BUILD_DIR)/start.o
 SOFT_APP_O := $(SOFT_BUILD_DIR)/$(APP).o
@@ -119,43 +154,60 @@ SOFT_DUMP := $(SOFT_BUILD_DIR)/$(APP).dump
 SOFT_SECTIONS := $(SOFT_BUILD_DIR)/$(APP).sections
 SOFT_SYMS := $(SOFT_BUILD_DIR)/$(APP).symbols
 
-soft_dirs:                 # La directroy build viene eliminata con make clear
+
+soft_dirs:
 	mkdir -p $(SOFT_BUILD_DIR)
 
-$(SOFT_START_O): $(SOFT_ASM_SRC) | soft_dirs     # $< = primo prerequisito $@ = target $^ = tutte le dipendenze
+
+$(SOFT_START_O): $(SOFT_ASM_SRC) | soft_dirs
 	$(CC) -c $< -o $@ $(CFLAGS)
+
 
 $(SOFT_APP_O): $(SOFT_C_SRC) | soft_dirs
 	$(CC) -c $< -o $@ $(CFLAGS)
 
+
 $(SOFT_ELF): $(SOFT_START_O) $(SOFT_APP_O)
 	$(CC) -o $@ $^ $(LDFLAGS)
 
+
 .PHONY: elf
 
+
 elf: $(SOFT_ELF)
+
 
 dump: $(SOFT_ELF)
 	$(OBJDUMP) -D $(SOFT_ELF) > $(SOFT_DUMP)
 	$(READELF) -S $(SOFT_ELF) > $(SOFT_SECTIONS)
 	$(NM) -n $(SOFT_ELF) > $(SOFT_SYMS)
 
+
 mem: $(SOFT_ELF) | dump
 	python $(SOFT_SCRIPT_INSTR) $(SOFT_ELF) | python $(SOFT_SCRIPT_DATA) $(SOFT_ELF)
+
 
 check-app:
 	@echo "APP = '$(APP)'"
 	@echo "origin(APP) = $(origin APP)"
 
-# Vivado: creazione del progetto
+
+# Vivado: creazione e apertura del progetto
+
 
 VIVADO ?= vivado
 
-VIVADO_CREATE_TCL := fpga/scripts/create_project.tcl
+
+VIVADO_PROJECT_NAME := rv32i_nexys
 VIVADO_BUILD_DIR := fpga/build
+VIVADO_PROJECT_DIR := $(VIVADO_BUILD_DIR)/$(VIVADO_PROJECT_NAME)
+VIVADO_PROJECT_FILE := $(VIVADO_PROJECT_DIR)/$(VIVADO_PROJECT_NAME).xpr
+VIVADO_CREATE_TCL := fpga/scripts/create_project.tcl
 VIVADO_LOG_DIR := $(VIVADO_BUILD_DIR)/logs
 
-.PHONY: vivado_project
+
+.PHONY: vivado_project vivado_open clean_vivado
+
 
 vivado_project: mem
 	mkdir -p "$(VIVADO_LOG_DIR)"
@@ -164,10 +216,14 @@ vivado_project: mem
 		-log "$(VIVADO_LOG_DIR)/create_project.log" \
 		-journal "$(VIVADO_LOG_DIR)/create_project.jou"
 
-.PHONY: clean_vivado
+
+vivado_open:
+	$(VIVADO) "$(VIVADO_PROJECT_FILE)"
+
 
 clean_vivado:
-	rm -rf -- "fpga/build"
+	rm -rf -- "$(VIVADO_BUILD_DIR)"
+
 
 help:
 	@echo "Target make disponibili:"
@@ -183,4 +239,7 @@ help:
 	@echo "  make dump                - genera dump, sezioni e simboli dell'ELF"
 	@echo "  make mem                 - genera i file di inizializzazione per le"
 	@echo "                             memorie istruzioni/dati a partire dall'ELF"
-	@echo "  make clean               - pulisce obj/, simu e build/"
+	@echo "  make clean               - pulisce obj/, simu/ e software/build/"
+	@echo "  make vivado_project      - genera le memorie e crea il progetto Vivado"
+	@echo "  make vivado_open         - apre il progetto Vivado generato"
+	@echo "  make clean_vivado        - rimuove la directory di build Vivado"

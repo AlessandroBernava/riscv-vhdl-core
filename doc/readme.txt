@@ -80,20 +80,24 @@ I log della creazione vengono salvati in:
 
 fpga/build/logs/
 
-Per protezione, lo script non sovrascrive una directory di progetto già esistente. Se si desidera ricrearlo, chiudere il progetto in Vivado e rinominare la directory fpga/build/rv32i_nexys prima di rilanciare il comando.
+Per protezione, lo script non sovrascrive una directory di progetto già esistente. Se si desidera ricrearlo, chiudere il progetto in Vivado ed eseguire:
+
+make clean_vivado
+
+Quindi rilanciare:
+
+make APP=FPGA_led_test vivado_project
 
 APERTURA DEL PROGETTO VIVADO
-Da PowerShell, dopo aver preparato l'ambiente:
+Dopo la creazione del progetto, aprirlo con:
 
-.\fpga\scripts\open_vivado.ps1
+make vivado_open
 
-Lo script individua e apre il progetto generato.
-
-In alternativa, da un terminale in cui Vivado è raggiungibile:
+Questo comando equivale a:
 
 vivado "fpga/build/rv32i_nexys/rv32i_nexys.xpr"
 
-È possibile anche aprire Vivado e selezionare il file .xpr tramite Open Project.
+È possibile anche aprire Vivado manualmente e selezionare il file .xpr tramite Open Project.
 
 SIMULAZIONE RTL IN VIVADO
 Il Flow Navigator è il pannello della GUI di Vivado che raccoglie le principali operazioni del progetto. I percorsi seguenti indicano voci dell'interfaccia, non comandi da digitare nel terminale.
@@ -118,6 +122,21 @@ Prima di utilizzare il bitstream, controllare i report di timing, utilizzo delle
 Il bitstream viene generato nella directory:
 
 fpga/build/rv32i_nexys/rv32i_nexys.runs/impl_1/
+
+PROGRAMMAZIONE DELLA FPGA
+Collegare la Nexys tramite la porta micro-USB etichettata PROG, alimentarla e aprire:
+
+Flow Navigator → PROGRAM AND DEBUG → Open Hardware Manager
+Open target → Auto Connect
+Right-click sul device → Program Device
+
+Selezionare il bitstream generato in:
+
+fpga/build/rv32i_nexys/rv32i_nexys.runs/impl_1/
+
+e premere Program.
+
+La programmazione JTAG è volatile: dopo lo spegnimento della board, la FPGA torna vuota finché non viene riprogrammata.
 
 FILE SORGENTE E FILE GENERATI
 I sorgenti VHDL, i vincoli XDC, le configurazioni IP e gli script sono mantenuti nella repository.
