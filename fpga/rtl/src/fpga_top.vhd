@@ -7,6 +7,10 @@ use work.pkg_riskv_pipeline.all;
 use work.pkg_riskv_types.all;
 
 entity fpga_top is
+    generic (
+        IMEM_INIT_FILE : string := "software/build/instr.mem";
+        DMEM_INIT_FILE : string := "software/build/data.mem"
+    );
     port (
         res_n    : in  std_logic;
         clk      : in  std_logic;
@@ -108,6 +112,10 @@ end process res_sync;
 res_core <= res_pipe(1);
 
 rv32i_core_inst : entity work.rv32i_core
+generic map (
+    IMEM_INIT_FILE => IMEM_INIT_FILE,
+    DMEM_INIT_FILE => DMEM_INIT_FILE
+)
 port map (
     clk                => clk_core,
     res                => res_core,

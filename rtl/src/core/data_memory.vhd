@@ -50,6 +50,9 @@ use std.textio.all;
 use work.pkg_riskv_types.all;
 
 entity data_memory is
+    generic (
+        INIT_FILE : string := "software/build/data.mem"
+    );
     port (
         clk           : in  std_logic;
         res_i         : in  std_logic;
@@ -67,9 +70,9 @@ architecture rtl of data_memory is
 
     impure function init_ram_hex return data_mem_t is
         -- Specifica il percorso del file. In simulazione parte dalla cartella dove lanci make.
-        file text_file       : text open read_mode is "C:\Users\Alessandro Bernava\RISK_V\software\build\data.mem";
+        file text_file       : text open read_mode is INIT_FILE;
         variable text_line   : line;
-        variable ram_content : data_mem_t := (others => (others => '0'));                                            -- Riempe di zeri il resto
+        variable ram_content : data_mem_t := (others => (others => '0'));  -- Riempe di zeri il resto
         variable i           : integer := 0;
     begin
         while not endfile(text_file) loop

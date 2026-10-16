@@ -6,6 +6,10 @@ library work;
 use work.pkg_riskv_types.all;
 
 entity tb_fpga_top is
+    generic (
+        IMEM_INIT_FILE : string := "software/build/instr.mem";
+        DMEM_INIT_FILE : string := "software/build/data.mem"
+    );
 end entity tb_fpga_top;
 
 architecture tb of tb_fpga_top is
@@ -18,6 +22,10 @@ architecture tb of tb_fpga_top is
 begin
 
     dut : entity work.fpga_top
+    generic map (
+    IMEM_INIT_FILE => IMEM_INIT_FILE,
+    DMEM_INIT_FILE => DMEM_INIT_FILE
+)
     port map (
         res_n    => res_i_t,
         clk      => clk_i_t,

@@ -19,6 +19,9 @@ use std.textio.all;               -- Libreria standard VHDL per i file
 use work.pkg_riskv_types.all;
 
 entity instruction_memory is
+    generic (
+        INIT_FILE : string := "software/build/instr.mem"
+    );
     port (
         clk     : in  std_logic;
         res_i   : in  std_logic;
@@ -51,9 +54,9 @@ architecture rtl of instruction_memory is
     -- Funzione che legge il file per inizializzare la memoria
     impure function init_rom_hex return instr_mem_t is
         -- Specifica il percorso del file. In simulazione parte dalla cartella dove viene lanciato make.
-        file text_file       : text open read_mode is "C:\Users\Alessandro Bernava\RISK_V\software\build\instr.mem";
+        file text_file       : text open read_mode is INIT_FILE;
         variable text_line   : line;
-        variable rom_content : instr_mem_t := (others => (others => '0'));                                            -- Riempe di zeri il resto
+        variable rom_content : instr_mem_t := (others => (others => '0'));  -- Riempe di zeri il resto
         variable i           : integer := 0;
     begin
         while not endfile(text_file) loop

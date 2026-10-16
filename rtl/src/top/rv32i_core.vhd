@@ -7,6 +7,10 @@ use work.pkg_riskv_pipeline.all;
 use work.pkg_riskv_types.all;
 
 entity rv32i_core is
+    generic (
+        IMEM_INIT_FILE : string := "software/build/instr.mem";
+        DMEM_INIT_FILE : string := "software/build/data.mem"
+    );
     port (
         res     : in  std_logic;
         clk     : in  std_logic;
@@ -154,6 +158,9 @@ begin
     );
 
     data_memory_inst : entity work.data_memory
+    generic map (
+        INIT_FILE => DMEM_INIT_FILE
+    )
     port map (
         clk           => clk,
         res_i         => res,
@@ -210,6 +217,9 @@ begin
     );
 
     instruction_memory_inst : entity work.instruction_memory
+    generic map (
+        INIT_FILE => IMEM_INIT_FILE
+    )
     port map (
         clk     => clk,
         res_i   => res,

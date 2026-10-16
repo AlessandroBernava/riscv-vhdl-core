@@ -7,6 +7,10 @@ use work.pkg_riskv_pipeline.all;
 use work.pkg_riskv_types.all;
 
 entity tb_rv32i_core is
+    generic (
+        IMEM_INIT_FILE : string := "software/build/instr.mem";
+        DMEM_INIT_FILE : string := "software/build/data.mem"
+    );
 end entity  tb_rv32i_core;
 
 architecture tb of tb_rv32i_core is
@@ -61,6 +65,10 @@ architecture tb of tb_rv32i_core is
 begin
 
     dut : entity work.rv32i_core
+    generic map (
+        IMEM_INIT_FILE => IMEM_INIT_FILE,
+        DMEM_INIT_FILE => DMEM_INIT_FILE
+    )
     port map (
         res => res_t,
         clk => clk_t,

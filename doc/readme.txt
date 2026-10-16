@@ -4,6 +4,128 @@
 Questo progetto contiene il design di una CPU RISC-V (RV32I) in VHDL e un flusso di lavoro automatizzato tramite Makefile.
 Il Makefile si occupa di compilare il codice C/Assembly, estrarre i dati dall'eseguibile ELF, inizializzare le memorie del processore e avviare la simulazione hardware.
 
+CLONARE LA REPOSITORY DA GITHUB
+Il progetto è disponibile su GitHub:
+
+https://github.com/AlessandroBernava/riscv-vhdl-core
+
+Per ottenere una copia locale, aprire un terminale nella directory in cui si desidera scaricare il progetto ed eseguire:
+
+git clone https://github.com/AlessandroBernava/riscv-vhdl-core.git
+
+Git crea automaticamente una cartella chiamata riscv-vhdl-core. Per entrare nella repository:
+
+cd riscv-vhdl-core
+
+È possibile scegliere un nome diverso per la cartella locale aggiungendolo alla fine del comando. Ad esempio:
+
+git clone https://github.com/AlessandroBernava/riscv-vhdl-core.git mio_progetto
+cd mio_progetto
+
+Il nome della cartella locale non modifica il funzionamento degli script. È però necessario scegliere un percorso senza spazi, preferibilmente breve, per evitare problemi con gli strumenti del flusso FPGA.
+
+Il clone contiene i file versionati presenti su GitHub. I file generati dalla compilazione e il progetto Vivado vengono ricreati localmente tramite Makefile e script.
+
+FLUSSO FPGA CON VIVADO
+Il flusso FPGA è stato verificato su Windows con AMD Vivado 2026.1.
+
+Il Makefile genera le immagini delle memorie a partire dal programma selezionato e avvia Vivado in modalità batch. Lo script fpga/scripts/create_project.tcl crea il progetto, aggiunge i sorgenti VHDL, il testbench, i vincoli XDC, le immagini delle memorie e le configurazioni delle IP Clocking Wizard e ILA.
+
+La creazione del progetto non avvia automaticamente simulazione, sintesi o implementazione. Queste operazioni vengono eseguite successivamente dalla GUI di Vivado.
+
+Tutti i comandi seguenti devono essere eseguiti dalla radice della repository, cioè dalla cartella che contiene il Makefile.
+
+PREPARAZIONE DELL'AMBIENTE VIVADO CON POWERSHELL
+Prima di eseguire la build è necessario rendere Vivado raggiungibile dal terminale.
+
+Aprire fpga/scripts/env_vivado.ps1 e verificare che il percorso della directory bin corrisponda alla propria installazione di Vivado. Il percorso presente nello script è un'impostazione locale da adattare al proprio PC.
+
+Dalla radice della repository, eseguire:
+
+.\fpga\scripts\env_vivado.ps1
+
+Lo script aggiunge la directory degli eseguibili Vivado al PATH della sessione PowerShell corrente. La preparazione va ripetuta quando si apre una nuova sessione.
+
+Per verificare che Vivado sia raggiungibile:
+
+where.exe vivado
+
+Il comando deve restituire il percorso di vivado.bat.
+
+UTILIZZO CON CMD
+In alternativa a PowerShell, è possibile utilizzare il Prompt dei comandi (CMD).
+
+In questo caso, preparare l'ambiente eseguendo settings64.bat dalla propria installazione Vivado. Ad esempio:
+
+call "D:\AMDDesignTools\2026.1\Vivado\settings64.bat"
+
+Adattare il percorso alla propria installazione e verificare:
+
+where vivado
+
+La preparazione dell'ambiente e i successivi comandi Make devono essere eseguiti nella stessa sessione CMD.
+
+CREAZIONE DEL PROGETTO VIVADO
+Dopo aver preparato l'ambiente, eseguire:
+
+make APP=FPGA_led_test vivado_project
+
+Il parametro APP seleziona il programma presente in software/src/, senza indicare l'estensione .c.
+
+Il comando aggiorna il software secondo le dipendenze del Makefile, genera instr.mem e data.mem e crea il progetto Vivado in:
+
+fpga/build/rv32i_nexys/rv32i_nexys.xpr
+
+I log della creazione vengono salvati in:
+
+fpga/build/logs/
+
+Per protezione, lo script non sovrascrive una directory di progetto già esistente. Se si desidera ricrearlo, chiudere il progetto in Vivado e rinominare la directory fpga/build/rv32i_nexys prima di rilanciare il comando.
+
+APERTURA DEL PROGETTO VIVADO
+Da PowerShell, dopo aver preparato l'ambiente:
+
+.\fpga\scripts\open_vivado.ps1
+
+Lo script individua e apre il progetto generato.
+
+In alternativa, da un terminale in cui Vivado è raggiungibile:
+
+vivado "fpga/build/rv32i_nexys/rv32i_nexys.xpr"
+
+È possibile anche aprire Vivado e selezionare il file .xpr tramite Open Project.
+
+SIMULAZIONE RTL IN VIVADO
+Il Flow Navigator è il pannello della GUI di Vivado che raccoglie le principali operazioni del progetto. I percorsi seguenti indicano voci dell'interfaccia, non comandi da digitare nel terminale.
+
+Per avviare la simulazione comportamentale:
+
+Flow Navigator → SIMULATION → Run Simulation → Run Behavioral Simulation
+
+Il top di simulazione è tb_fpga_top, mentre il top hardware è fpga_top.
+
+Verificare l'assenza di errori di compilazione, elaborazione e apertura delle memorie, quindi controllare che il testbench raggiunga il risultato previsto.
+
+SINTESI, IMPLEMENTAZIONE E BITSTREAM
+Dopo la verifica della simulazione, eseguire nell'ordine:
+
+Flow Navigator → SYNTHESIS → Run Synthesis
+Flow Navigator → IMPLEMENTATION → Run Implementation
+Flow Navigator → PROGRAM AND DEBUG → Generate Bitstream
+
+Prima di utilizzare il bitstream, controllare i report di timing, utilizzo delle risorse e gli eventuali errori o warning rilevanti.
+
+Il bitstream viene generato nella directory:
+
+fpga/build/rv32i_nexys/rv32i_nexys.runs/impl_1/
+
+FILE SORGENTE E FILE GENERATI
+I sorgenti VHDL, i vincoli XDC, le configurazioni IP e gli script sono mantenuti nella repository.
+
+Le directory software/build/ e fpga/build/ contengono output generati e non devono essere versionate.
+
+Le modifiche a un file VHDL già registrato non richiedono di aggiungerlo nuovamente al progetto. L'aggiunta di nuovi file, nuove IP o modifiche alle impostazioni del progetto richiede invece di aggiornare la relativa descrizione negli script, così che il progetto possa essere ricostruito.
+
  AMBIENTE DI SVILUPPO E TOOLCHAIN
 
 Il progetto è stato sviluppato e testato su Windows in Visual Studio Code, utlizzato come editor per la scrittura del codice VHDL, programmi in C, script Python e codice assembly.

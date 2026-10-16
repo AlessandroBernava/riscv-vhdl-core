@@ -1,18 +1,30 @@
-# Cartelle di build / sim
+# Cartelle di build / simulazione
 obj/
 simu/
 trash/
+software/build/
+fpga/build/
+
+# File di simulazione
 *.ghw
 *.vcd
+*.wdb
 
 # File temporanei editor
 .vscode/*
 !.vscode/settings.json
 !.vscode/tasks.json
 
-# Vari, file sintesi
+# File intermedi di sintesi e simulazione
 *.log
+*.jou
 *.ys
 *.ys_out
 *.il
 *.blif
+*.str
+
+# File temporanei Vivado
+Xil/
+*.bak
+*.orig

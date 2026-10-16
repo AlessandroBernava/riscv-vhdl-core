@@ -147,6 +147,23 @@ check-app:
 	@echo "APP = '$(APP)'"
 	@echo "origin(APP) = $(origin APP)"
 
+# Vivado: creazione del progetto
+
+VIVADO ?= vivado
+
+VIVADO_CREATE_TCL := fpga/scripts/create_project.tcl
+VIVADO_BUILD_DIR := fpga/build
+VIVADO_LOG_DIR := $(VIVADO_BUILD_DIR)/logs
+
+.PHONY: vivado_project
+
+vivado_project: mem
+	mkdir -p "$(VIVADO_LOG_DIR)"
+	$(VIVADO) -mode batch \
+		-source "$(VIVADO_CREATE_TCL)" \
+		-log "$(VIVADO_LOG_DIR)/create_project.log" \
+		-journal "$(VIVADO_LOG_DIR)/create_project.jou"
+
 help:
 	@echo "Target make disponibili:"
 	@echo "  make / make simula       - analizza, elabora e simula il testbench"
